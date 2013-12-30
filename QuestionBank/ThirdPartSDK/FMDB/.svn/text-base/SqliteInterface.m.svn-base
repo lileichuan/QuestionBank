@@ -1,0 +1,126 @@
+//
+//  SqliteInterface.m
+//  CALayer
+//
+//  Created by Terry on 11-5-30.
+//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//
+
+#import "SqliteInterface.h"
+
+
+@implementation SqliteInterface
+
+@synthesize  db;
+@synthesize dbRealPath;
+
+SqliteInterface *sharedSqliteInterface;
+
++ (SqliteInterface *) sharedSqliteInterface
+{
+	if (!sharedSqliteInterface) {
+		sharedSqliteInterface = [[SqliteInterface alloc] init];
+	}
+	return sharedSqliteInterface;
+}
+
+
+- (void) connectDB
+{
+	if (db == nil) {
+		db = [[FMDatabase alloc] initWithPath:dbRealPath];
+	}
+	if (![db open]) {
+		NSLog(@"Could not open database.");
+	}else {
+      
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSInteger newDatebaseVersion =[[self getDatebaseVersionCode]integerValue];
+        NSInteger oldDatebaseVersion = [[defaults valueForKey:@"DatebaseVersion"] integerValue];
+        if (oldDatebaseVersion < newDatebaseVersion) {
+           BOOL success = [self upgradeDatebase:oldDatebaseVersion withNewVersion:newDatebaseVersion];
+            if (success) {
+                [defaults setValue:[NSNumber numberWithInteger: newDatebaseVersion] forKey:@"DatebaseVersion"];
+            }
+        }
+        [defaults synchronize];
+		NSLog(@"DataBase has already opened");
+	}
+	
+}
+- (void) closeDB
+{ 
+    if (db == nil) {
+        return;
+    }
+	[db close];
+	[db release],
+    db= nil;
+	NSLog(@"DataBase has already close");
+}
+
+
+- (void) setupDB:(NSString *)dbFileName
+{
+	if (dbFileName == nil) {
+		return;
+	}
+    if (db) {
+         [[SqliteInterface sharedSqliteInterface] closeDB]; //关闭数据库
+    }
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+	NSString *libraryPath = [paths objectAtIndex:0];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *err;
+
+    dbRealPath = [libraryPath stringByAppendingString:[NSString stringWithFormat:@"/%@",dbFileName]];
+	if (![fileManager fileExistsAtPath:dbRealPath]) {
+		NSString *dbSrcPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:dbFileName];
+		BOOL copySuccess = [fileManager copyItemAtPath:dbSrcPath toPath:dbRealPath error:&err];
+		if (copySuccess) {
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSNumber *datebaseVersion =[self getDatebaseVersionCode];
+            [defaults setValue:datebaseVersion forKey:@"DatebaseVersion"];
+            [defaults synchronize];
+		}
+        else{
+            NSLog(@"Failed to copy dataBase %@",[err localizedDescription]);
+        }
+	}
+
+	NSLog(@"dbRealPath: %@",dbRealPath);
+}
+
+
+-(NSNumber *)getDatebaseVersionCode{
+    NSString *versionCodePath = [[NSBundle mainBundle]pathForResource:@"VersionCode" ofType:@"plist"];
+    NSDictionary *versionDic = [NSDictionary dictionaryWithContentsOfFile:versionCodePath];
+    NSNumber *versionCode = [versionDic objectForKey:@"DatebaseVersion"];
+    return versionCode;
+}
+
+
+-(BOOL)upgradeDatebase:(NSInteger)oldVersion withNewVersion:(NSInteger)newVersion{
+    BOOL success = NO;
+    if (newVersion == 1) {
+        //增加了表ResourceGroup(ID,name,course_id,material_ids)，课程表增加resource_ids
+        BOOL result1 = [db executeUpdate:@"Create table if not exists ResourceGroup (ID text,name text,course_id text,material_ids text)"];
+        BOOL result2 = [db executeUpdate:@"Create table if not exists Screen (ID text PRIMARY KEY,user_id text,user_name text,time_created double,is_score boolean,screen_source integer)"];
+        BOOL result3 = [db executeUpdate:@"Create table if not exists BookResource (ID text PRIMARY KEY,name text,description text,file_path text,file_type integer,textbook_id text,page_num integer,coordinate text)"];
+        //BOOL result4 = [db executeUpdate:@"Create table if not exists ScreenScore (ID text PRIMARY KEY,score integer,score_time double,comment text,score_user_name text,score_user_id text PRIMARY KEY)"];
+        BOOL result4 = [db executeUpdate:@"Create table if not exists ScreenScore (ID text,score integer,score_time double,comment text,score_user_name text,score_user_id text,PRIMARY KEY (ID,score_user_id))"];
+        //BOOL result2 = [db executeUpdate:@"alter table Course add resource_ids text"];
+        success = result1&& result2 && result3 && result4;
+    }
+    return success;
+}
+
+- (void)dealloc
+{
+	//[db release];
+	[dbRealPath release];
+	[super dealloc];
+}
+
+@end

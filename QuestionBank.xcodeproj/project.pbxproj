@@ -52,7 +52,6 @@
 		604C968F18668B3E00B0DF93 /* remove_error_book@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 604C968D18668B3E00B0DF93 /* remove_error_book@2x.png */; };
 		604C969418668C0700B0DF93 /* star_question_y.png in Resources */ = {isa = PBXBuildFile; fileRef = 604C969218668C0700B0DF93 /* star_question_y.png */; };
 		604C969518668C0700B0DF93 /* star_question_y@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 604C969318668C0700B0DF93 /* star_question_y@2x.png */; };
-		604C969A18669CAC00B0DF93 /* ChapterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 604C969918669CAC00B0DF93 /* ChapterView.m */; };
 		604C96A218669DB400B0DF93 /* btn_close_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 604C969C18669DB400B0DF93 /* btn_close_normal.png */; };
 		604C96A318669DB400B0DF93 /* btn_close_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 604C969D18669DB400B0DF93 /* btn_close_normal@2x.png */; };
 		604C96A418669DB400B0DF93 /* btn_close_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 604C969E18669DB400B0DF93 /* btn_close_selected.png */; };
@@ -103,6 +102,13 @@
 		605CB2A11862C99E008D3227 /* QuestionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 605CB2A01862C99E008D3227 /* QuestionCell.m */; };
 		605CB2A41862D69F008D3227 /* TestPaperDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 605CB2A31862D69F008D3227 /* TestPaperDao.m */; };
 		605CB2A71862D6B1008D3227 /* TestPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 605CB2A61862D6B1008D3227 /* TestPaper.m */; };
+		606AEB221873D0DA006BAD88 /* DMAlphaTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 606AEB1B1873D0DA006BAD88 /* DMAlphaTransition.m */; };
+		606AEB231873D0DA006BAD88 /* DMBaseTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 606AEB1D1873D0DA006BAD88 /* DMBaseTransition.m */; };
+		606AEB241873D0DA006BAD88 /* DMScaleTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 606AEB1F1873D0DA006BAD88 /* DMScaleTransition.m */; };
+		606AEB251873D0DA006BAD88 /* DMSlideTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 606AEB211873D0DA006BAD88 /* DMSlideTransition.m */; };
+		606AEB281873D132006BAD88 /* ChapterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 606AEB271873D132006BAD88 /* ChapterViewController.m */; };
+		606AEB2B1873D14C006BAD88 /* ExamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 606AEB2A1873D14C006BAD88 /* ExamViewController.m */; };
+		606AEB2E1873D164006BAD88 /* HotspotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 606AEB2D1873D164006BAD88 /* HotspotViewController.m */; };
 		606DFDF418648B290009FBB9 /* main_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 606DFDF318648B290009FBB9 /* main_bg@2x.png */; };
 		6092BB5D1855810900E6B34F /* question.db in Resources */ = {isa = PBXBuildFile; fileRef = 6092BB5C1855810900E6B34F /* question.db */; };
 		6092BB6C1855815B00E6B34F /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 6092BB611855815B00E6B34F /* FMDatabase.m */; };
@@ -118,9 +124,7 @@
 		60996EA7185FE0A8009ABDEA /* Answer.m in Sources */ = {isa = PBXBuildFile; fileRef = 60996EA6185FE0A8009ABDEA /* Answer.m */; };
 		60996EAA185FE502009ABDEA /* AnswerDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 60996EA9185FE502009ABDEA /* AnswerDao.m */; };
 		609AD5971861486E00B77989 /* TIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 609AD5961861486E00B77989 /* TIButton.m */; };
-		60AB0816186175E400E10792 /* HotSpotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AB0815186175E400E10792 /* HotSpotView.m */; };
 		60D4E9F21866D5800058B96B /* top_bar_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 60D4E9F11866D5800058B96B /* top_bar_line.png */; };
-		60D4EA061867208F0058B96B /* ExamView.m in Sources */ = {isa = PBXBuildFile; fileRef = 60D4EA051867208F0058B96B /* ExamView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -194,8 +198,6 @@
 		604C968D18668B3E00B0DF93 /* remove_error_book@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "remove_error_book@2x.png"; sourceTree = "<group>"; };
 		604C969218668C0700B0DF93 /* star_question_y.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star_question_y.png; sourceTree = "<group>"; };
 		604C969318668C0700B0DF93 /* star_question_y@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star_question_y@2x.png"; sourceTree = "<group>"; };
-		604C969818669CAC00B0DF93 /* ChapterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterView.h; sourceTree = "<group>"; };
-		604C969918669CAC00B0DF93 /* ChapterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterView.m; sourceTree = "<group>"; };
 		604C969C18669DB400B0DF93 /* btn_close_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_close_normal.png; sourceTree = "<group>"; };
 		604C969D18669DB400B0DF93 /* btn_close_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_close_normal@2x.png"; sourceTree = "<group>"; };
 		604C969E18669DB400B0DF93 /* btn_close_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_close_selected.png; sourceTree = "<group>"; };
@@ -262,6 +264,20 @@
 		605CB2A51862D6B1008D3227 /* TestPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestPaper.h; sourceTree = "<group>"; };
 		605CB2A61862D6B1008D3227 /* TestPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestPaper.m; sourceTree = "<group>"; };
 		605CB2A81862E17E008D3227 /* QuestionDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QuestionDefine.h; sourceTree = "<group>"; };
+		606AEB1A1873D0DA006BAD88 /* DMAlphaTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMAlphaTransition.h; sourceTree = "<group>"; };
+		606AEB1B1873D0DA006BAD88 /* DMAlphaTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMAlphaTransition.m; sourceTree = "<group>"; };
+		606AEB1C1873D0DA006BAD88 /* DMBaseTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMBaseTransition.h; sourceTree = "<group>"; };
+		606AEB1D1873D0DA006BAD88 /* DMBaseTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMBaseTransition.m; sourceTree = "<group>"; };
+		606AEB1E1873D0DA006BAD88 /* DMScaleTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMScaleTransition.h; sourceTree = "<group>"; };
+		606AEB1F1873D0DA006BAD88 /* DMScaleTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMScaleTransition.m; sourceTree = "<group>"; };
+		606AEB201873D0DA006BAD88 /* DMSlideTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMSlideTransition.h; sourceTree = "<group>"; };
+		606AEB211873D0DA006BAD88 /* DMSlideTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMSlideTransition.m; sourceTree = "<group>"; };
+		606AEB261873D132006BAD88 /* ChapterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterViewController.h; sourceTree = "<group>"; };
+		606AEB271873D132006BAD88 /* ChapterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterViewController.m; sourceTree = "<group>"; };
+		606AEB291873D14C006BAD88 /* ExamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExamViewController.h; sourceTree = "<group>"; };
+		606AEB2A1873D14C006BAD88 /* ExamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExamViewController.m; sourceTree = "<group>"; };
+		606AEB2C1873D164006BAD88 /* HotspotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotspotViewController.h; sourceTree = "<group>"; };
+		606AEB2D1873D164006BAD88 /* HotspotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotspotViewController.m; sourceTree = "<group>"; };
 		606DFDF318648B290009FBB9 /* main_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "main_bg@2x.png"; sourceTree = "<group>"; };
 		6092BB5C1855810900E6B34F /* question.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = question.db; sourceTree = "<group>"; };
 		6092BB601855815B00E6B34F /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
@@ -290,11 +306,7 @@
 		60996EA9185FE502009ABDEA /* AnswerDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnswerDao.m; sourceTree = "<group>"; };
 		609AD5951861486E00B77989 /* TIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TIButton.h; sourceTree = "<group>"; };
 		609AD5961861486E00B77989 /* TIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TIButton.m; sourceTree = "<group>"; };
-		60AB0814186175E400E10792 /* HotSpotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotSpotView.h; sourceTree = "<group>"; };
-		60AB0815186175E400E10792 /* HotSpotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotSpotView.m; sourceTree = "<group>"; };
 		60D4E9F11866D5800058B96B /* top_bar_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_bar_line.png; sourceTree = "<group>"; };
-		60D4EA041867208F0058B96B /* ExamView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExamView.h; sourceTree = "<group>"; };
-		60D4EA051867208F0058B96B /* ExamView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExamView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -406,6 +418,12 @@
 				6037ECC0186D151B00F970E3 /* Main.storyboard */,
 				6037B2C7185452BE0010A5D1 /* Images.xcassets */,
 				6037B2B6185452BE0010A5D1 /* Supporting Files */,
+				606AEB261873D132006BAD88 /* ChapterViewController.h */,
+				606AEB271873D132006BAD88 /* ChapterViewController.m */,
+				606AEB291873D14C006BAD88 /* ExamViewController.h */,
+				606AEB2A1873D14C006BAD88 /* ExamViewController.m */,
+				606AEB2C1873D164006BAD88 /* HotspotViewController.h */,
+				606AEB2D1873D164006BAD88 /* HotspotViewController.m */,
 			);
 			path = QuestionBank;
 			sourceTree = "<group>";
@@ -540,9 +558,25 @@
 			path = UIGridView;
 			sourceTree = "<group>";
 		};
+		606AEB191873D0DA006BAD88 /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				606AEB1A1873D0DA006BAD88 /* DMAlphaTransition.h */,
+				606AEB1B1873D0DA006BAD88 /* DMAlphaTransition.m */,
+				606AEB1C1873D0DA006BAD88 /* DMBaseTransition.h */,
+				606AEB1D1873D0DA006BAD88 /* DMBaseTransition.m */,
+				606AEB1E1873D0DA006BAD88 /* DMScaleTransition.h */,
+				606AEB1F1873D0DA006BAD88 /* DMScaleTransition.m */,
+				606AEB201873D0DA006BAD88 /* DMSlideTransition.h */,
+				606AEB211873D0DA006BAD88 /* DMSlideTransition.m */,
+			);
+			path = Transitions;
+			sourceTree = "<group>";
+		};
 		6092BB5E1855815B00E6B34F /* ThirdPartSDK */ = {
 			isa = PBXGroup;
 			children = (
+				606AEB191873D0DA006BAD88 /* Transitions */,
 				604C969B18669DB400B0DF93 /* Vendor */,
 				605CB2941862C910008D3227 /* UIGridView */,
 				530BC8C01859F6EE00D711B8 /* TreemapKit */,
@@ -605,8 +639,6 @@
 			isa = PBXGroup;
 			children = (
 				6092BB831855990700E6B34F /* Question */,
-				60AB0814186175E400E10792 /* HotSpotView.h */,
-				60AB0815186175E400E10792 /* HotSpotView.m */,
 				605CB29F1862C99E008D3227 /* QuestionCell.h */,
 				605CB2A01862C99E008D3227 /* QuestionCell.m */,
 				605AB10A18655E40004993FE /* TranscriptView.h */,
@@ -615,10 +647,6 @@
 				53241B58186333010062AD3A /* QuestionResultView.m */,
 				605AB10D186572F7004993FE /* MainView.h */,
 				605AB10E186572F7004993FE /* MainView.m */,
-				604C969818669CAC00B0DF93 /* ChapterView.h */,
-				604C969918669CAC00B0DF93 /* ChapterView.m */,
-				60D4EA041867208F0058B96B /* ExamView.h */,
-				60D4EA051867208F0058B96B /* ExamView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -807,6 +835,7 @@
 				605CB2A71862D6B1008D3227 /* TestPaper.m in Sources */,
 				6092BB8618559A8900E6B34F /* QuestionBrowser.m in Sources */,
 				602F7BA8185C8445005C515E /* QuestionInterface.m in Sources */,
+				606AEB281873D132006BAD88 /* ChapterViewController.m in Sources */,
 				6037B2EC1854580E0010A5D1 /* TopView.m in Sources */,
 				6092BB781855829600E6B34F /* BaseDao.m in Sources */,
 				604C96AC1866B29100B0DF93 /* ProgressHUD.m in Sources */,
@@ -818,7 +847,6 @@
 				60996EAA185FE502009ABDEA /* AnswerDao.m in Sources */,
 				6037B2EF1854581C0010A5D1 /* BottomView.m in Sources */,
 				6092BB711855815B00E6B34F /* SqliteInterface.m in Sources */,
-				604C969A18669CAC00B0DF93 /* ChapterView.m in Sources */,
 				604FAB7D185C046000CFB5B5 /* HistoryRecordDao.m in Sources */,
 				6092BB751855820200E6B34F /* QuestionDAO.m in Sources */,
 				605CB29C1862C910008D3227 /* UIGridView.m in Sources */,
@@ -828,19 +856,23 @@
 				605CB29D1862C910008D3227 /* UIGridViewCell.m in Sources */,
 				604C96A618669DB400B0DF93 /* DXAlertView.m in Sources */,
 				530BC8C51859F6EE00D711B8 /* TreemapView.m in Sources */,
-				60AB0816186175E400E10792 /* HotSpotView.m in Sources */,
 				605CB2A41862D69F008D3227 /* TestPaperDao.m in Sources */,
+				606AEB231873D0DA006BAD88 /* DMBaseTransition.m in Sources */,
 				6092BB701855815B00E6B34F /* FMResultSet.m in Sources */,
 				6037B2C0185452BE0010A5D1 /* AppDelegate.m in Sources */,
 				530BC8C61859F6EE00D711B8 /* TreemapViewCell.m in Sources */,
 				605CB29E1862C910008D3227 /* UIGridViewRow.m in Sources */,
+				606AEB241873D0DA006BAD88 /* DMScaleTransition.m in Sources */,
 				60996EA7185FE0A8009ABDEA /* Answer.m in Sources */,
 				6092BB6E1855815B00E6B34F /* FMDatabasePool.m in Sources */,
 				6092BB6F1855815B00E6B34F /* FMDatabaseQueue.m in Sources */,
 				605AB0F218652963004993FE /* ChapterDao.m in Sources */,
 				6037B2BC185452BE0010A5D1 /* main.m in Sources */,
-				60D4EA061867208F0058B96B /* ExamView.m in Sources */,
+				606AEB2E1873D164006BAD88 /* HotspotViewController.m in Sources */,
+				606AEB2B1873D14C006BAD88 /* ExamViewController.m in Sources */,
 				53241B59186333010062AD3A /* QuestionResultView.m in Sources */,
+				606AEB251873D0DA006BAD88 /* DMSlideTransition.m in Sources */,
+				606AEB221873D0DA006BAD88 /* DMAlphaTransition.m in Sources */,
 				6092BB6C1855815B00E6B34F /* FMDatabase.m in Sources */,
 				605AB0EF18652955004993FE /* Chapter.m in Sources */,
 				609AD5971861486E00B77989 /* TIButton.m in Sources */,

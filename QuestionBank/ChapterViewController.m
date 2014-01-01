@@ -1,16 +1,17 @@
 //
-//  ChapterView.m
+//  ChapterViewController.m
 //  QuestionBank
 //
-//  Created by 李 雷川 on 13-12-22.
-//  Copyright (c) 2013年 李 雷川. All rights reserved.
+//  Created by 李 雷川 on 14-1-1.
+//  Copyright (c) 2014年 李 雷川. All rights reserved.
 //
 
-#import "ChapterView.h"
+#import "ChapterViewController.h"
 #import "Chapter.h"
 #import "QuestionBrowser.h"
 #import "TopView.h"
 #import "QuestionInterface.h"
+
 
 @interface ChapterCell : UITableViewCell {
     
@@ -52,13 +53,13 @@
 
 @end
 
-@interface ChapterView ()<QuestionBrowserDelegate>{
-     NSArray  *chapterArr;
-     NSArray  *questionArr;
-     EXAM_TYPE    examType;
-     QuestionBrowser *questionBrowser;
-     NSInteger curSelectRow;
-
+@interface ChapterViewController ()<QuestionBrowserDelegate,UITableViewDataSource,UITableViewDelegate>{
+    NSArray  *chapterArr;
+    NSArray  *questionArr;
+    EXAM_TYPE    examType;
+    QuestionBrowser *questionBrowser;
+    NSInteger curSelectRow;
+    
     
     TopView *topView;
     UITableView *chapterTableView;
@@ -67,18 +68,30 @@
 @property(nonatomic, retain) NSArray  *questionArr;
 @end
 
-@implementation ChapterView
+@implementation ChapterViewController
 @synthesize chapterArr,questionArr;
-- (id)initWithFrame:(CGRect)frame
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithFrame:frame];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Initialization code
-        [self addTopBarView];
-        [self addTableView];
-      
+        // Custom initialization
     }
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    [self addTopBarView];
+    [self addTableView];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 -(void)dealloc{
@@ -98,6 +111,7 @@
     [super dealloc];
 }
 
+
 -(void)close{
     if (questionBrowser) {
         [UIView animateWithDuration:0.35f delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -114,12 +128,13 @@
         }];
     }
     else{
-        if (self.exitBlock) {
-            self.exitBlock();
-        }
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    
     }
     
-
+    
 }
 
 -(void)initChapterWithType:(EXAM_TYPE)type{
@@ -146,22 +161,23 @@
 
 -(void)addTopBarView{
     if (!topView) {
-        CGRect topRect =   CGRectMake(0, 0,CGRectGetWidth(self.bounds), TOP_BAR_HEIGHT);
+        CGRect topRect =   CGRectMake(0, 0,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
         topView = [[TopView alloc]initWithFrame:topRect];
         [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:topView];
+        [self.view addSubview:topView];
         [topView  release];
     }
-
+    
 }
+
 -(void)addTableView{
     if (!chapterTableView) {
-        CGRect contentRect =   CGRectMake(0, TOP_BAR_HEIGHT,CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - TOP_BAR_HEIGHT );
+        CGRect contentRect =   CGRectMake(0, TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
         chapterTableView = [[UITableView alloc]initWithFrame:contentRect];
         chapterTableView.dataSource = self;
         chapterTableView.delegate = self;
         //chapterTableView.separatorStyle =  UITableViewCellSeparatorStyleNone;
-        [self addSubview:chapterTableView];
+        [self.view addSubview:chapterTableView];
         [chapterTableView release];
     }
     
@@ -219,7 +235,7 @@
     curSelectRow = indexPath.row;
     [self initQuestionDataWithChapterID:chapter.ID];
     [self enterQuestionBroswerView];
-   
+    
 }
 
 
@@ -252,11 +268,11 @@
 
 -(void)enterQuestionBroswerView{
     
-    CGRect startRect =   CGRectMake(CGRectGetWidth(self.bounds), TOP_BAR_HEIGHT,CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - TOP_BAR_HEIGHT );
-    CGRect contentRect =   CGRectMake(0,TOP_BAR_HEIGHT,CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - TOP_BAR_HEIGHT );
+    CGRect startRect =   CGRectMake(CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
+    CGRect contentRect =   CGRectMake(0,TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
     if (!questionBrowser) {
         questionBrowser = [[QuestionBrowser alloc]initWithFrame:startRect withDelegate:self withAnswerType:examType];
-        [self addSubview:questionBrowser];
+        [self.view addSubview:questionBrowser];
         [questionBrowser release];
     }
     [UIView animateWithDuration:0.35f delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -270,15 +286,7 @@
                      animations:^{
                          questionBrowser.frame = contentRect;
                      }];
-
+    
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

@@ -8,28 +8,25 @@
 
 #import "ViewController.h"
 #import "QuestionView.h"
-#import "BottomView.h"
-#import "QuestionBrowser.h"
 #import "Question.h"
 #import "QuestionDAO.h"
 #import "QuestionInterface.h"
-#import "QuestionCell.h"
 #import "TestPaper.h"
 #import "ChapterDao.h"
 #import "Chapter.h"
-#import "HotSpotView.h"
 #import "MainView.h"
-#import "ChapterView.h"
-#import "ExamView.h"
 
+#import "ChapterViewController.h"
+#import "ExamViewController.h"
+#import "HotspotViewController.h"
+#import "DMAlphaTransition.h"
+#import "DMScaleTransition.h"
+#import "DMSlideTransition.h"
 
 #define MAIN_RECT CGRectMake(0,20,CGRectGetWidth(self.view.bounds),CGRectGetHeight(self.view.bounds) -20)
 @interface ViewController (){
     MainView           *mainView;
-   
-    HotSpotView         *hotSpotView;
-    ChapterView   *chapterView;
-    ExamView      *examView;
+
     
     EXAM_TYPE  examType;
     
@@ -234,45 +231,36 @@
 
 -(void)loadFunctionView:(id)sender{
     UIButton *btn = sender;
+    DMScaleTransition *scaleTransition = [[DMScaleTransition alloc]init];
+    id viewController = nil;
     examType = (EXAM_TYPE)btn.tag;
     switch (examType) {
-        case MOCK_EXAM:
-            [self addExamView];
-            break;
+        case MOCK_EXAM:{
+            viewController = [[ExamViewController alloc]init];
+        }
+        break;
         case HOT_SPORT:{
-            [self addHotSpotView];
+            viewController = [[HotspotViewController alloc]init];
+           
         }
             break;
         case FREEDOM_EXAM:
         case ERROR_BOOK:
         case START_BOOK:{
-            [self addChapterView];
+          viewController = [[ChapterViewController alloc]init];
+            [viewController initChapterWithType:examType];
         }
             break;
         default:
             break;
     }
+    [viewController setTransitioningDelegate:scaleTransition];
+    [scaleTransition release];
+    [self presentViewController:viewController animated:YES completion:^{
+        
+    }];
+    [viewController release];
     
-}
-
--(void)exitFunctionView{
-    switch (examType) {
-        case MOCK_EXAM:
-            [self removeExamView];
-            break;
-        case HOT_SPORT:{
-            [self removeHotSportView];
-        }
-            break;
-        case FREEDOM_EXAM:
-        case ERROR_BOOK:
-        case START_BOOK:{
-            [self removeChapterView];
-        }
-            break;
-        default:
-            break;
-    }
 }
 
 -(void)addMainView{
@@ -284,86 +272,6 @@
     }
 }
 
--(void)addExamView{
-    if (!examView) {
-        examView = [[ExamView alloc]initWithFrame:MAIN_RECT];
-        examView.exitBlock =^(){
-            [UIView animateWithDuration:1.0
-                             animations:^{
-                                 CGRect rect = examView.frame;
-                                 rect.origin.x = self.view.frame.size.width;
-                                 examView.frame = rect;
-                                 
-                             }
-                             completion:^(BOOL finished){
-                                 [self removeExamView];
-                             }];
-           // [self removeExamView];
-        };
-        [self.view addSubview:examView];
-        [examView release];
-    }
-}
--(void)removeExamView{
-    if (examView) {
-        [examView removeFromSuperview];
-        examView  =nil;
-    }
-}
-
--(void)addChapterView{
-    if (!chapterView) {
-        chapterView = [[ChapterView alloc]initWithFrame:MAIN_RECT];
-        [chapterView initChapterWithType:examType];
-        chapterView.exitBlock =^(){
-            [UIView animateWithDuration:1.0
-                             animations:^{
-                                 CGRect rect = chapterView.frame;
-                                 rect.origin.x = self.view.frame.size.width;
-                                 chapterView.frame = rect;
-                                 
-                             }
-                             completion:^(BOOL finished){
-                                 [self removeChapterView];
-                             }];
-        };
-        [self.view addSubview:chapterView];
-        [chapterView release];
-    }
-}
-
--(void)addHotSpotView{
-    if (!hotSpotView) {
-        hotSpotView = [[HotSpotView alloc]initWithFrame:MAIN_RECT];
-        hotSpotView.exitBlock =^(){
-            [UIView animateWithDuration:1.0
-                             animations:^{
-                                 CGRect rect = hotSpotView.frame;
-                                 rect.origin.x = self.view.frame.size.width;
-                                 hotSpotView.frame = rect;
-                                 
-                             }
-                             completion:^(BOOL finished){
-                                 [self removeHotSportView];
-                             }];
-            
-        };
-        [self.view addSubview:hotSpotView];
-        [hotSpotView release];
-    }
-}
--(void)removeHotSportView{
-    if (hotSpotView) {
-        [hotSpotView removeFromSuperview];
-        hotSpotView  =nil;
-    }
-}
--(void)removeChapterView{
-    if (chapterView) {
-        [chapterView removeFromSuperview];
-        chapterView = nil;
-    }
-}
 
 - (void)viewDidLoad
 {

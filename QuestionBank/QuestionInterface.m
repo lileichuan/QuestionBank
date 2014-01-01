@@ -25,29 +25,6 @@ QuestionInterface *questionInterface;
     }
 }
 
--(NSArray *)getQuestionsWithType:(EXAM_TYPE)type{
-    QuestionDAO *qDao =[[QuestionDAO alloc]init];
-    NSArray *arr = nil;
-    switch (type) {
-        case MOCK_EXAM:
-            arr =[ qDao getAllQuestion];
-            break;
-        case ERROR_BOOK:
-            arr =[ qDao getWrongQuestions];
-            break;
-        case START_BOOK:
-            arr =[ qDao getStarQuestions];
-            break;
-        case FREEDOM_EXAM:
-            arr =[ qDao getAllQuestion];
-            break;
-        default:
-            break;
-    }
-    [qDao release];
-    qDao = nil;
-    return arr;
-}
 -(BOOL)updateQuestonWithStar:(BOOL)star withQuestionID:(NSInteger)questionID{
     QuestionDAO *qDao =[[QuestionDAO alloc]init];
     BOOL success = [qDao updateQuestonWithStar:star withQuestionID:questionID];

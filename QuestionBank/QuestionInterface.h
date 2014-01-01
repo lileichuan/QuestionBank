@@ -24,7 +24,6 @@
 
 -(void)closeQuestionInterface;
 
--(NSArray *)getQuestionsWithType:(EXAM_TYPE)type;
 
 -(BOOL)updateQuestonWithStar:(BOOL)star withQuestionID:(NSInteger)questionID;
 

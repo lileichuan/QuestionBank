@@ -345,6 +345,19 @@
 			path = TreemapKit;
 			sourceTree = "<group>";
 		};
+		60135CC0187574B200FF9F09 /* QuestionResult */ = {
+			isa = PBXGroup;
+			children = (
+				605CB29F1862C99E008D3227 /* QuestionCell.h */,
+				605CB2A01862C99E008D3227 /* QuestionCell.m */,
+				605AB10A18655E40004993FE /* TranscriptView.h */,
+				605AB10B18655E40004993FE /* TranscriptView.m */,
+				53241B57186333010062AD3A /* QuestionResultView.h */,
+				53241B58186333010062AD3A /* QuestionResultView.m */,
+			);
+			name = QuestionResult;
+			sourceTree = "<group>";
+		};
 		602E328C1857FD2A00064368 /* image */ = {
 			isa = PBXGroup;
 			children = (
@@ -411,19 +424,15 @@
 				6037B2BF185452BE0010A5D1 /* AppDelegate.m */,
 				6037B2C4185452BE0010A5D1 /* ViewController.h */,
 				6037B2C5185452BE0010A5D1 /* ViewController.m */,
-				6037B2ED1854581C0010A5D1 /* BottomView.h */,
-				6037B2EE1854581C0010A5D1 /* BottomView.m */,
-				6037B2EA1854580E0010A5D1 /* TopView.h */,
-				6037B2EB1854580E0010A5D1 /* TopView.m */,
-				6037ECC0186D151B00F970E3 /* Main.storyboard */,
-				6037B2C7185452BE0010A5D1 /* Images.xcassets */,
-				6037B2B6185452BE0010A5D1 /* Supporting Files */,
 				606AEB261873D132006BAD88 /* ChapterViewController.h */,
 				606AEB271873D132006BAD88 /* ChapterViewController.m */,
 				606AEB291873D14C006BAD88 /* ExamViewController.h */,
 				606AEB2A1873D14C006BAD88 /* ExamViewController.m */,
 				606AEB2C1873D164006BAD88 /* HotspotViewController.h */,
 				606AEB2D1873D164006BAD88 /* HotspotViewController.m */,
+				6037ECC0186D151B00F970E3 /* Main.storyboard */,
+				6037B2C7185452BE0010A5D1 /* Images.xcassets */,
+				6037B2B6185452BE0010A5D1 /* Supporting Files */,
 			);
 			path = QuestionBank;
 			sourceTree = "<group>";
@@ -638,20 +647,19 @@
 		6092BB82185598EC00E6B34F /* View */ = {
 			isa = PBXGroup;
 			children = (
-				6092BB831855990700E6B34F /* Question */,
-				605CB29F1862C99E008D3227 /* QuestionCell.h */,
-				605CB2A01862C99E008D3227 /* QuestionCell.m */,
-				605AB10A18655E40004993FE /* TranscriptView.h */,
-				605AB10B18655E40004993FE /* TranscriptView.m */,
-				53241B57186333010062AD3A /* QuestionResultView.h */,
-				53241B58186333010062AD3A /* QuestionResultView.m */,
 				605AB10D186572F7004993FE /* MainView.h */,
 				605AB10E186572F7004993FE /* MainView.m */,
+				6037B2ED1854581C0010A5D1 /* BottomView.h */,
+				6037B2EE1854581C0010A5D1 /* BottomView.m */,
+				6037B2EA1854580E0010A5D1 /* TopView.h */,
+				6037B2EB1854580E0010A5D1 /* TopView.m */,
+				60135CC0187574B200FF9F09 /* QuestionResult */,
+				6092BB831855990700E6B34F /* QuestionBrowser */,
 			);
 			name = View;
 			sourceTree = "<group>";
 		};
-		6092BB831855990700E6B34F /* Question */ = {
+		6092BB831855990700E6B34F /* QuestionBrowser */ = {
 			isa = PBXGroup;
 			children = (
 				6092BB871855AE3500E6B34F /* QuestionProtocol.h */,
@@ -667,7 +675,7 @@
 				604C9675186669F800B0DF93 /* QuestionTitleView.h */,
 				604C9676186669F800B0DF93 /* QuestionTitleView.m */,
 			);
-			name = Question;
+			name = QuestionBrowser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

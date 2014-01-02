@@ -212,7 +212,7 @@
 #pragma mark - Paging
 
 -(void)clearTilePages{
-    for (QuestionView *subView in self.subviews) {
+    for (QuestionView *subView in _pagingScrollView.subviews) {
         if ([subView isKindOfClass:[QuestionView class]]) {
             [subView removeFromSuperview];
             subView = nil;
@@ -317,7 +317,7 @@
     _currentPageIndex == 0?(isShowPreBtn = NO):(isShowPreBtn = YES);
     
     BOOL isShowNextBtn;
-    _currentPageIndex == _questionCount - 1?(isShowNextBtn = NO):(isShowNextBtn = YES);
+    _currentPageIndex == _questionCount - 1 || _questionCount == 0?(isShowNextBtn = NO):(isShowNextBtn = YES);
     
     NSString *title = @"没有题目";
     if (_questionCount > 0) {
@@ -534,11 +534,16 @@
 }
 
 -(void)removeErrorQuestion{
-    Question *_question = [self questionAtIndex:_currentPageIndex];
-    _question.error = NO;
-    [[QuestionInterface sharedQuestionInterface]updateQuestonWithError:NO withQuestionID:_question.questionID];
-    [_delegate updateQuestionData];
-    [ProgressHUD showSuccess:@"移除试题成功!"];
+    if (_questionCount == 0) {
+        [ProgressHUD showSuccess:@"没有可移除试题"];
+    }
+    else{
+        Question *_question = [self questionAtIndex:_currentPageIndex];
+        _question.error = NO;
+        [[QuestionInterface sharedQuestionInterface]updateQuestonWithError:NO withQuestionID:_question.questionID];
+        [_delegate updateQuestionData];
+        [ProgressHUD showSuccess:@"移除试题成功!"];
+    }
 }
 
 

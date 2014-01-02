@@ -11,7 +11,7 @@
 @interface QuestionCell : UIGridViewCell{
     UILabel *label;
     NSInteger num;
-    
+
     NSInteger state; //0表示未做;1表示正确;2表示错误;
     //HistoryRecord *historyRecord;
     

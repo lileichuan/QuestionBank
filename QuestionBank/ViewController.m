@@ -282,7 +282,6 @@
 //    for (NSInteger i = 1; i < 7; i++) {
 //         [self setDataWithChapterNum:i];
 //    }
-    //[self setDataWithChapterNum:3];
    
     
     

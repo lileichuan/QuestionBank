@@ -152,6 +152,12 @@
         float labelWidth = 300;
         float labelHeigth = 40;
         
+        CGRect photoRect = CGRectMake(startX, 50,100, 100);
+        UIImageView *photoImageView = [[UIImageView alloc]initWithFrame:photoRect];
+        [guideView addSubview:photoImageView];
+        [photoImageView release];
+        
+        
         UIFont *font = [UIFont fontWithName:@"ArialRoundedMTBold" size:18];
         CGRect timeRect = CGRectMake(startX, 150,labelWidth , labelHeigth);
         UILabel *timeLabel = [[UILabel alloc]initWithFrame:timeRect];
@@ -182,15 +188,14 @@
         
         
         UIButton *enterExamBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        //[submitBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1]] forState:UIControlStateNormal];
+        [enterExamBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1]] forState:UIControlStateNormal];
         enterExamBtn.layer.masksToBounds  = YES;
         enterExamBtn.layer.cornerRadius  = 3.0;
-        enterExamBtn.backgroundColor = [UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1];
         [enterExamBtn setTitle:@"进入考试" forState:UIControlStateNormal];
         [enterExamBtn addTarget:self action:@selector(addQuestionBrowserView) forControlEvents:UIControlEventTouchUpInside];
         float btnWidth = 90;
         float btnHeight = 35;
-        enterExamBtn.frame = CGRectMake(CGRectGetMidX(guideView.frame) - btnWidth/2,CGRectGetMidY(guideView.frame) - btnHeight/2, btnWidth, btnHeight);
+        enterExamBtn.frame = CGRectMake(CGRectGetMidX(guideView.frame) - btnWidth/2,CGRectGetMaxY(standardLabel.frame), btnWidth, btnHeight);
         [guideView addSubview:enterExamBtn];
         
     }

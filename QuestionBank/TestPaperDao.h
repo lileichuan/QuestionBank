@@ -19,4 +19,6 @@
 
 -(NSInteger)getTestPaperCount;
 
+-(NSArray *)getAllTestPaper;
+
 @end

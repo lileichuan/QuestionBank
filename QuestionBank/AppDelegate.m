@@ -8,20 +8,36 @@
 
 #import "AppDelegate.h"
 #import "SqliteInterface.h"
-
+#import "InterfaceService.h"
+#import "UserInfo.h"
 #define DB_NAME @"question.db"
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+//    InterfaceService *service = [[InterfaceService alloc]init];
+   
+//    UserInfo *userInfo = [[UserInfo alloc]init];
+//    userInfo.userID = @"1234567";
+//    userInfo.name = @"李雷川";
+//    userInfo.company = @"北大方正";
+//    [service uploadUserInfo:userInfo];
+    
+    //[service loadAnswerRaking];
+    
     // Override point for customization after application launch.
     //打开数据库
     [[SqliteInterface sharedSqliteInterface] setupDB:DB_NAME];
     [[SqliteInterface sharedSqliteInterface] connectDB];
-    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:[NSBundle mainBundle]];
+    UIViewController *vc = [storyboard instantiateInitialViewController];
+    self.window.rootViewController = vc;
+    self.window.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
+    [self.window makeKeyAndVisible];
     return YES;
 }
-							
+
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

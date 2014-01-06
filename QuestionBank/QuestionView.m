@@ -11,6 +11,7 @@
 #import "Answer.h"
 #import "HistoryRecord.h"
 #import "QuestionInterface.h"
+#import "DXAlertView.h"
 
 @interface   OptionViewCell:UITableViewCell{
     UIImageView   *imageView;
@@ -60,21 +61,24 @@
     answerLabel.hidden = YES;
     submitBtn.hidden = YES;
     NSInteger answerID = [[cellInfo objectForKey:@"answerID"]integerValue];
+    float cellHeigth = [[cellInfo objectForKey:@"cellHeight"]floatValue];
+    float cellHeigth1 = CGRectGetHeight(self.bounds);
+    NSLog(@"cellHeigth is:%f %f",cellHeigth,cellHeigth1);
     self.tag = answerID;
     if (answerID != 0) {
         optionLabel.hidden = NO ;
         imageView.hidden = NO ;
         float _score = [[cellInfo objectForKey:@"score"]floatValue];
+       
         self.score = _score;
-        if (score == 0.0) {
-            isCorrect = NO;
-        }
-        else{
-            isCorrect = YES;
-        }
+        score == 0.0 ? (isCorrect = NO) :(isCorrect = YES);
+        CGRect imageRect = CGRectMake(20,cellHeigth/2 - 12,24, 24);
+        imageView.frame = imageRect;
         NSString *content = [cellInfo objectForKey:@"content"];
+        CGRect optionRect = CGRectMake(CGRectGetMaxX(imageView.frame) + 5,0,CGRectGetWidth(self.frame) - 50,cellHeigth);
+        optionLabel.frame = optionRect;
         optionLabel.text = content;
-    }
+           }
     else{
         submitBtn.hidden = NO;
     }
@@ -89,9 +93,10 @@
         [imageView release];
     }
     if (!optionLabel) {
-        optionLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 5,4,CGRectGetWidth(self.bounds) - 51,40)];
+        optionLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 5,4,CGRectGetWidth(self.bounds) - 50,CGRectGetHeight(self.bounds) - 8)];
         [optionLabel setNumberOfLines:0];
         optionLabel.font = [UIFont systemFontOfSize:16];
+        optionLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:optionLabel];
         optionLabel.hidden = YES;
         [optionLabel release];
@@ -119,10 +124,10 @@
         answerLabel = [[UILabel alloc]initWithFrame:CGRectMake(5,4, CGRectGetWidth(self.bounds) - 100,40)];
         [answerLabel setNumberOfLines:0];
         answerLabel.font = [UIFont systemFontOfSize:16];
+        answerLabel.textColor = [UIColor redColor];
         [self addSubview:answerLabel];
         answerLabel.hidden = YES;
         [answerLabel release];
-        
     }
 }
 
@@ -215,12 +220,27 @@
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(gotoNextQuestion) object:nil];
 }
 
+
 -(void)setQuestion:(Question *)_question{
     if (question) {
         [question release];
     }
     question = [_question retain];
-    
+
+   
+    if (optionArr) {
+        [optionArr release];
+        optionArr = nil;
+    }
+    if (question.optionType == SINGLE_CHOOSE) {
+        optionArr =[@[@"A",@"B",@"C",@"D"] retain];
+    }
+    else if(question.optionType == MUTABLE_CHOOSE){
+        optionArr = [@[@"A",@"B",@"C",@"D",@"E"] retain];
+    }
+    else if (question.optionType == TRUE_FALSE){
+         optionArr = [@[@"正确",@"错误"] retain];
+    }
     if (!titleView) {
         titleView = [[QuestionTitleView alloc]initWithFrame:CGRectMake(0, 0,CGRectGetWidth(self.bounds),18)];
         [self addSubview:titleView];
@@ -236,25 +256,63 @@
         [self addSubview:optionTableView];
         [optionTableView release];
     }
-    NSString *questionTitle = [NSString stringWithFormat:@"%d.%@",titleNum,question.question];
+
+    
+    NSString *questionTitle = [NSString stringWithFormat:@"%ld.%@",titleNum,question.question];
     NSDictionary *dic = @{@"type":[NSNumber numberWithInteger:question.optionType],@"title":questionTitle};
     [titleView configureTitleInfo:dic];
+
     float tableY =CGRectGetMaxY(titleView.frame);
-    optionTableView.frame = CGRectMake(0,tableY, CGRectGetWidth(self.bounds),CGRectGetHeight(self.bounds)- tableY);
-    if (optionArr) {
-        [optionArr release];
-        optionArr = nil;
+    [self configureCellHeight];
+    float totalHeigth = 0;
+    
+    for (id height in cellHeightArr) {
+        totalHeigth += [height floatValue];
     }
-    if (question.optionType == SINGLE_CHOOSE) {
-        optionArr =[@[@"A",@"B",@"C",@"D"] retain];
-    }
-    else if(question.optionType == MUTABLE_CHOOSE){
-        optionArr = [@[@"A",@"B",@"C",@"D",@"E"] retain];
-    }
-    else if (question.optionType == TRUE_FALSE){
-         optionArr = [@[@"正确",@"错误"] retain];
-    }
+    optionTableView.frame = CGRectMake(0,tableY, CGRectGetWidth(self.bounds),totalHeigth);
+    self.contentSize = CGSizeMake(CGRectGetWidth(self.bounds),CGRectGetHeight(titleView.frame) + CGRectGetHeight(optionTableView.frame));
     [optionTableView reloadData];
+}
+
+-(void)configureCellHeight{
+    if (cellHeightArr) {
+        [cellHeightArr release];
+        cellHeightArr = nil;
+    }
+    CGFloat contentWidth = CGRectGetWidth(self.bounds);
+    NSInteger numCount;
+    if (question.optionType != MUTABLE_CHOOSE) {
+        numCount = question.answerArr.count;
+    }
+    else{
+        numCount = question.answerArr.count + 1;
+    }
+    NSMutableArray *arr = [NSMutableArray arrayWithCapacity:5];
+    for (NSInteger i =0; i < numCount; i++) {
+        float height;
+        if (question.optionType == MUTABLE_CHOOSE && i == numCount -1 ) {
+            height = 100.0;
+        }
+        else {
+            Answer *answer = [question.answerArr objectAtIndex:i];
+            NSString *content = [NSString stringWithFormat:@"%@",answer.content];;
+            if (question.optionType != TRUE_FALSE) {
+                NSString *option = [optionArr objectAtIndex:i];
+                content = [NSString stringWithFormat:@"%@.%@",option,content];
+            }
+            // 計算出顯示完內容需要的最小尺寸
+            UIFont *font = [UIFont systemFontOfSize:16];
+            CGSize size = [content sizeWithFont:font constrainedToSize:CGSizeMake(contentWidth - 50,200) lineBreakMode:NSLineBreakByWordWrapping];
+            if (size.height < 38) {
+                height = 40;
+            }
+            else{
+                height = (size.height + 2);
+            }
+        }
+        [arr addObject:[NSNumber numberWithFloat:height]];
+    }
+    cellHeightArr = [arr retain];
 }
 
 /*
@@ -269,29 +327,8 @@
 #pragma mark UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat contentWidth = tableView.frame.size.width;
-    NSInteger row = indexPath.row;
-    // 該行要顯示的內容
-    if (question.optionType == MUTABLE_CHOOSE && indexPath.row == question.answerArr.count) {
-        return 100;
-    }
-    else{
-        Answer *answer = [question.answerArr objectAtIndex:row];
-        NSString *content = [NSString stringWithFormat:@"%@",answer.content];;
-        if (question.optionType != TRUE_FALSE) {
-            NSString *option = [optionArr objectAtIndex:row];
-            content = [NSString stringWithFormat:@"%@.%@",option,content];
-        }
-        // 計算出顯示完內容需要的最小尺寸
-        UIFont *font = [UIFont systemFontOfSize:16];
-        CGSize size = [content sizeWithFont:font constrainedToSize:CGSizeMake(contentWidth - 50, 200) lineBreakMode:UILineBreakModeWordWrap];
-        // 這裏返回需要的高度
-        NSLog(@"size.height is:%f",size.height);
-        if (size.height < 42) {
-            size.height = 42;
-        }
-        return size.height;
-    }
+    return [[cellHeightArr objectAtIndex:indexPath.row] floatValue];
+
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -315,7 +352,7 @@
     cell.isOptionSelect = NO;
 
     if (question.optionType == MUTABLE_CHOOSE && indexPath.row == question.answerArr.count) {
-        cellInfo = @{@"answerID":[NSNumber numberWithInteger:0]};
+        cellInfo = @{@"answerID":[NSNumber numberWithInteger:0],@"cellHeight":[cellHeightArr objectAtIndex:row]};
     }
     else{
         Answer *answer = [question.answerArr objectAtIndex:row];
@@ -324,7 +361,7 @@
             NSString *option = [optionArr objectAtIndex:row];
             content = [NSString stringWithFormat:@"%@.%@",option,content];
         }
-         cellInfo = @{@"answerID":[NSNumber numberWithInteger:answer.ID],@"content":content,@"score":[NSNumber numberWithFloat:answer.score]};
+         cellInfo = @{@"answerID":[NSNumber numberWithInteger:answer.ID],@"content":content,@"score":[NSNumber numberWithFloat:answer.score],@"cellHeight":[cellHeightArr objectAtIndex:row]};
         
     }
     [cell configureCellInfo:cellInfo];
@@ -341,9 +378,9 @@
         };
     }
     [self makeCellAnswerWithCell:cell cellforRowIndexPath:indexPath];
+    
     return cell;
 }
-
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (question.optionType != MUTABLE_CHOOSE) {
@@ -355,22 +392,27 @@
     OptionViewCell *optionCell =  (OptionViewCell *)cell;
     if (question.historyRecord.answerIDs) {
         optionCell.userInteractionEnabled = NO;
-        NSRange range = [question.historyRecord.answerIDs rangeOfString:[NSString stringWithFormat:@"%d",optionCell.tag]];
+        if (indexPath.row  == question.answerArr.count && question.optionType == MUTABLE_CHOOSE) {
+            NSString *answer = [NSString stringWithFormat:@"正确答案:%@",[self formatCorrectAnswer]];
+            [optionCell feedbackMutiChooseCorrectAnswer:answer];
+            return;
+        }
+        NSRange range = [question.historyRecord.answerIDs rangeOfString:[NSString stringWithFormat:@"%ld",optionCell.tag]];
         if (range.location != NSNotFound) {//重新回来后加载上一次的选项需要修改
             if (question.optionType != MUTABLE_CHOOSE) {
               [optionCell feedback];
             }
             else{
-                if (indexPath.row == question.answerArr.count) {
-                    [self feedbackMutiblechooswWithCorrect:NO];
-                }
+                optionCell.selected = YES;
+                //optionCell.isOptionSelect = YES;
             }
-          
         }
     }
     else{
         optionCell.userInteractionEnabled = YES;
     }
+
+ 
 }
 
 
@@ -427,7 +469,7 @@
     TestPaper *testPaper =   [[QuestionInterface sharedQuestionInterface]getCurTestPaper];
     if (isCorrect && score ==  1.0) {
          testPaper.correctNum += 1;
-        testPaper.score += score;
+         testPaper.score += score;
     }
     else{
         isCorrect = NO;
@@ -471,7 +513,7 @@
     if (cell.tag == 0) {
         NSString *answer = nil;
         if (!isCorrect) {
-            answer = [NSString stringWithFormat:@"打错了，正确答案:%@",[self formateCorrectAnswer]];
+            answer = [NSString stringWithFormat:@"答错了,正确答案:%@",[self formatCorrectAnswer]];
         }
         else {
             answer = @"恭喜你,答对啦!";
@@ -481,7 +523,7 @@
     }
 }
 
--(NSString *)formateCorrectAnswer{
+-(NSString *)formatCorrectAnswer{
     NSString *answerStr =nil;
     for (NSInteger i = 0;i< question.answerArr.count; i++) {
         Answer *answer = [question.answerArr objectAtIndex:i];

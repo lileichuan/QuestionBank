@@ -11,12 +11,13 @@
 #import "QuestionTitleView.h"
 @class Question;
 
-@interface QuestionView : UIView<QuestionProtocol,UITableViewDataSource,UITableViewDelegate>{
+@interface QuestionView : UIScrollView<QuestionProtocol,UITableViewDataSource,UITableViewDelegate>{
     Question *question;
     
     QuestionTitleView *titleView;
-    UITableView *optionTableView;
-    NSArray *optionArr;
+    UITableView     *optionTableView;
+    NSArray         *optionArr;
+    NSArray         *cellHeightArr;
     NSInteger   titleNum;  //题目编号
     
 }

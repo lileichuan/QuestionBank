@@ -14,5 +14,5 @@
     
 
 }
-
+-(IBAction)loadFunctionView:(id)sender;
 @end

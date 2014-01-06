@@ -33,10 +33,10 @@
     for (NSInteger i = 0; i < testPaper.questionArr.count; i++ ) {
         Question *question = [testPaper.questionArr objectAtIndex:i];
         if (i ==0 ) {
-            questionIDs = [NSString stringWithFormat:@"%d,",question.questionID];
+            questionIDs = [NSString stringWithFormat:@"%ld,",question.questionID];
         }
         else{
-            questionIDs =[questionIDs stringByAppendingString:[NSString stringWithFormat:@",%d",question.questionID]];
+            questionIDs =[questionIDs stringByAppendingString:[NSString stringWithFormat:@",%ld",question.questionID]];
         }
     }
 	[db executeUpdate:[self SQL:@"INSERT INTO %@ (id,created_time,duration,error_num,correct_num,un_write_num,socre,question_ids) VALUES(?,?,?,?,?,?,?,?)" inTable:TABLE_NAME],
@@ -59,10 +59,9 @@
 
 -(NSInteger)getTestPaperCount{
     NSInteger result = 0;
-    FMResultSet *rs =[db executeQuery:[self SQL:@"SELECT * FROM %@ w" inTable:TABLE_NAME]];
+    FMResultSet *rs =[db executeQuery:[self SQL:@"SELECT * FROM %@ " inTable:TABLE_NAME]];
 	while ([rs next]) {
         result ++;
-        break;
     }
     if ([db hadError]) {
 		NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -70,5 +69,33 @@
     return result;
 }
 
+-(NSArray *)getAllTestPaper{
+    NSMutableArray *arr = nil;
+    FMResultSet *rs =[db executeQuery:[self SQL:@"SELECT * FROM %@ w" inTable:TABLE_NAME]];
+	while ([rs next]) {
+        if (!arr) {
+            arr = [[[NSMutableArray alloc]initWithCapacity:10]autorelease];
+        }
+        TestPaper *testPaper = [self analysisTestPaperWithRS: rs];
+        [arr addObject:testPaper];
+    }
+    if ([db hadError]) {
+		NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+	}
+    return arr;
+    
+}
 
+-(TestPaper *)analysisTestPaperWithRS:(FMResultSet*)rs {
+    TestPaper *testPaper =[[[TestPaper alloc]init] autorelease];;
+    testPaper.paperID = [rs intForColumn:@"id"];
+    testPaper.createdTime =[NSDate dateWithTimeIntervalSince1970:[rs doubleForColumn:@"created_time"]];
+    testPaper.duration = [rs intForColumn:@"duration"];
+    testPaper.correctNum =  [rs intForColumn:@"correct_num"];
+    testPaper.errorNum = [rs intForColumn:@"error_num"];
+    testPaper.unWriteNum = [rs intForColumn:@"un_write_num"];
+    testPaper.score = [rs doubleForColumn:@"socre"];
+    testPaper.questionArr = [[rs stringForColumn:@"question_ids"] componentsSeparatedByString:@","];
+    return testPaper;
+}
 @end

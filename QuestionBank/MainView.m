@@ -15,8 +15,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        [self setupTopView];
-        [self setupMainBtn];
+//        [self setupTopView];
+//        [self setupMainBtn];
     }
     return self;
 }
@@ -89,14 +89,37 @@
         hotSpotBtn.tag = HOT_SPORT;
         [self addSubview:hotSpotBtn];
     }
+    
+    float bottomBtnWidth = 100;
+    float bottomBtnHeigth = 44;
+    float bottomSpace = 60;
+    if (!historyBtn) {
+        CGRect rect = CGRectMake(bottomSpace,CGRectGetHeight(self.bounds) - bottomBtnHeigth,bottomBtnWidth,bottomBtnHeigth);
+        historyBtn = [UIButton  buttonWithType:UIButtonTypeCustom];
+        historyBtn.frame = rect;
+        [historyBtn setImage:[UIImage imageNamed:@"hot_sport.png"] forState:UIControlStateNormal];
+        historyBtn.tag = ANSWER_RECORD;
+        [self addSubview:historyBtn];
+    }
+    
+    if (!rankBtn) {
+        CGRect rect = CGRectMake(CGRectGetWidth(self.bounds) - bottomSpace - bottomBtnWidth,CGRectGetHeight(self.bounds) - bottomBtnHeigth,bottomBtnWidth,bottomBtnHeigth);
+        rankBtn = [UIButton  buttonWithType:UIButtonTypeCustom];
+        rankBtn.frame = rect;
+        [rankBtn setImage:[UIImage imageNamed:@"rank.png"] forState:UIControlStateNormal];
+        rankBtn.tag = RANGKING;
+        [self addSubview:rankBtn];
+    }
 }
 
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents{
-      [mockExamBtn addTarget:target action:action forControlEvents:controlEvents];
-      [freedomExamBtn addTarget:target action:action forControlEvents:controlEvents];
-      [hotSpotBtn addTarget:target action:action forControlEvents:controlEvents];
-      [wrongBookBtn addTarget:target action:action forControlEvents:controlEvents];
-      [starBookBtn addTarget:target action:action forControlEvents:controlEvents];
+    [mockExamBtn addTarget:target action:action forControlEvents:controlEvents];
+    [freedomExamBtn addTarget:target action:action forControlEvents:controlEvents];
+    [hotSpotBtn addTarget:target action:action forControlEvents:controlEvents];
+    [wrongBookBtn addTarget:target action:action forControlEvents:controlEvents];
+    [starBookBtn addTarget:target action:action forControlEvents:controlEvents];
+    [historyBtn addTarget:target action:action forControlEvents:controlEvents];
+    [rankBtn addTarget:target action:action forControlEvents:controlEvents];
 }
 
 /*

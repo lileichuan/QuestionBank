@@ -29,7 +29,7 @@
 
 -(void)setNum:(NSInteger)_num{
     num = _num;
-    NSString *title = [NSString stringWithFormat:@"%ld",num];
+    NSString *title = [NSString stringWithFormat:@"%ld",_num];
     label.text = title;
 }
 

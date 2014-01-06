@@ -29,19 +29,18 @@
 
 -(BOOL)updateQuestonWithError:(BOOL)error withQuestionID:(NSInteger)questionID;
 
--(NSArray *)getQuestionsWithChapter:(NSInteger)chapter;
-
 -(BOOL)addHistoryRecord:(HistoryRecord*)_historyRecord;
 
 -(NSArray*)getQuestionWithChapterID:(NSInteger)chapterID withExamType:(EXAM_TYPE)type;
 
 -(NSArray *)gtChaptersWithAnswerType:(EXAM_TYPE)type;
 
+-(NSArray *)getAllTestPape;
+
 -(TestPaper *)generateTestPaper;
 
 -(TestPaper *)getCurTestPaper;
 
--(void)updateTestPaperInfo:(NSDictionary *)info;
+-(BOOL)saveTestPaper;
 
--(BOOL)insertTestPaper;
 @end

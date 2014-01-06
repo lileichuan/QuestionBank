@@ -113,7 +113,9 @@ SqliteInterface *sharedSqliteInterface;
     BOOL result4 =[db executeUpdate:@"Create table if not exists test_paper (id integer PRIMARY KEY,created_time double,duration integer,error_num integer,correct_num integer ,un_write_num integer,socre float,question_ids text)"];
     
     BOOL result5 =[db executeUpdate:@"Create table if not exists chapter (id integer PRIMARY KEY,name text)"];
-      success = result1&& result2 && result3 && result4 && result5;
+    
+    BOOL result6 =[db executeUpdate:@"Create table if not exists userInfo (id text PRIMARY KEY,name text,company text)"];
+      success = result1&& result2 && result3 && result4 && result5 && result6;
     return success;
 }
 

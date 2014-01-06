@@ -14,25 +14,31 @@
 #import "DXAlertView.h"
 #import "UIGridView.h"
 #import "UIGridViewDelegate.h"
+#import "UserInfo.h"
+#import "UserInfoDao.h"
+#import "InterfaceService.h"
+#import "Catalog.h"
+#import "RankingViewController.h"
 
-@interface ExamViewController ()<QuestionBrowserDelegate,QuestionProtocol,UIGridViewDelegate>{
+@interface ExamViewController ()<QuestionBrowserDelegate,QuestionProtocol,UIGridViewDelegate,UIGestureRecognizerDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationBarDelegate>{
     UIView *guideView;
     TopView *topView;
     QuestionBrowser     *questionBrowser;
     QuestionResultView *questionResultView;
     
-    
     NSArray     *questionArr;
-    
     NSInteger       viewTag; //0表示向导页面；1表示考试界面；2表示答题结果页面；3表示查看答案；
     UIGridView *answerList ;
+    UserInfo   *userInfo;
 }
-@property(nonatomic, retain)  NSArray             *questionArr;
+@property(nonatomic, retain)  NSArray          *questionArr;
+@property(nonatomic, retain)  UserInfo   *userInfo;
 @property(nonatomic, assign)  NSInteger       viewTag;
+
 @end
 
 @implementation ExamViewController
-@synthesize questionArr,viewTag;
+@synthesize questionArr,viewTag,userInfo;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -43,10 +49,21 @@
     return self;
 }
 
+- (BOOL)shouldAutorotate{
+    return NO;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [userDefaults objectForKey:@"userID"];
+    UserInfoDao *dao = [[UserInfoDao alloc]init];
+    self.userInfo = [dao getUserWithID:userID];
+    [dao release];
+    dao = nil;
     [self addTopBarView];
     [self addGuideView];
 }
@@ -55,6 +72,18 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dealloc{
+    if (userInfo) {
+        [userInfo release];
+        userInfo = nil;
+    }
+    if (questionArr) {
+        [questionArr release];
+        questionArr = nil;
+    }
+    [super dealloc];
 }
 
 -(void)close{
@@ -122,7 +151,7 @@
 
 -(void)addTopBarView{
     if (!topView) {
-        CGRect topRect =   CGRectMake(0, 0,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
+        CGRect topRect =   CGRectMake(0,20,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
         topView = [[TopView alloc]initWithFrame:topRect];
         [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
         
@@ -140,8 +169,17 @@
     }
 }
 
+-(void)addRegisterView{
+    
+}
+
+-(void)removeRegisterView{
+    
+}
+
+
 -(void)addGuideView{
-    CGRect contentRect =   CGRectMake(0, TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
+    CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame));
     if (!guideView) {
         guideView = [[UIView alloc]initWithFrame:contentRect];
         guideView.backgroundColor = [UIColor whiteColor];
@@ -154,12 +192,43 @@
         
         CGRect photoRect = CGRectMake(startX, 50,100, 100);
         UIImageView *photoImageView = [[UIImageView alloc]initWithFrame:photoRect];
+        photoImageView.layer.masksToBounds = YES;
+        photoImageView.layer.cornerRadius = 30;
+        photoImageView.layer.borderWidth = 3;
+        photoImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
+        photoImageView.userInteractionEnabled = YES;
+        photoImageView.image = [UIImage imageNamed:@"Photo_Default.png"];
         [guideView addSubview:photoImageView];
+        photoImageView.tag = 100;
         [photoImageView release];
+        
+        //实例化长按手势监听
+        UILongPressGestureRecognizer *longPress =
+        [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                      action:@selector(handleTableviewCellLongPressed:)];
+        //代理
+        longPress.delegate = self;
+        longPress.minimumPressDuration = 1.0;
+        //将长按手势添加到需要实现长按操作的视图里
+        [photoImageView addGestureRecognizer:longPress];
+        [longPress release];
+        
         
         
         UIFont *font = [UIFont fontWithName:@"ArialRoundedMTBold" size:18];
-        CGRect timeRect = CGRectMake(startX, 150,labelWidth , labelHeigth);
+        
+        
+        CGRect nameRect = CGRectMake(CGRectGetMaxX(photoImageView.frame) + 10,CGRectGetMidY(photoImageView.frame),labelWidth,labelHeigth);
+        UILabel *nameLabel = [[UILabel alloc]initWithFrame:nameRect];
+        //设置字体
+        nameLabel.font = font;
+        nameLabel.backgroundColor = [UIColor clearColor];
+        nameLabel.text = userInfo.name;
+        [guideView addSubview:nameLabel];
+        [nameLabel release];
+        
+        
+        CGRect timeRect = CGRectMake(startX, CGRectGetMaxY(photoImageView.frame) + 10,labelWidth , labelHeigth);
         UILabel *timeLabel = [[UILabel alloc]initWithFrame:timeRect];
         //设置字体
         timeLabel.font = font;
@@ -173,7 +242,7 @@
         //设置字体
         amountLabel.font = font;
         amountLabel.backgroundColor = [UIColor clearColor];
-        amountLabel.text = @"考试时间:60分钟";
+        amountLabel.text = @"考试时间:90分钟";
         [guideView addSubview:amountLabel];
         [amountLabel release];
         
@@ -182,7 +251,7 @@
         //设置字体
         standardLabel.font = font;
         standardLabel.backgroundColor = [UIColor clearColor];
-        standardLabel.text = @"合格标准:满分100分，60分及格";
+        standardLabel.text = @"合格标准:满分100分";
         [guideView addSubview:standardLabel];
         [standardLabel release];
         
@@ -211,8 +280,8 @@
 
 -(void)addQuestionBrowserView{
     [self initQuestionData];
-    CGRect startRect =   CGRectMake(CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
-    CGRect contentRect =   CGRectMake(0,TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
+    CGRect startRect =   CGRectMake(CGRectGetWidth(self.view.bounds), CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
+    CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
     if (!questionBrowser) {
         questionBrowser = [[QuestionBrowser alloc]initWithFrame:startRect withDelegate:self withAnswerType:MOCK_EXAM];
         questionBrowser._questionData = questionArr;
@@ -251,7 +320,7 @@
 
 -(void)addQuestionResultView{
     TestPaper *testPaper =   [[QuestionInterface sharedQuestionInterface]getCurTestPaper];
-    CGRect contentRect =   CGRectMake(0,TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
+    CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
     if (!questionResultView) {
         questionResultView = [[QuestionResultView alloc] initWithFrame:contentRect];
         questionResultView.testPaper = testPaper;
@@ -260,6 +329,9 @@
         };
         questionResultView.restartBlock =^(){
             [self restartQuestionBroswerView];
+        };
+        questionResultView.rankBlock =^(){
+            [self addRanking];
         };
         [self.view addSubview:questionResultView];
         [questionResultView release];
@@ -273,10 +345,18 @@
         questionResultView = nil;
     }
 }
+
+-(void)addRanking{
+    RankingViewController * viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Ranking"];
+    [self presentViewController:viewController animated:YES completion:^{
+        
+    }];
+}
+
 //查看答题结果
 -(void)addAnswerListView{
     if (!answerList) {
-        CGRect contentRect =   CGRectMake(0,TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
+        CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
         answerList = [[UIGridView alloc] initWithFrame:contentRect];
         answerList.uiGridViewDelegate = self;
         [self.view addSubview:answerList];
@@ -317,6 +397,22 @@
 //
 -(void)finishExam{
     [self addQuestionResultView];
+    //上传到服务器
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self uploadAnswerRecord];
+    });
+    [[QuestionInterface sharedQuestionInterface]saveTestPaper];//保存试卷
+    
+  
+}
+
+-(void)uploadAnswerRecord{
+    TestPaper *testPaper = [[QuestionInterface sharedQuestionInterface]getCurTestPaper];
+    NSDictionary *recordDic = @{@"user_id":userInfo.userID,@"score":[NSNumber numberWithFloat:testPaper.score],@"duration":[NSNumber numberWithInteger:testPaper.duration]};
+    InterfaceService *interface = [[InterfaceService alloc]init];
+    [interface uploadAnswerRecord:recordDic];
+    [interface release];
+    
 }
 #pragma mark
 #pragma mark QuestionProtocol
@@ -421,6 +517,95 @@
     }
     [self removeAnswerListView];
     viewTag = 1;
+}
+
+
+#pragma mark
+#pragma mark 切换头像
+
+- (void) handleTableviewCellLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+     
+        UIActionSheet* actionsheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                          delegate:nil
+                                                 cancelButtonTitle:@"取消"
+                                            destructiveButtonTitle:nil
+                                                 otherButtonTitles:@"相机",@"相册",nil];
+       
+        actionsheet.delegate = self;
+        // CGRect photoRect = CGRectMake(50, 50,100, 100);
+        //[actionsheet showFromRect:photoRect inView:guideView animated:YES];
+        [actionsheet showInView:self.view];
+        [actionsheet release];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"buttonIndex is:%d",buttonIndex);
+    if (buttonIndex == 2) {
+        return;
+    }
+    UIImagePickerControllerSourceType sourceType;
+    //判断是否有摄像头
+    if (buttonIndex == 0) {
+        sourceType = UIImagePickerControllerSourceTypeCamera;
+        if(![UIImagePickerController isSourceTypeAvailable:sourceType])
+        {
+            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+    }
+    else if(buttonIndex == 1){
+         sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.delegate = self;   // 设置委托
+    imagePickerController.sourceType = sourceType;
+    imagePickerController.allowsEditing = NO;
+    [self presentViewController:imagePickerController animated:YES completion:nil];  //需要以模态的形式展示
+    [imagePickerController release];
+}
+#pragma mark -
+#pragma mark UIImagePickerController Method
+//完成拍照
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    if (image == nil)
+        image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self performSelector:@selector(saveImage:) withObject:image];
+}
+//用户取消拍照
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+//将照片保存到disk上
+-(void)saveImage:(UIImage *)image
+{
+    NSData *imageData = UIImagePNGRepresentation(image);
+    if(imageData != nil)
+    {
+        imageData = UIImageJPEGRepresentation(image, 1.0);
+    }
+    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
+    [imageData writeToFile:photoPath atomically:YES];
+    [self updatePhotoWithPath:photoPath];
+    
+    InterfaceService *service = [[InterfaceService alloc]init];
+    [service uploadUserInfo:userInfo];
+    [service release];
+
+    
+}
+
+-(void)updatePhotoWithPath:(NSString *)photoPath{
+    UIImage *image = [UIImage imageWithContentsOfFile:photoPath];
+    for (UIImageView *subView in guideView.subviews) {
+        if ([subView isKindOfClass:[UIImageView class]]) {
+            subView.image = image;
+        }
+    }
 }
 
 @end

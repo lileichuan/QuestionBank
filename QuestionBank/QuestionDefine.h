@@ -14,10 +14,13 @@
 
 typedef enum{
     MOCK_EXAM = 0,  //模拟
-    FREEDOM_EXAM,   //自由练习
-    ERROR_BOOK,     //错题本
-    START_BOOK,      //收藏本
-    HOT_SPORT,      //热点提问
+    FREEDOM_EXAM = 1,   //自由练习
+    ERROR_BOOK = 2,     //错题本
+    START_BOOK = 3,      //收藏本
+    HOT_SPORT = 4,      //热点提问
+    ANSWER_RECORD = 5,  //答题记录
+    RANGKING = 6,      //排行榜
+     ANSWER_LIST = 7,      //答题列表
 }EXAM_TYPE;
 typedef enum{
     SINGLE_CHOOSE = 0,  //单选

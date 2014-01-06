@@ -84,7 +84,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	int residue =  ([uiGridViewDelegate numberOfCellsOfGridView:self] % [uiGridViewDelegate numberOfColumnsOfGridView:self]);
+	NSInteger residue =  ([uiGridViewDelegate numberOfCellsOfGridView:self] % [uiGridViewDelegate numberOfColumnsOfGridView:self]);
 	
 	if (residue > 0) residue = 1;
 	
@@ -107,13 +107,13 @@
         row = [[[UIGridViewRow alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 	
-	int numCols = [uiGridViewDelegate numberOfColumnsOfGridView:self];
-	int count = [uiGridViewDelegate numberOfCellsOfGridView:self];
+	NSInteger numCols = [uiGridViewDelegate numberOfColumnsOfGridView:self];
+	NSInteger count = [uiGridViewDelegate numberOfCellsOfGridView:self];
 	
 	CGFloat x = 0.0;
 	CGFloat height = [uiGridViewDelegate gridView:self heightForRowAt:indexPath.row];
 	
-	for (int i=0;i<numCols;i++) {
+	for (NSInteger i=0;i<numCols;i++) {
 		
 		if ((i + indexPath.row * numCols) >= count) {
 			

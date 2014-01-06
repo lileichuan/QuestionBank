@@ -80,7 +80,18 @@ QuestionInterface *questionInterface;
     return success;
 }
 
+-(NSArray *)getAllTestPape{
+    TestPaperDao *testPaperDao = [[TestPaperDao alloc]init];
+    NSArray *arr = [testPaperDao getAllTestPaper];
+    [testPaperDao release];
+    return arr;
+}
+
 -(TestPaper *)generateTestPaper{
+    if (testPaper) {
+        [testPaper release];
+        testPaper = nil;
+    }
     testPaper = [[TestPaper alloc]init];
     testPaper.questionArr = [self generateMockExamWithMode:MOCK_EXAM];
     testPaper.unWriteNum = testPaper.questionArr.count;
@@ -94,19 +105,14 @@ QuestionInterface *questionInterface;
 -(TestPaper *)getCurTestPaper{
     return testPaper;
 }
--(void)updateTestPaperInfo:(NSDictionary *)info{
-    
-}
--(BOOL)insertTestPaper{
+
+-(BOOL)saveTestPaper{
     BOOL success = NO;
     if (testPaper) {
         TestPaperDao *testPaperDao = [[TestPaperDao alloc]init];
-         success = [testPaperDao insertTestPaper:testPaper];
+        success = [testPaperDao insertTestPaper:testPaper];
         [testPaperDao release];
-        [testPaper release];
-        testPaper = nil;
     }
     return success;
-    
 }
 @end

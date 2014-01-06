@@ -38,4 +38,6 @@
 @property(nonatomic, retain)  NSArray *questionArr;
 @property(nonatomic, copy) dispatch_block_t answerListBlock;
 @property(nonatomic, copy) dispatch_block_t restartBlock;
+@property(nonatomic, copy) dispatch_block_t rankBlock;
+
 @end

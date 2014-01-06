@@ -87,9 +87,18 @@
 }
 
 -(void)loadQuestionResult:(id)sender{
-    if (self.answerListBlock) {
-        self.answerListBlock();
+    UIButton *btn = sender;
+    if (btn.tag == RANGKING) {
+        if (self.rankBlock) {
+            self.rankBlock();
+        }
     }
+    else if(btn.tag == ANSWER_LIST){
+        if (self.answerListBlock) {
+            self.answerListBlock();
+        }
+    }
+
     
 }
 

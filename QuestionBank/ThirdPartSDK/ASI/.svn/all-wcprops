@@ -1,0 +1,299 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI
+END
+ASICloudFilesCDNRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesCDNRequest.m
+END
+ASIS3BucketRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3BucketRequest.h
+END
+ASIHTTPRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIHTTPRequest.m
+END
+ASINetworkQueue.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASINetworkQueue.h
+END
+ASIDataDecompressor.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIDataDecompressor.h
+END
+ASIS3BucketRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3BucketRequest.m
+END
+ASINetworkQueue.m
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASINetworkQueue.m
+END
+ASIDataDecompressor.m
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIDataDecompressor.m
+END
+ASIFormDataRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIFormDataRequest.h
+END
+ASIInputStream.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIInputStream.h
+END
+ASIFormDataRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIFormDataRequest.m
+END
+ASIHTTPRequestConfig.h
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIHTTPRequestConfig.h
+END
+ASIInputStream.m
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIInputStream.m
+END
+ASICloudFilesObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesObject.h
+END
+ASIWebPageRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIWebPageRequest.h
+END
+ASIS3Bucket.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3Bucket.h
+END
+ASIS3ObjectRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3ObjectRequest.h
+END
+ASICloudFilesObject.m
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesObject.m
+END
+ASIWebPageRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIWebPageRequest.m
+END
+ASIS3Bucket.m
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3Bucket.m
+END
+ASICloudFilesObjectRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesObjectRequest.h
+END
+ASIS3ObjectRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3ObjectRequest.m
+END
+ASIDownloadCache.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIDownloadCache.h
+END
+ASICloudFilesContainer.h
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesContainer.h
+END
+ASICacheDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICacheDelegate.h
+END
+ASICloudFilesObjectRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesObjectRequest.m
+END
+ASIS3Request.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3Request.h
+END
+ASIAuthenticationDialog.h
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIAuthenticationDialog.h
+END
+ASIProgressDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIProgressDelegate.h
+END
+ASIDownloadCache.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIDownloadCache.m
+END
+ASICloudFilesContainer.m
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesContainer.m
+END
+ASICloudFilesRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesRequest.h
+END
+ASIS3Request.m
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3Request.m
+END
+ASIAuthenticationDialog.m
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIAuthenticationDialog.m
+END
+ASICloudFilesContainerRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesContainerRequest.h
+END
+ASICloudFilesRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesRequest.m
+END
+ASIS3BucketObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3BucketObject.h
+END
+ASICloudFilesContainerRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesContainerRequest.m
+END
+ASIS3ServiceRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3ServiceRequest.h
+END
+ASIS3BucketObject.m
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3BucketObject.m
+END
+ASIHTTPRequestDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIHTTPRequestDelegate.h
+END
+ASIS3ServiceRequest.m
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIS3ServiceRequest.m
+END
+strict.xcconfig
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/strict.xcconfig
+END
+ASICloudFilesContainerXMLParserDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesContainerXMLParserDelegate.h
+END
+ASIDataCompressor.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIDataCompressor.h
+END
+ASICloudFilesCDNRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesCDNRequest.h
+END
+ASIHTTPRequest.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIHTTPRequest.h
+END
+ASICloudFilesContainerXMLParserDelegate.m
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASICloudFilesContainerXMLParserDelegate.m
+END
+ASIDataCompressor.m
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/edu/!svn/ver/12132/IOS/trunk/WitCloudyReader/Resources/ThirdPartSDK/ASI/ASIDataCompressor.m
+END

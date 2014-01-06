@@ -12,17 +12,17 @@
 
 
 @optional
-- (void) gridView:(UIGridView *)grid didSelectRowAt:(int)rowIndex AndColumnAt:(int)columnIndex;
+- (void) gridView:(UIGridView *)grid didSelectRowAt:(NSInteger)rowIndex AndColumnAt:(NSInteger)columnIndex;
 
 
 @required
-- (CGFloat) gridView:(UIGridView *)grid widthForColumnAt:(int)columnIndex;
-- (CGFloat) gridView:(UIGridView *)grid heightForRowAt:(int)rowIndex;
+- (CGFloat) gridView:(UIGridView *)grid widthForColumnAt:(NSInteger)columnIndex;
+- (CGFloat) gridView:(UIGridView *)grid heightForRowAt:(NSInteger)rowIndex;
 
 - (NSInteger) numberOfColumnsOfGridView:(UIGridView *) grid;
 - (NSInteger) numberOfCellsOfGridView:(UIGridView *) grid;
 
-- (UIGridViewCell *) gridView:(UIGridView *)grid cellForRowAt:(int)rowIndex AndColumnAt:(int)columnIndex;
+- (UIGridViewCell *) gridView:(UIGridView *)grid cellForRowAt:(NSInteger)rowIndex AndColumnAt:(NSInteger)columnIndex;
 
 @end
 

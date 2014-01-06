@@ -30,10 +30,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
     [self addTopBarView];
     [self addWebView];
 }
 
+- (BOOL)shouldAutorotate{
+    return NO;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -45,7 +49,7 @@
 
 -(void)addTopBarView{
     if (!topView) {
-        CGRect topRect =   CGRectMake(0, 0,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
+        CGRect topRect =   CGRectMake(0,20,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
         topView = [[TopView alloc]initWithFrame:topRect];
         [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:topView];
@@ -56,7 +60,7 @@
 
 
 -(void)addWebView{
-    CGRect contentRect =   CGRectMake(0, TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
+    CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
     if (!webView) {
         webView = [[UIWebView alloc]initWithFrame:contentRect];
         [self.view addSubview:webView];

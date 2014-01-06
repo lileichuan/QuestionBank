@@ -26,6 +26,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+      
         float height = 22;
         titleLable = [[UILabel alloc]initWithFrame:CGRectMake(10,CGRectGetMidY(self.frame) - height/2, CGRectGetWidth(self.frame),22)];
         [self addSubview:titleLable];
@@ -80,10 +81,15 @@
     return self;
 }
 
+- (BOOL)shouldAutorotate{
+    return NO;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+      self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
     [self addTopBarView];
     [self addTableView];
 }
@@ -140,6 +146,18 @@
 -(void)initChapterWithType:(EXAM_TYPE)type{
     examType = type;
     [self initChapterData];
+    [chapterTableView reloadData];
+    
+}
+
+-(void)addTopBarView{
+    if (!topView) {
+        CGRect topRect =   CGRectMake(0,20,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
+        topView = [[TopView alloc]initWithFrame:topRect];
+        [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:topView];
+        [topView  release];
+    }
     NSString *title;
     switch (examType) {
         case FREEDOM_EXAM:
@@ -155,24 +173,12 @@
             break;
     }
     topView.title.text = title;
-    [chapterTableView reloadData];
-    
-}
-
--(void)addTopBarView{
-    if (!topView) {
-        CGRect topRect =   CGRectMake(0, 0,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
-        topView = [[TopView alloc]initWithFrame:topRect];
-        [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:topView];
-        [topView  release];
-    }
     
 }
 
 -(void)addTableView{
     if (!chapterTableView) {
-        CGRect contentRect =   CGRectMake(0, TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
+        CGRect contentRect =   CGRectMake(0, CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
         chapterTableView = [[UITableView alloc]initWithFrame:contentRect];
         chapterTableView.dataSource = self;
         chapterTableView.delegate = self;
@@ -255,7 +261,9 @@
     }
     return nil;
 }
+-(void)finishExam{
 
+}
 -(void)updateQuestionData{
     Chapter *chapter = [chapterArr objectAtIndex:curSelectRow];
     [self initQuestionDataWithChapterID:chapter.ID];
@@ -268,8 +276,8 @@
 
 -(void)enterQuestionBroswerView{
     
-    CGRect startRect =   CGRectMake(CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
-    CGRect contentRect =   CGRectMake(0,TOP_BAR_HEIGHT,CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - TOP_BAR_HEIGHT );
+    CGRect startRect =   CGRectMake(CGRectGetWidth(self.view.bounds), CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
+    CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
     if (!questionBrowser) {
         questionBrowser = [[QuestionBrowser alloc]initWithFrame:startRect withDelegate:self withAnswerType:examType];
         [self.view addSubview:questionBrowser];

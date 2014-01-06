@@ -19,6 +19,13 @@
 #import "ChapterViewController.h"
 #import "ExamViewController.h"
 #import "HotspotViewController.h"
+#import "AnswerRecordViewController.h"
+#import "RankingViewController.h"
+
+#import "InterfaceService.h"
+#import "UserInfo.h"
+#import "UserInfoDao.h"
+
 #import "DMAlphaTransition.h"
 #import "DMScaleTransition.h"
 #import "DMSlideTransition.h"
@@ -30,11 +37,53 @@
     
     EXAM_TYPE  examType;
     
+    UITextField *nameTextField;
+    UITextField *companytextField;
+    
 }
+@property(nonatomic, retain)UITextField *nameTextField;
+@property(nonatomic, retain) UITextField *companytextField;
 
 @end
 
 @implementation ViewController
+@synthesize nameTextField,companytextField;
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];//    float startX = 20;
+    //[self addMainView];
+    for (NSInteger i = 1; i < 7; i++) {
+        [self setDataWithChapterNum:i];
+    }
+}
+-(void)dealloc{
+    
+    [super dealloc];
+}
+-(void)viewDidAppear:(BOOL)animated{
+    //    CGRect frame = self.view.frame;
+    //    float systemVersion = 7.0;
+    //    if ([[UIDevice currentDevice].systemVersion floatValue] >= systemVersion) {
+    //        frame.origin.y = 20;
+    //        frame.size.height = self.view.frame.size.height - 20;
+    //        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    //    } else {
+    //        frame.origin.x = 0;
+    //    }
+    //    self.view.frame = frame;
+    
+}
+
+- (BOOL)shouldAutorotate{
+    return NO;
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 -(void)setDataWithChapterNum:(NSInteger)num{
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
@@ -51,7 +100,7 @@
             chapterName = @"第一章《中国特色社会主义》练习题";
             break;
         case 2:
-            chapterName = @"第三章《新闻伦理》练习题";
+            chapterName = @"第二章《马克思主义新闻观》练习题";
             break;
         case 3:
             chapterName = @"第三章《新闻伦理》练习题";
@@ -200,11 +249,22 @@
                     else{
                          content = @"正确";
                     }
-                    if ([answer isEqualToString:@"√"] && k ==1) {
-                        optionAnswer.score = 1.0;
+                    if ([answer isEqualToString:@"√"]) {
+                        if (k == 0) {
+                             optionAnswer.score = 0.0;
+                        }
+                        else if (k == 1){
+                             optionAnswer.score = 1.0;
+                        }
+                       
                     }
-                    else{
-                        optionAnswer.score = 0.0;
+                    else if([answer isEqualToString:@"√"]){
+                        if (k == 0) {
+                            optionAnswer.score = 1.0;
+                        }
+                        else if (k == 1){
+                            optionAnswer.score = 0.0;
+                        }
                     }
                     optionAnswer.content = content;
                     [answerArr addObject:optionAnswer];
@@ -229,96 +289,145 @@
     [pool release];
 }
 
--(void)loadFunctionView:(id)sender{
+-(IBAction)loadFunctionView:(id)sender{
     UIButton *btn = sender;
-    DMScaleTransition *scaleTransition = [[DMScaleTransition alloc]init];
+    id transition = nil;
     id viewController = nil;
     examType = (EXAM_TYPE)btn.tag;
     switch (examType) {
         case MOCK_EXAM:{
-            viewController = [[ExamViewController alloc]init];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString *userID = [userDefaults objectForKey:@"userID"];
+            if (!userID) {
+                [self showRegisterAlert];
+                return;
+            }
+            else{
+                transition = [[DMScaleTransition alloc]init];
+                viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Exam"];
+            }
+
         }
         break;
         case HOT_SPORT:{
-            viewController = [[HotspotViewController alloc]init];
-           
+            transition = [[DMScaleTransition alloc]init];
+             viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Hotspot"];
         }
             break;
         case FREEDOM_EXAM:
         case ERROR_BOOK:
         case START_BOOK:{
-          viewController = [[ChapterViewController alloc]init];
+            transition = [[DMScaleTransition alloc]init];
+            viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Chapter"];
             [viewController initChapterWithType:examType];
         }
             break;
+        case ANSWER_RECORD:
+        {
+            transition = [[DMSlideTransition alloc]init];
+           viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"AnswerRecord"];
+            
+        }
+            break;
+        case RANGKING:{
+            transition = [[DMSlideTransition alloc]init];
+             viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Ranking"];
+        }
+            break;
+
         default:
             break;
     }
-    [viewController setTransitioningDelegate:scaleTransition];
-    [scaleTransition release];
+    [viewController setTransitioningDelegate:transition];
+    [transition autorelease];
     [self presentViewController:viewController animated:YES completion:^{
         
     }];
-    [viewController release];
+    //[viewController release];
     
 }
 
+-(void)showRegisterAlert{
+    UITextField *tfID=[[UITextField alloc]initWithFrame:CGRectZero];
+    [tfID becomeFirstResponder];
+    tfID.borderStyle = UITextBorderStyleRoundedRect;
+    tfID.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.nameTextField = tfID;
+    [tfID release];
+    
+    UITextField *tfPwd=[[UITextField alloc]initWithFrame:CGRectZero];
+    tfPwd.borderStyle = UITextBorderStyleRoundedRect;
+    tfPwd.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.companytextField = tfPwd;
+    [tfPwd release];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置用户信息" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
+    self.nameTextField = [alert textFieldAtIndex:0];
+    nameTextField.placeholder = @"用户昵称";
+    self.companytextField = [alert textFieldAtIndex:1];
+    companytextField.placeholder = @"所在单位";
+    alert.tag=100;
+    [alert show];
+    [alert release];
+}
 -(void)addMainView{
     if (!mainView) {
         mainView  = [[MainView alloc]initWithFrame:MAIN_RECT];
+        //[mainView addTarget:self action:@selector(loadFunctionView:) forControlEvents:UIControlEventTouchUpInside];
+        //self.view = mainView;
         [self.view addSubview:mainView];
-        [mainView addTarget:self action:@selector(loadFunctionView:) forControlEvents:UIControlEventTouchUpInside];
         [mainView release];
     }
 }
 
-
-- (void)viewDidLoad
+#pragma mark
+#pragma mark UIAlertViewDelegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [super viewDidLoad];
-    //self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"main_bg.png"]];
-    self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];//    float startX = 20;
-    [self addMainView];
-//    for (NSInteger i = 1; i < 7; i++) {
-//         [self setDataWithChapterNum:i];
-//    }
-   
+    if (alertView.tag==100) {
+        switch (buttonIndex) {
+            case 1:
+            {
+                [self saveUserInfo];
+                
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
     
+}
+-(void)saveUserInfo{
+    CFUUIDRef uuidObj = CFUUIDCreate(nil);   //create a new UUID
+	NSString *userID = (NSString *)CFUUIDCreateString(nil, uuidObj);
+	CFRelease(uuidObj);
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:userID forKey:@"userID"];
+    [userDefaults synchronize];
     
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        InterfaceService *service = [[InterfaceService alloc]init];
+        
+        UserInfo *userInfo = [[UserInfo alloc]init];
+        userInfo.userID = userID;
+        userInfo.name = nameTextField.text;
+        userInfo.company = companytextField.text;
+        BOOL success =  [service uploadUserInfo:userInfo];
+        UserInfoDao *dao  =[[UserInfoDao alloc]init];
+        [dao insertUser:userInfo];
+        [dao release];
+        if (success) {
+            [userDefaults setBool:YES forKey:@"IsUploadUser"];
+        }
+        [service release];
+        [userInfo release];
+    });
+    
+
     
 }
--(void)dealloc{
-
-    [super dealloc];
-}
-
--(void)viewDidAppear:(BOOL)animated{
-//    CGRect frame = self.view.frame;
-//    float systemVersion = 7.0;
-//    if ([[UIDevice currentDevice].systemVersion floatValue] >= systemVersion) {
-//        frame.origin.y = 20;
-//        frame.size.height = self.view.frame.size.height - 20;
-//        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-//    } else {
-//        frame.origin.x = 0;
-//    }
-//    self.view.frame = frame;
-
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
-
--(void)close{
-
-}
-
-
-
 
 @end

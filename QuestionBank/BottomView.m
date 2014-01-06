@@ -30,7 +30,7 @@
         CGRect preBtnRect = CGRectMake(space,startY,width, height);
         leftBtn = [TIButton buttonWithType:UIButtonTypeCustom];
         leftBtn.frame = preBtnRect;
-        leftBtn.tag = 0;
+        leftBtn.tag = ANSWER_LIST;
         [self addSubview:leftBtn];
         [leftBtn release];
     }
@@ -38,7 +38,7 @@
         CGRect preBtnRect = CGRectMake(CGRectGetMaxX(self.frame) -width - space ,startY,width, height);
         rightBtn = [TIButton buttonWithType:UIButtonTypeCustom];
         rightBtn.frame = preBtnRect;
-        rightBtn.tag = 1;
+        rightBtn.tag = RANGKING;
         [self addSubview:rightBtn];
         [rightBtn release];
     }

@@ -73,10 +73,10 @@
 
 -(void)configureTranscriptInfo:(NSDictionary *)dic{
     NSInteger score = [[dic objectForKey:@"score"]integerValue];
-    scoreLabel.text = [NSString stringWithFormat:@"%d分",score];
+    scoreLabel.text = [NSString stringWithFormat:@"%ld分",score];
     
     NSInteger duration = [[dic objectForKey:@"duration"]integerValue];
-    NSString *useTime = [NSString stringWithFormat:@"%d分%d秒",duration/60,duration%60];
+    NSString *useTime = [NSString stringWithFormat:@"%ld分%ld秒",duration/60,duration%60];
     durationLabel.text = useTime;
     
     NSString *title;

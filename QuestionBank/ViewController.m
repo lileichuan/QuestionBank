@@ -30,6 +30,7 @@
 #import "DMScaleTransition.h"
 #import "DMSlideTransition.h"
 
+
 #define MAIN_RECT CGRectMake(0,20,CGRectGetWidth(self.view.bounds),CGRectGetHeight(self.view.bounds) -20)
 @interface ViewController (){
     MainView           *mainView;
@@ -53,9 +54,9 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];//    float startX = 20;
     //[self addMainView];
-    for (NSInteger i = 1; i < 7; i++) {
-        [self setDataWithChapterNum:i];
-    }
+//    for (NSInteger i = 1; i < 7; i++) {
+//        [self setDataWithChapterNum:i];
+//    }
 }
 -(void)dealloc{
     
@@ -258,7 +259,7 @@
                         }
                        
                     }
-                    else if([answer isEqualToString:@"√"]){
+                    else if([answer isEqualToString:@"×"]){
                         if (k == 0) {
                             optionAnswer.score = 1.0;
                         }
@@ -296,17 +297,8 @@
     examType = (EXAM_TYPE)btn.tag;
     switch (examType) {
         case MOCK_EXAM:{
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSString *userID = [userDefaults objectForKey:@"userID"];
-            if (!userID) {
-                [self showRegisterAlert];
-                return;
-            }
-            else{
-                transition = [[DMScaleTransition alloc]init];
-                viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Exam"];
-            }
-
+            transition = [[DMScaleTransition alloc]init];
+            viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Exam"];
         }
         break;
         case HOT_SPORT:{
@@ -348,28 +340,30 @@
 }
 
 -(void)showRegisterAlert{
-    UITextField *tfID=[[UITextField alloc]initWithFrame:CGRectZero];
-    [tfID becomeFirstResponder];
-    tfID.borderStyle = UITextBorderStyleRoundedRect;
-    tfID.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    self.nameTextField = tfID;
-    [tfID release];
-    
-    UITextField *tfPwd=[[UITextField alloc]initWithFrame:CGRectZero];
-    tfPwd.borderStyle = UITextBorderStyleRoundedRect;
-    tfPwd.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    self.companytextField = tfPwd;
-    [tfPwd release];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置用户信息" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
-    self.nameTextField = [alert textFieldAtIndex:0];
-    nameTextField.placeholder = @"用户昵称";
-    self.companytextField = [alert textFieldAtIndex:1];
-    companytextField.placeholder = @"所在单位";
-    alert.tag=100;
-    [alert show];
-    [alert release];
+//    UITextField *tfID=[[UITextField alloc]initWithFrame:CGRectZero];
+//    [tfID becomeFirstResponder];
+//    tfID.borderStyle = UITextBorderStyleRoundedRect;
+//    tfID.autocapitalizationType = UITextAutocapitalizationTypeNone;
+//    self.nameTextField = tfID;
+//    [tfID release];
+//    
+//    UITextField *tfPwd=[[UITextField alloc]initWithFrame:CGRectZero];
+//    tfPwd.borderStyle = UITextBorderStyleRoundedRect;
+//    tfPwd.autocapitalizationType = UITextAutocapitalizationTypeNone;
+//    self.companytextField = tfPwd;
+//    [tfPwd release];
+//    
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置用户信息" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+//    alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
+//    self.nameTextField = [alert textFieldAtIndex:0];
+//    nameTextField.placeholder = @"用户昵称";
+//    self.companytextField = [alert textFieldAtIndex:1];
+//    companytextField.placeholder = @"所在单位";
+//    alert.tag=100;
+//    [alert show];
+//    [alert release];
+    UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"modal"];
+
 }
 -(void)addMainView{
     if (!mainView) {
@@ -400,34 +394,54 @@
     }
     
 }
--(void)saveUserInfo{
-    CFUUIDRef uuidObj = CFUUIDCreate(nil);   //create a new UUID
-	NSString *userID = (NSString *)CFUUIDCreateString(nil, uuidObj);
-	CFRelease(uuidObj);
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:userID forKey:@"userID"];
-    [userDefaults synchronize];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        InterfaceService *service = [[InterfaceService alloc]init];
-        
-        UserInfo *userInfo = [[UserInfo alloc]init];
-        userInfo.userID = userID;
-        userInfo.name = nameTextField.text;
-        userInfo.company = companytextField.text;
-        BOOL success =  [service uploadUserInfo:userInfo];
-        UserInfoDao *dao  =[[UserInfoDao alloc]init];
-        [dao insertUser:userInfo];
-        [dao release];
-        if (success) {
-            [userDefaults setBool:YES forKey:@"IsUploadUser"];
-        }
-        [service release];
-        [userInfo release];
-    });
-    
 
-    
-}
+
+//- (IBAction)goAction:(id)sender
+//{
+//    primaryView.userInteractionEnabled=NO;
+//    
+//    [UIView animateWithDuration:0.3 animations:^{
+//        secondaryView.frame = CGRectMake(0, primaryView.frame.size.height - secondaryView.frame.size.height, secondaryView.frame.size.width, secondaryView.frame.size.height);
+//        
+//        CALayer *layer = primaryView.layer;
+//        layer.zPosition = -4000;
+//        CATransform3D rotationAndPerspectiveTransform = CATransform3DIdentity;
+//        rotationAndPerspectiveTransform.m34 = 1.0 / -300;
+//        layer.transform = CATransform3DRotate(rotationAndPerspectiveTransform, 10.0f * M_PI / 180.0f, 1.0f, 0.0f, 0.0f);
+//        
+//        primaryShadeView.alpha = 0.35;
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.3 animations:^{
+//            primaryView.transform = CGAffineTransformMakeScale(0.9, 0.9);
+//            
+//            primaryShadeView.alpha = 0.5;
+//        }];
+//    }];
+//}
+//
+//- (IBAction)undoAction:(id)sender
+//{
+//    primaryView.userInteractionEnabled=YES;
+//    
+//    [UIView animateWithDuration:0.3 animations:^{
+//        CALayer *layer = primaryView.layer;
+//        layer.zPosition = -4000;
+//        CATransform3D rotationAndPerspectiveTransform = CATransform3DIdentity;
+//        rotationAndPerspectiveTransform.m34 = 1.0 / 300;
+//        layer.transform = CATransform3DRotate(rotationAndPerspectiveTransform, -10.0f * M_PI / 180.0f, 1.0f, 0.0f, 0.0f);
+//        
+//        primaryShadeView.alpha = 0.35;
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.3 animations:^{
+//            primaryView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//            
+//            primaryShadeView.alpha = 0.0;
+//            
+//            secondaryView.frame = CGRectMake(0, primaryView.frame.size.height, secondaryView.frame.size.width, secondaryView.frame.size.height);
+//        }];
+//    }];
+//}
+//
+
 
 @end

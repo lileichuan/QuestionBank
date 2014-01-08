@@ -40,10 +40,10 @@
             self.backgroundColor = [UIColor whiteColor];
             break;
         case 1:
-            self.backgroundColor = [UIColor colorWithRed:153.0/255.0 green:153.0/255.0 blue:153.0/255.0 alpha:1.0];
+             self.backgroundColor = [UIColor grayColor];
             break;
         case 2:
-            self.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:1.0];
+            self.backgroundColor = [UIColor colorWithRed:205.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0];
             break;
             
         default:

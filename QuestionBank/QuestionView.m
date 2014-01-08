@@ -109,7 +109,7 @@
         [submitBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1]] forState:UIControlStateNormal];
         submitBtn.layer.masksToBounds  = YES;
         //submitBtn.layer.cornerRadius  = 3.0;
-        submitBtn.backgroundColor = [UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1];
+//        submitBtn.backgroundColor = [UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1];
         [submitBtn setTitle:@"确定" forState:UIControlStateNormal];
         
         float btnWidth = 90;

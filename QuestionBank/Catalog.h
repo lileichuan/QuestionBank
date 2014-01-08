@@ -11,4 +11,6 @@
 @interface Catalog : NSObject
 
 +(NSString *)getPhotoForlder;
+
++(NSString *)getCompanyFilePath;
 @end

@@ -39,7 +39,9 @@
 	// Do any additional setup after loading the view.
     [self initData];
     [self addTopBarView];
-    [self addCloumChart];
+    if (timeArr.count > 0) {
+        [self addCloumChart];
+    }
 }
 - (BOOL)shouldAutorotate{
     return NO;

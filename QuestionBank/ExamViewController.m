@@ -57,15 +57,33 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
-    
+    [self addTopBarView];
+     self.viewTag = 0;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [userDefaults objectForKey:@"userID"];
-    UserInfoDao *dao = [[UserInfoDao alloc]init];
-    self.userInfo = [dao getUserWithID:userID];
-    [dao release];
-    dao = nil;
-    [self addTopBarView];
-    [self addGuideView];
+    if (!userID) {
+        [self loadRegister];
+    }
+    else{
+        UserInfoDao *dao = [[UserInfoDao alloc]init];
+        self.userInfo = [dao getUserWithID:userID];
+        [dao release];
+        dao = nil;
+        if (infoView) {
+            [infoView configureUserInfo:userInfo];
+        }
+    }
+
+}
+
+-(void)loadRegister{
+    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Company"];
+    [self presentViewController:viewController animated:YES completion:^{
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -178,98 +196,6 @@
 }
 
 
--(void)addGuideView{
-    CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame));
-    if (!guideView) {
-        guideView = [[UIView alloc]initWithFrame:contentRect];
-        guideView.backgroundColor = [UIColor whiteColor];
-        [self.view addSubview:guideView];
-        [guideView release];
-        
-        float startX = 50;
-        float labelWidth = 300;
-        float labelHeigth = 40;
-        
-        CGRect photoRect = CGRectMake(startX, 50,100, 100);
-        UIImageView *photoImageView = [[UIImageView alloc]initWithFrame:photoRect];
-        photoImageView.layer.masksToBounds = YES;
-        photoImageView.layer.cornerRadius = 30;
-        photoImageView.layer.borderWidth = 3;
-        photoImageView.layer.borderColor = [[UIColor whiteColor] CGColor];
-        photoImageView.userInteractionEnabled = YES;
-        photoImageView.image = [UIImage imageNamed:@"Photo_Default.png"];
-        [guideView addSubview:photoImageView];
-        photoImageView.tag = 100;
-        [photoImageView release];
-        
-        //实例化长按手势监听
-        UILongPressGestureRecognizer *longPress =
-        [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                      action:@selector(handleTableviewCellLongPressed:)];
-        //代理
-        longPress.delegate = self;
-        longPress.minimumPressDuration = 1.0;
-        //将长按手势添加到需要实现长按操作的视图里
-        [photoImageView addGestureRecognizer:longPress];
-        [longPress release];
-        
-        
-        
-        UIFont *font = [UIFont fontWithName:@"ArialRoundedMTBold" size:18];
-        
-        
-        CGRect nameRect = CGRectMake(CGRectGetMaxX(photoImageView.frame) + 10,CGRectGetMidY(photoImageView.frame),labelWidth,labelHeigth);
-        UILabel *nameLabel = [[UILabel alloc]initWithFrame:nameRect];
-        //设置字体
-        nameLabel.font = font;
-        nameLabel.backgroundColor = [UIColor clearColor];
-        nameLabel.text = userInfo.name;
-        [guideView addSubview:nameLabel];
-        [nameLabel release];
-        
-        
-        CGRect timeRect = CGRectMake(startX, CGRectGetMaxY(photoImageView.frame) + 10,labelWidth , labelHeigth);
-        UILabel *timeLabel = [[UILabel alloc]initWithFrame:timeRect];
-        //设置字体
-        timeLabel.font = font;
-        timeLabel.backgroundColor = [UIColor clearColor];
-        timeLabel.text = @"试题数量:100题";
-        [guideView addSubview:timeLabel];
-        [timeLabel release];
-        
-        CGRect amountRect = CGRectMake(startX,CGRectGetMaxY(timeRect) ,labelWidth , labelHeigth);
-        UILabel *amountLabel = [[UILabel alloc]initWithFrame:amountRect];
-        //设置字体
-        amountLabel.font = font;
-        amountLabel.backgroundColor = [UIColor clearColor];
-        amountLabel.text = @"考试时间:90分钟";
-        [guideView addSubview:amountLabel];
-        [amountLabel release];
-        
-        CGRect standardRect = CGRectMake(startX,CGRectGetMaxY(amountRect) ,labelWidth , labelHeigth);
-        UILabel *standardLabel = [[UILabel alloc]initWithFrame:standardRect];
-        //设置字体
-        standardLabel.font = font;
-        standardLabel.backgroundColor = [UIColor clearColor];
-        standardLabel.text = @"合格标准:满分100分";
-        [guideView addSubview:standardLabel];
-        [standardLabel release];
-        
-        
-        UIButton *enterExamBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [enterExamBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1]] forState:UIControlStateNormal];
-        enterExamBtn.layer.masksToBounds  = YES;
-        enterExamBtn.layer.cornerRadius  = 3.0;
-        [enterExamBtn setTitle:@"进入考试" forState:UIControlStateNormal];
-        [enterExamBtn addTarget:self action:@selector(addQuestionBrowserView) forControlEvents:UIControlEventTouchUpInside];
-        float btnWidth = 90;
-        float btnHeight = 35;
-        enterExamBtn.frame = CGRectMake(CGRectGetMidX(guideView.frame) - btnWidth/2,CGRectGetMaxY(standardLabel.frame), btnWidth, btnHeight);
-        [guideView addSubview:enterExamBtn];
-        
-    }
-    self.viewTag = 0;
-}
 
 -(void)removeGuidView{
     if (guideView) {
@@ -278,7 +204,7 @@
     }
 }
 
--(void)addQuestionBrowserView{
+-(IBAction)addQuestionBrowserView:(id)sender{
     [self initQuestionData];
     CGRect startRect =   CGRectMake(CGRectGetWidth(self.view.bounds), CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
     CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
@@ -523,21 +449,16 @@
 #pragma mark
 #pragma mark 切换头像
 
-- (void) handleTableviewCellLongPressed:(UILongPressGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-     
-        UIActionSheet* actionsheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                          delegate:nil
-                                                 cancelButtonTitle:@"取消"
-                                            destructiveButtonTitle:nil
-                                                 otherButtonTitles:@"相机",@"相册",nil];
-       
-        actionsheet.delegate = self;
-        // CGRect photoRect = CGRectMake(50, 50,100, 100);
-        //[actionsheet showFromRect:photoRect inView:guideView animated:YES];
-        [actionsheet showInView:self.view];
-        [actionsheet release];
-    }
+- (IBAction)handleTableviewCellLongPressed:(UITapGestureRecognizer *)gestureRecognizer {
+    UIActionSheet* actionsheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"取消"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"相机",@"相册",nil];
+    
+    actionsheet.delegate = self;
+    [actionsheet showInView:self.view];
+    [actionsheet release];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{

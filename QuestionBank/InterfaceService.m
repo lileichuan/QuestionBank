@@ -59,7 +59,7 @@
 -(BOOL)uploadAnswerRecord:(NSDictionary *)recordDic{
     BOOL success = NO;
     NSError *error;
-    NSString *serveraddress = [NSString stringWithFormat:@"http://www.jizhehome.com/app/record.c?user_id=%@&score=%@&time_long=%d",[recordDic objectForKey:@"user_id"],[recordDic objectForKey:@"score"],[[recordDic objectForKey:@"duration"]integerValue]];
+    NSString *serveraddress = [NSString stringWithFormat:@"http://www.jizhehome.com/app/record.c?user_id=%@&score=%@&duration=%d",[recordDic objectForKey:@"user_id"],[recordDic objectForKey:@"score"],[[recordDic objectForKey:@"duration"]integerValue]];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
     [request setTimeOutSeconds:15.0];

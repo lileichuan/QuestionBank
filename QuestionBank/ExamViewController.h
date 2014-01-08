@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ExamInfoView.h"
+@interface ExamViewController : UIViewController{
+    IBOutlet ExamInfoView  *infoView;
+}
 
-@interface ExamViewController : UIViewController
-
+- (IBAction)handleTableviewCellLongPressed:(UITapGestureRecognizer *)gestureRecognizer;
+- (IBAction)addQuestionBrowserView:(id)sender;
 @end

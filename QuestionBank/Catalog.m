@@ -18,4 +18,12 @@
     return forlderPath;
 
 }
+
++(NSString *)getCompanyFilePath{
+    NSString *filePath = [NSString stringWithFormat:@"%@%@", [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0],@"/Company.plist"];
+//    if (![[NSFileManager defaultManager]fileExistsAtPath:forlderPath]) {
+//        [[NSFileManager defaultManager]createDirectoryAtPath:forlderPath withIntermediateDirectories:YES attributes:nil error:nil];
+//    }
+    return filePath;
+}
 @end

@@ -173,6 +173,11 @@
 		60E4DA791877CE6B00ABB3EB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60E4DA781877CE6B00ABB3EB /* SystemConfiguration.framework */; };
 		60E4DA7C1877D06400ABB3EB /* Catalog.m in Sources */ = {isa = PBXBuildFile; fileRef = 60E4DA7B1877D06400ABB3EB /* Catalog.m */; };
 		60E4DA7E1877DF5100ABB3EB /* Photo_Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 60E4DA7D1877DF5100ABB3EB /* Photo_Default.png */; };
+		60E547CC187AF55400651567 /* CompanyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60E547CB187AF55400651567 /* CompanyViewController.m */; };
+		60E547CF187AF77A00651567 /* CompanyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 60E547CE187AF77A00651567 /* CompanyCell.m */; };
+		60E547D3187AFBD500651567 /* UserCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60E547D2187AFBD500651567 /* UserCenterViewController.m */; };
+		60E547D6187AFCB600651567 /* ExamInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 60E547D5187AFCB600651567 /* ExamInfoView.m */; };
+		60E547D8187B1AB100651567 /* Company.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60E547D7187B1AB100651567 /* Company.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -448,6 +453,15 @@
 		60E4DA7A1877D06400ABB3EB /* Catalog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Catalog.h; sourceTree = "<group>"; };
 		60E4DA7B1877D06400ABB3EB /* Catalog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Catalog.m; sourceTree = "<group>"; };
 		60E4DA7D1877DF5100ABB3EB /* Photo_Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Photo_Default.png; sourceTree = "<group>"; };
+		60E547CA187AF55400651567 /* CompanyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyViewController.h; sourceTree = "<group>"; };
+		60E547CB187AF55400651567 /* CompanyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyViewController.m; sourceTree = "<group>"; };
+		60E547CD187AF77A00651567 /* CompanyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyCell.h; sourceTree = "<group>"; };
+		60E547CE187AF77A00651567 /* CompanyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyCell.m; sourceTree = "<group>"; };
+		60E547D1187AFBD500651567 /* UserCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCenterViewController.h; sourceTree = "<group>"; };
+		60E547D2187AFBD500651567 /* UserCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCenterViewController.m; sourceTree = "<group>"; };
+		60E547D4187AFCB600651567 /* ExamInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExamInfoView.h; sourceTree = "<group>"; };
+		60E547D5187AFCB600651567 /* ExamInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExamInfoView.m; sourceTree = "<group>"; };
+		60E547D7187B1AB100651567 /* Company.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Company.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -604,8 +618,9 @@
 		6037B2A3185452BE0010A5D1 = {
 			isa = PBXGroup;
 			children = (
-				602C0FC218783D730032EFDB /* Storyboard.storyboard */,
+				6092BB5E1855815B00E6B34F /* ThirdPartSDK */,
 				6037B2B5185452BE0010A5D1 /* QuestionBank */,
+				602C0FC218783D730032EFDB /* Storyboard.storyboard */,
 				6037B2D4185452BE0010A5D1 /* QuestionBankTests */,
 				6037B2AE185452BE0010A5D1 /* Frameworks */,
 				6037B2AD185452BE0010A5D1 /* Products */,
@@ -641,7 +656,6 @@
 		6037B2B5185452BE0010A5D1 /* QuestionBank */ = {
 			isa = PBXGroup;
 			children = (
-				6092BB5E1855815B00E6B34F /* ThirdPartSDK */,
 				6092BB81185598E600E6B34F /* Model */,
 				6092BB82185598EC00E6B34F /* View */,
 				6037B2BE185452BE0010A5D1 /* AppDelegate.h */,
@@ -676,6 +690,7 @@
 				6037B2B8185452BE0010A5D1 /* InfoPlist.strings */,
 				6037B2BB185452BE0010A5D1 /* main.m */,
 				6037B2BD185452BE0010A5D1 /* QuestionBank-Prefix.pch */,
+				60E547D7187B1AB100651567 /* Company.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -852,7 +867,8 @@
 				530BC8C01859F6EE00D711B8 /* TreemapKit */,
 				6092BB5F1855815B00E6B34F /* FMDB */,
 			);
-			path = ThirdPartSDK;
+			name = ThirdPartSDK;
+			path = QuestionBank/ThirdPartSDK;
 			sourceTree = "<group>";
 		};
 		6092BB5F1855815B00E6B34F /* FMDB */ = {
@@ -911,6 +927,7 @@
 		6092BB82185598EC00E6B34F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				60E547D0187AF7B400651567 /* Company */,
 				605AB10D186572F7004993FE /* MainView.h */,
 				605AB10E186572F7004993FE /* MainView.m */,
 				6037B2ED1854581C0010A5D1 /* BottomView.h */,
@@ -925,6 +942,8 @@
 				602C0FBB18781A5D0032EFDB /* RankingView.m */,
 				602C0FBD18781A730032EFDB /* RankingCell.h */,
 				602C0FBE18781A730032EFDB /* RankingCell.m */,
+				60E547D4187AFCB600651567 /* ExamInfoView.h */,
+				60E547D5187AFCB600651567 /* ExamInfoView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -946,6 +965,19 @@
 				604C9676186669F800B0DF93 /* QuestionTitleView.m */,
 			);
 			name = QuestionBrowser;
+			sourceTree = "<group>";
+		};
+		60E547D0187AF7B400651567 /* Company */ = {
+			isa = PBXGroup;
+			children = (
+				60E547CA187AF55400651567 /* CompanyViewController.h */,
+				60E547CB187AF55400651567 /* CompanyViewController.m */,
+				60E547CD187AF77A00651567 /* CompanyCell.h */,
+				60E547CE187AF77A00651567 /* CompanyCell.m */,
+				60E547D1187AFBD500651567 /* UserCenterViewController.h */,
+				60E547D2187AFBD500651567 /* UserCenterViewController.m */,
+			);
+			name = Company;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1029,6 +1061,7 @@
 			files = (
 				6037B2C8185452BE0010A5D1 /* Images.xcassets in Resources */,
 				6037B2BA185452BE0010A5D1 /* InfoPlist.strings in Resources */,
+				60E547D8187B1AB100651567 /* Company.plist in Resources */,
 				605AB11818657747004993FE /* star_book@2x.png in Resources */,
 				604C96AB1866B29100B0DF93 /* ProgressHUD.bundle in Resources */,
 				605AB10718655287004993FE /* restart.png in Resources */,
@@ -1113,6 +1146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60E547CC187AF55400651567 /* CompanyViewController.m in Sources */,
 				604FAB80185C047200CFB5B5 /* HistoryRecord.m in Sources */,
 				605AB10C18655E40004993FE /* TranscriptView.m in Sources */,
 				605CB2A71862D6B1008D3227 /* TestPaper.m in Sources */,
@@ -1135,6 +1169,7 @@
 				6037B2C6185452BE0010A5D1 /* ViewController.m in Sources */,
 				603641891876F39000A9759E /* RankingViewController.m in Sources */,
 				603641BC1877BA4D00A9759E /* ASIAuthenticationDialog.m in Sources */,
+				60E547D3187AFBD500651567 /* UserCenterViewController.m in Sources */,
 				603641C61877BA4D00A9759E /* ASIDownloadCache.m in Sources */,
 				6037B2E9185455850010A5D1 /* Question.m in Sources */,
 				605CB2A11862C99E008D3227 /* QuestionCell.m in Sources */,
@@ -1158,6 +1193,7 @@
 				605CB29D1862C910008D3227 /* UIGridViewCell.m in Sources */,
 				604C96A618669DB400B0DF93 /* DXAlertView.m in Sources */,
 				530BC8C51859F6EE00D711B8 /* TreemapView.m in Sources */,
+				60E547D6187AFCB600651567 /* ExamInfoView.m in Sources */,
 				605CB2A41862D69F008D3227 /* TestPaperDao.m in Sources */,
 				606AEB231873D0DA006BAD88 /* DMBaseTransition.m in Sources */,
 				6092BB701855815B00E6B34F /* FMResultSet.m in Sources */,
@@ -1168,6 +1204,7 @@
 				530BC8C61859F6EE00D711B8 /* TreemapViewCell.m in Sources */,
 				603641CB1877BA4D00A9759E /* ASIS3Bucket.m in Sources */,
 				603641C21877BA4D00A9759E /* ASICloudFilesObjectRequest.m in Sources */,
+				60E547CF187AF77A00651567 /* CompanyCell.m in Sources */,
 				605CB29E1862C910008D3227 /* UIGridViewRow.m in Sources */,
 				603641D01877BA4D00A9759E /* ASIS3ServiceRequest.m in Sources */,
 				6046099318794F0A003F35FD /* SBJSON.m in Sources */,

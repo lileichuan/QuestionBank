@@ -13,7 +13,6 @@
 #import "QuestionProtocol.h"
 #import "TestPaper.h"
 #import "BottomView.h"
-#import "TranscriptView.h"
 //@protocol QuestionResultDelegate <NSObject>
 //
 //-(void)exitQuestionResult;
@@ -25,13 +24,7 @@
     
     id<QuestionProtocol> delegate;
     TestPaper   *testPaper;
-    
-
-    TranscriptView  *transcripView;
     UIButton    *restartBtn;
-    
-
-
 }
 @property(nonatomic, assign)  id<QuestionProtocol> delegate;
 @property(nonatomic, retain) TestPaper   *testPaper;

@@ -60,24 +60,23 @@
         [userDefaults setObject:userID forKey:@"userID"];
         [userDefaults synchronize];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            InterfaceService *service = [[InterfaceService alloc]init];
-            
-            UserInfo *userInfo = [[UserInfo alloc]init];
-            userInfo.userID = userID;
-            userInfo.name = nameTextField.text;
-            userInfo.company = companyLabel.text;
-            BOOL success =  [service uploadUserInfo:userInfo];
-            UserInfoDao *dao  =[[UserInfoDao alloc]init];
-            [dao insertUser:userInfo];
-            [dao release];
-            if (success) {
-                [userDefaults setBool:YES forKey:@"IsUploadUser"];
-            }
-            [service release];
-            [userInfo release];
-        });
-        
+        UserInfo *userInfo = [[UserInfo alloc]init];
+        userInfo.userID = userID;
+        userInfo.name = nameTextField.text;
+        userInfo.company = companyLabel.text;
+        UserInfoDao *dao  =[[UserInfoDao alloc]init];
+        [dao insertUser:userInfo];
+        InterfaceService *service = [[InterfaceService alloc]init];
+        BOOL success =  [service uploadUserInfo:userInfo];
+        if (success) {
+            [userDefaults setBool:YES forKey:@"IsUploadUser"];
+        }
+        [service release];
+        [userInfo release];
+        [dao release];
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//
+//        });
         [self dismissViewControllerAnimated:YES completion:^{
             
         }];

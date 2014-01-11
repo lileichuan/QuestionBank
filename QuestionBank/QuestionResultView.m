@@ -16,7 +16,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor colorWithRed:254/255.0 green:244/255.0 blue:186/255.0 alpha:1.0];
+//        self.backgroundColor = [UIColor colorWithRed:254/255.0 green:244/255.0 blue:186/255.0 alpha:1.0];
     }
     return self;
 }
@@ -43,30 +43,68 @@
 
 
 -(void)addTranscriptView{
-    if (!transcripView) {
-        CGRect rect =   CGRectMake(0,TOP_BAR_HEIGHT,CGRectGetWidth(self.bounds),292);
-        transcripView = [[TranscriptView alloc]initWithFrame:rect];
-        [self addSubview:transcripView];
-        NSDictionary *dic = @{@"score":[NSNumber numberWithFloat:testPaper.score],@"duration":[NSNumber numberWithInteger:testPaper.duration]};
-        [transcripView configureTranscriptInfo:dic];
-
-    }
-}
-
--(void)removeTranscriptView{
-    if (transcripView) {
-        [transcripView removeFromSuperview];
-        [transcripView release];
-        transcripView = nil;
-    }
+    UIImageView *topImageView = [[UIImageView alloc]initWithFrame:self.bounds];
+    topImageView.contentMode = UIViewContentModeScaleAspectFill;
+     topImageView.image = [UIImage imageNamed:@"answer_result.png"];
+    [self addSubview:topImageView];
+    [topImageView release];
     
+    UIImageView *resultImageView = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMidX(self.frame) - 60,65 ,120 , 22)];
+    [self addSubview:resultImageView];
+    [resultImageView release];
+    
+    UIImage *resultImage = nil;
+    NSInteger score = testPaper.score;
+    NSInteger duration =testPaper.duration;
+  
+    if (score < 60) {
+        resultImage = [UIImage imageNamed:@"less60.png"];
+    }
+    else if(score >= 60 && score < 70){
+       resultImage = [UIImage imageNamed:@"less70.png"];
+    }
+    else if(score >= 70 && score < 80){
+        resultImage = [UIImage imageNamed:@"less80.png"];
+    }
+    else if(score >= 80 && score < 90){
+        resultImage = [UIImage imageNamed:@"less90.png"];
+    }
+    else if(score >= 90 && score < 100){
+       resultImage = [UIImage imageNamed:@"less90.png"];
+    }
+    else if(score == 100){
+      resultImage = [UIImage imageNamed:@"100.png"];
+        
+    }
+    resultImageView.image = resultImage;
+    CGRect scoreRect = CGRectMake(165,188,100,20 );
+     UILabel * scoreLabel = [[UILabel alloc]initWithFrame:scoreRect];
+    scoreLabel.font =[UIFont systemFontOfSize:18];
+    scoreLabel.textAlignment = NSTextAlignmentLeft;
+    scoreLabel.backgroundColor = [UIColor clearColor];
+    scoreLabel.textColor = [UIColor redColor];
+    [self addSubview:scoreLabel];
+    scoreLabel.text = [NSString stringWithFormat:@"%d",score];
+    [scoreLabel release];
+    
+    CGRect durationRect = CGRectMake(165,228,100,20);
+    UILabel *durationLabel = [[UILabel alloc]initWithFrame:durationRect];
+    durationLabel.font =[UIFont systemFontOfSize:18];
+    durationLabel.textAlignment = NSTextAlignmentLeft;
+    durationLabel.backgroundColor = [UIColor clearColor];
+    durationLabel.textColor = [UIColor redColor];
+    [self addSubview:durationLabel];
+    [durationLabel release];
+    NSString *useTime = [NSString stringWithFormat:@"%ld分%ld秒",duration/60,duration%60];
+    durationLabel.text = [NSString stringWithFormat:@"%@",useTime];
 }
+
 
 -(void)addRestartBtn{
     float btnWidth = 77;
     float btnHight = 30;
     if (!restartBtn) {
-        CGRect rect = CGRectMake(CGRectGetWidth(self.bounds)/2 - btnWidth/2,CGRectGetMaxY(transcripView.frame) + 5,btnWidth,btnHight);
+        CGRect rect = CGRectMake(CGRectGetWidth(self.bounds)/2 - btnWidth/2,CGRectGetMaxY(self.frame) - btnHight - BOTTOM_BAR_HEIGHT,btnWidth,btnHight);
         restartBtn = [UIButton  buttonWithType:UIButtonTypeCustom];
         restartBtn.frame = rect;
         [restartBtn addTarget:self action:@selector(restartExam:) forControlEvents:UIControlEventTouchUpInside];

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>A865ED08-9D26-4F1A-B50E-7D2DE6A013FC</string>
+	<key>IDESourceControlProjectName</key>
+	<string>QuestionBank</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>37CA0015-741C-4575-84A3-7A5ED98C6AEA</key>
+		<string>https://github.com/lileichuan/QuestionBank.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>QuestionBank.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>37CA0015-741C-4575-84A3-7A5ED98C6AEA</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/lileichuan/QuestionBank.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>37CA0015-741C-4575-84A3-7A5ED98C6AEA</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>37CA0015-741C-4575-84A3-7A5ED98C6AEA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>QuizBank</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>37CA0015-741C-4575-84A3-7A5ED98C6AEA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>QuizBank</string>
+		</dict>
+	</array>
+</dict>
+</plist>

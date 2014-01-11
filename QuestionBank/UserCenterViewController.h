@@ -16,6 +16,7 @@
     NSDictionary   *userInfoDic;
 }
 @property(nonatomic, retain)NSDictionary   *userInfoDic;
+@property(nonatomic, copy) dispatch_block_t saveBlock;
 
 -(void)configureUserInfo:(NSDictionary *)userDic;
 

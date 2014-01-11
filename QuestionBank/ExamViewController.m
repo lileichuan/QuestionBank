@@ -176,8 +176,6 @@
         [self.view addSubview:topView];
         [topView  release];
     }
-    
-    
 }
 
 -(void)removeTopBarView{
@@ -500,6 +498,10 @@
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)updateUaerInfo:(UserInfo *)_userInfo{
+    
 }
 //将照片保存到disk上
 -(void)saveImage:(UIImage *)image

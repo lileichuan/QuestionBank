@@ -59,32 +59,23 @@
     self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
     [self addTopBarView];
      self.viewTag = 0;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [userDefaults objectForKey:@"userID"];
+    UserInfoDao *dao = [[UserInfoDao alloc]init];
+    self.userInfo = [dao getUserWithID:userID];
+    [dao release];
+    dao = nil;
+    if (infoView) {
+        [infoView configureUserInfo:userInfo];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [userDefaults objectForKey:@"userID"];
-    if (!userID) {
-        [self loadRegister];
-    }
-    else{
-        UserInfoDao *dao = [[UserInfoDao alloc]init];
-        self.userInfo = [dao getUserWithID:userID];
-        [dao release];
-        dao = nil;
-        if (infoView) {
-            [infoView configureUserInfo:userInfo];
-        }
-    }
+
+
 
 }
 
--(void)loadRegister{
-    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Company"];
-    [self presentViewController:viewController animated:YES completion:^{
-        
-    }];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -192,8 +183,6 @@
 -(void)removeRegisterView{
     
 }
-
-
 
 -(void)removeGuidView{
     if (guideView) {

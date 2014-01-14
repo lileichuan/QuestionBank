@@ -10,6 +10,9 @@
 #import "CompanyCell.h"
 #import "UserCenterViewController.h"
 #import "Catalog.h"
+#import "UserInfo.h"
+#import "UserInfoDao.h"
+#import "InterfaceService.h"
 @interface CompanyViewController (){
     NSArray  *companyArr;
     UITextField *companyTextField;
@@ -74,17 +77,34 @@
     alert.tag=100;
     [alert show];
     [alert release];
+    
+
+
 
 }
-
+-(IBAction)closeSetting:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:^{}];
+}
 -(void)initData{
-    NSString *filePath = [Catalog getCompanyFilePath];
-    if ([[NSFileManager defaultManager]fileExistsAtPath:filePath]) {
-        self.companyArr = [NSArray arrayWithContentsOfFile:filePath];
+    InterfaceService *service = [[InterfaceService alloc]init];
+   NSArray *arr =  [service getCompanylist];
+    [service release];
+    if (arr) {
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:10];
+        for (NSDictionary *companyInfo in arr) {
+            [tempArr addObject:[companyInfo objectForKey:@"name"]];
+        }
+        self.companyArr = tempArr;
     }
     else{
-        self.companyArr =@[@"人民日报社",@"新华通讯社",@"解放军报社",@"光明日报社",@"经济日报社",@"中央人民广播电台",@"中国国际广播电台",@"中央电视台",@"中国日报社",@"科技日报社",@"中国纪检监察报社",@"工人日报社",@"中国青年报社",@"中国妇女报社",@"农民日报社",@"法制日报社",@"中国新闻社",@"《求是》杂志社",@"中国石化报"];
-        [companyArr writeToFile:filePath atomically:YES];
+        NSString *filePath = [Catalog getCompanyFilePath];
+        if ([[NSFileManager defaultManager]fileExistsAtPath:filePath]) {
+            self.companyArr = [NSArray arrayWithContentsOfFile:filePath];
+        }
+        else{
+            self.companyArr =@[@"人民日报社",@"新华通讯社",@"解放军报社",@"光明日报社",@"经济日报社",@"中央人民广播电台",@"中国国际广播电台",@"中央电视台",@"中国日报社",@"科技日报社",@"中国纪检监察报社",@"工人日报社",@"中国青年报社",@"中国妇女报社",@"农民日报社",@"法制日报社",@"中国新闻社",@"《求是》杂志社",@"中国石化报"];
+            [companyArr writeToFile:filePath atomically:YES];
+        }
     }
 }
 
@@ -197,16 +217,29 @@
 }
 
 -(void)enterUserCenterViewController{
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:self.companyArr];
-    [arr addObject:companyTextField.text];
-    NSString *filePath = [Catalog getCompanyFilePath];
-    [arr writeToFile:filePath atomically:YES];
-    [self initData];
-    [self.tableView reloadData];
+//    NSMutableArray *arr = [NSMutableArray arrayWithArray:self.companyArr];
+//    [arr addObject:companyTextField.text];
+//    NSString *filePath = [Catalog getCompanyFilePath];
+//    [arr writeToFile:filePath atomically:YES];
+
     UserCenterViewController *destViewController= [self.storyboard instantiateViewControllerWithIdentifier:@"UserCenter"];
     NSDictionary *dic = @{@"company":companyTextField.text};
     [destViewController configureUserInfo:dic];
     [self.navigationController pushViewController:destViewController animated:YES];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        InterfaceService *service = [[InterfaceService alloc]init];
+        BOOL success =  [service uploadCompany:companyTextField.text];
+        [service release];
+        if (!success) {
+            NSLog(@"上传单位失败");
+        }
+        else {
+            [self initData];
+            [self.tableView reloadData];
+        }
+        
+    });
 }
 
 @end

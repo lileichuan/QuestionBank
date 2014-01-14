@@ -20,4 +20,8 @@
 
 -(NSArray *)loadAnswerRaking;
 
+-(BOOL)uploadCompany:(NSString *)company;
+
+-(NSArray *)getCompanylist;
+
 @end

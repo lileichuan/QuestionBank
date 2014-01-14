@@ -9,18 +9,21 @@
 #import "InterfaceService.h"
 #import "Catalog.h"
 #import "JSON.h"
+
+#define BASE_URL @"http://jizhehome.duapp.com"
 @implementation InterfaceService
 
 //上传用户头像
 -(BOOL)uploadUserInfo:(UserInfo *)userInfo{
 //    NSString *serveraddress = [NSString stringWithFormat:@"http://www.jizhehome.com/app/register.c?u="];
-     NSString *serveraddress = [[NSString stringWithFormat:@"http://www.jizhehome.com/app/register.c"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+     NSString *serveraddress = [[NSString stringWithFormat:@"%@/app/register.c",BASE_URL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
     NSURL *url =[ NSURL URLWithString :serveraddress ];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
     // 字符串使用 GBK 编码，因为 servlet 只识别 GBK
     NSStringEncoding enc= CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingMacChineseSimp );
-    // NSStringEncoding enc= CFStringConvertEncodingToNSStringEncoding (NSUTF8StringEncoding );
+     //NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    //NSStringEncoding enc= CFStringConvertEncodingToNSStringEncoding (NSUTF8StringEncoding );
     [request setStringEncoding :enc];
     
 //    NSDictionary *userDic = @{@"user_id":userInfo.userID,@"name":userInfo.name,@"company":userInfo.company};
@@ -32,15 +35,19 @@
     NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
     [request setRequestMethod:@"post"];
     [request setPostValue :userInfo.userID forKey : @"user_id" ];
-    [request setPostValue :userInfo.name forKey : @"name" ];
-    [request setPostValue :userInfo.company forKey : @"company" ];
-    NSString *photo = [[NSBundle mainBundle]pathForResource:@"Photo_Default" ofType:@"png"];
-    NSArray *compoments = [photo componentsSeparatedByString:@"/"];
+    [request setPostValue :userInfo.name forKey : @"name"];
+    [request setPostValue :userInfo.company forKey : @"company"];
+    
+    NSString *photo;
     //[request setPostValue:[compoments lastObject] forKey:@"img_file"];
     if ([[NSFileManager defaultManager]fileExistsAtPath:photoPath]) {
-        
+        photo = photoPath;
     }
-    [request setFile:photo forKey:@"png" ];
+    else{
+       photo = [[NSBundle mainBundle]pathForResource:@"Photo_Default" ofType:@"png"];
+    }
+      NSArray *compoments = [photo componentsSeparatedByString:@"/"];
+    //[request setFile:photo forKey:@"png" ];
     [request setFile:photo withFileName:[compoments lastObject] andContentType:nil forKey:@"img_file"];
 //    [ request setDelegate : self ];
 //    [ request setDidFinishSelector : @selector ( responseComplete:)];
@@ -59,7 +66,7 @@
 -(BOOL)uploadAnswerRecord:(NSDictionary *)recordDic{
     BOOL success = NO;
     NSError *error;
-    NSString *serveraddress = [NSString stringWithFormat:@"http://www.jizhehome.com/app/record.c?user_id=%@&score=%@&duration=%d",[recordDic objectForKey:@"user_id"],[recordDic objectForKey:@"score"],[[recordDic objectForKey:@"duration"]integerValue]];
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/record.c?user_id=%@&score=%@&duration=%d",BASE_URL,[recordDic objectForKey:@"user_id"],[recordDic objectForKey:@"score"],[[recordDic objectForKey:@"duration"]integerValue]];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
     [request setTimeOutSeconds:15.0];
@@ -77,7 +84,7 @@
 }
 
 -(NSArray *)loadAnswerRaking{
-    NSString *serveraddress = [NSString stringWithFormat:@"http://www.jizhehome.com/app/sort.c"];
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/sort.c",BASE_URL];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
     [request setTimeOutSeconds:15.0];
@@ -126,5 +133,46 @@
             }
         }
     }
+}
+
+-(BOOL)uploadCompany:(NSString *)company{
+    BOOL success = NO;
+    NSError *error;
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/company_add.c?company=%@",BASE_URL,company];
+    NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setTimeOutSeconds:15.0];
+    [request startSynchronous];
+    error = [request error];
+    if (!error) {
+        NSString *str = [request responseString];
+        NSLog(@"str is:%@",str);
+        NSData *data = [request responseData];
+        NSString *reuslt = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        NSLog(@"reuslt is:%@",reuslt);
+        success = YES;
+    }
+    return success;
+}
+
+-(NSArray *)getCompanylist{
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/company.c",BASE_URL];
+    NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setTimeOutSeconds:15.0];
+    [request startSynchronous];
+    NSError *error = [request error];
+    if (!error) {
+        // NSString *jsonString = [request responseString];
+        //NSDictionary *dic = [jsonString JSONValue];
+        NSData *data = [request responseData];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        if ([[dic objectForKey:@"result"] isEqualToString:@"success"]) {
+            NSArray *companyArr = [dic objectForKey:@"data"];
+            //              NSArray *rankArr = [NSJSONSerialization JSONObjectWithData:[data dataUsingEncoding: NSUTF8StringEncoding]options:kNilOptions error:&error];
+            return companyArr;
+        }
+    }
+    return nil;
 }
 @end

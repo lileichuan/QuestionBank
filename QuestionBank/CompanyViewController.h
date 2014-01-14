@@ -11,4 +11,6 @@
 @interface CompanyViewController : UITableViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 
 -(IBAction)addCompany:(id)sender;
+
+-(IBAction)closeSetting:(id)sender;
 @end

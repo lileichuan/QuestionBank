@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 
 
-@interface ViewController : UIViewController{
+@interface ViewController : UIViewController<UIAlertViewDelegate>{
 
     
 
 }
 -(IBAction)loadFunctionView:(id)sender;
+
+-(IBAction)openJizheHome:(id)sender;
+
+-(IBAction)setUserInfo:(id)sender;
+
+-(void)enterExamViewController;
 @end

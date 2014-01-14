@@ -14,7 +14,7 @@
 
 
 @interface ChapterCell : UITableViewCell {
-    
+
 }
 @property (retain, nonatomic) UILabel *titleLable;
 @property (retain, nonatomic) UILabel *amountLable;
@@ -64,13 +64,15 @@
     
     TopView *topView;
     UITableView *chapterTableView;
+    NSString *title;
 }
 @property(nonatomic, retain)NSArray  *chapterArr;
 @property(nonatomic, retain) NSArray  *questionArr;
+@property(nonatomic, retain) NSString *title;
 @end
 
 @implementation ChapterViewController
-@synthesize chapterArr,questionArr;
+@synthesize chapterArr,questionArr,title;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -139,6 +141,7 @@
         }];
     
     }
+    topView.title.text = title;
     
     
 }
@@ -158,7 +161,6 @@
         [self.view addSubview:topView];
         [topView  release];
     }
-    NSString *title;
     switch (examType) {
         case FREEDOM_EXAM:
             title = @"章节练习";
@@ -241,7 +243,7 @@
     curSelectRow = indexPath.row;
     [self initQuestionDataWithChapterID:chapter.ID];
     [self enterQuestionBroswerView];
-    
+    topView.title.text = [NSString stringWithFormat:@"%@-第%d章",title,indexPath.row + 1];
 }
 
 

@@ -72,6 +72,7 @@
     NSInteger duration = [[info objectForKey:@"duration"]integerValue];
     NSString *time = [NSString stringWithFormat:@"%ld分%ld秒",duration/60,duration%60];
     NSString *rankInfo = [NSString stringWithFormat:@"第%ld名",rank];
+    NSString *company = [userInfo objectForKey:@"company"];
     NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userID]];
     if([[NSFileManager defaultManager]fileExistsAtPath:photoPath]){
          photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
@@ -80,6 +81,7 @@
     rankLabel.text = rankInfo;
     timeLabel.text = time;
     scoreLabel.text = score;
+    compayLabel.text = company;
 }
 
 /*

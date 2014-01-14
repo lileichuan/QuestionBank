@@ -20,7 +20,8 @@ typedef enum{
     HOT_SPORT = 4,      //热点提问
     ANSWER_RECORD = 5,  //答题记录
     RANGKING = 6,      //排行榜
-     ANSWER_LIST = 7,      //答题列表
+    ANSWER_LIST = 7,    //答题列表
+    ABOUT = 8,        //关于我们
 }EXAM_TYPE;
 typedef enum{
     SINGLE_CHOOSE = 0,  //单选

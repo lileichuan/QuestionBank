@@ -33,7 +33,8 @@
         [back.titleLabel setFont:[UIFont fontWithName:@"ArialRoundedMTBold" size:14]];
         [self addSubview:back];
         
-        title  = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) / 2 - 50, 0, 100,CGRectGetHeight(self.bounds))];
+        title  = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) / 2 - 70, 0, 140,CGRectGetHeight(self.bounds))];
+        //title.font = [UIFont systemFontOfSize:13];
         title.textAlignment = NSTextAlignmentCenter;
         title.backgroundColor = [UIColor clearColor];
         title.textColor = [UIColor whiteColor];
@@ -60,7 +61,8 @@
         [back.titleLabel setFont:[UIFont fontWithName:@"ArialRoundedMTBold" size:14]];
         [self addSubview:back];
         
-        title  = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) / 2 - 50, 0, 100,CGRectGetHeight(self.bounds))];
+        title  = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) / 2 - 70, 0, 140,CGRectGetHeight(self.bounds))];
+        //title.font = [UIFont systemFontOfSize:13];
         title.textAlignment = NSTextAlignmentCenter;
         title.backgroundColor = [UIColor clearColor];
         title.textColor = [UIColor whiteColor];
@@ -73,7 +75,6 @@
 
 -(void)layoutSubviews{
 
-    
 }
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents{
     [back addTarget:target action:action forControlEvents:controlEvents];

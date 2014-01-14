@@ -14,6 +14,7 @@
     IBOutlet UILabel *nameLabel;
     IBOutlet UILabel *scoreLabel;
     IBOutlet UILabel *timeLabel;
+    IBOutlet UILabel *compayLabel;
 }
 
 -(void)configureCellInfo:(NSDictionary *)info withRank:(NSInteger)rank;

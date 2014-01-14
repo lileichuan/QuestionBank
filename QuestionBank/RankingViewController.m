@@ -37,7 +37,7 @@
 	// Do any additional setup after loading the view.
     [self initData];
     [self addTopBarView];
-      [self addRankingView];
+    [self addRankingView];
 
 }
 - (BOOL)shouldAutorotate{
@@ -92,8 +92,7 @@
 #pragma mark UITableViewDelegate
 - (CGFloat)tableView:(RankingView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
-    
+    return 80;
 }
 
 - (NSInteger)tableView:(RankingView *)tableView numberOfRowsInSection:(NSInteger)section{

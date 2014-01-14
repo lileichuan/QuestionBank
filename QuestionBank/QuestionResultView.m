@@ -43,8 +43,9 @@
 
 
 -(void)addTranscriptView{
+    self.backgroundColor = [UIColor blackColor];
     UIImageView *topImageView = [[UIImageView alloc]initWithFrame:self.bounds];
-    topImageView.contentMode = UIViewContentModeScaleAspectFill;
+    //topImageView.contentMode = UIViewContentModeScaleAspectFill;
      topImageView.image = [UIImage imageNamed:@"answer_result.png"];
     [self addSubview:topImageView];
     [topImageView release];
@@ -77,25 +78,33 @@
         
     }
     resultImageView.image = resultImage;
-    CGRect scoreRect = CGRectMake(165,188,100,20 );
+    CGRect scoreRect = CGRectMake(165,188,90,20 );
      UILabel * scoreLabel = [[UILabel alloc]initWithFrame:scoreRect];
     scoreLabel.font =[UIFont systemFontOfSize:18];
-    scoreLabel.textAlignment = NSTextAlignmentLeft;
+    scoreLabel.textAlignment = NSTextAlignmentCenter;
     scoreLabel.backgroundColor = [UIColor clearColor];
     scoreLabel.textColor = [UIColor redColor];
     [self addSubview:scoreLabel];
     scoreLabel.text = [NSString stringWithFormat:@"%d",score];
     [scoreLabel release];
     
-    CGRect durationRect = CGRectMake(165,228,100,20);
+    CGRect durationRect = CGRectMake(165,228,90,20);
     UILabel *durationLabel = [[UILabel alloc]initWithFrame:durationRect];
     durationLabel.font =[UIFont systemFontOfSize:18];
-    durationLabel.textAlignment = NSTextAlignmentLeft;
+    durationLabel.textAlignment = NSTextAlignmentCenter;
     durationLabel.backgroundColor = [UIColor clearColor];
     durationLabel.textColor = [UIColor redColor];
     [self addSubview:durationLabel];
     [durationLabel release];
     NSString *useTime = [NSString stringWithFormat:@"%ld分%ld秒",duration/60,duration%60];
+//     NSString *useTime = [NSString stringWithFormat:@"%ld:ld",duration/60,duration%60];
+//    NSInteger mini = duration/60;
+//    if (mini == 0) {
+//         NSString *useTime = [NSString stringWithFormat:@"%ld:ld",duration/60,duration%60];
+//    }else{
+
+//    }
+   
     durationLabel.text = [NSString stringWithFormat:@"%@",useTime];
 }
 
@@ -104,7 +113,7 @@
     float btnWidth = 77;
     float btnHight = 30;
     if (!restartBtn) {
-        CGRect rect = CGRectMake(CGRectGetWidth(self.bounds)/2 - btnWidth/2,CGRectGetMaxY(self.frame) - btnHight - BOTTOM_BAR_HEIGHT,btnWidth,btnHight);
+        CGRect rect = CGRectMake(CGRectGetWidth(self.bounds)/2 - btnWidth/2,258,btnWidth,btnHight);
         restartBtn = [UIButton  buttonWithType:UIButtonTypeCustom];
         restartBtn.frame = rect;
         [restartBtn addTarget:self action:@selector(restartExam:) forControlEvents:UIControlEventTouchUpInside];

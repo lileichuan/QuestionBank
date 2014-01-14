@@ -21,12 +21,22 @@
 -(id)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
     if (self) {
-        enterExamBtn.layer.masksToBounds  = YES;
-        enterExamBtn.layer.cornerRadius  = 3.0;
+
+        
+      
     }
     return self;
 }
 
+-(void)awakeFromNib{
+    enterExamBtn.layer.masksToBounds  = YES;
+    enterExamBtn.layer.cornerRadius  = 3.0;
+    
+    [photoImageView.layer setMasksToBounds:YES];
+    [photoImageView.layer setCornerRadius:CGRectGetHeight(photoImageView.frame)/2];
+    photoImageView.layer.borderWidth = 2.0;
+    photoImageView.layer.borderColor =  [UIColor grayColor].CGColor;
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -42,6 +52,9 @@
     if ([[NSFileManager defaultManager]fileExistsAtPath:photoPath]) {
           photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
     }
-  
+//    [photoImageView.layer setMasksToBounds:YES];
+//    [photoImageView.layer setCornerRadius: (photoImageView.frame.size.height/2)];
+//    photoImageView.layer.borderWidth = 5.0;
+//    photoImageView.layer.borderColor =  [UIColor redColor].CGColor;
 }
 @end

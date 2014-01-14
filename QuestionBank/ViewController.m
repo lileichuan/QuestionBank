@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+
 #import "QuestionView.h"
 #import "Question.h"
 #import "QuestionDAO.h"
@@ -290,6 +291,15 @@
     [pool release];
 }
 
+-(void)loadRegister{
+    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Company"];
+    [self presentViewController:viewController animated:YES completion:^{
+        
+    }];
+}
+
+
+
 -(IBAction)loadFunctionView:(id)sender{
     UIButton *btn = sender;
     id transition = nil;
@@ -297,6 +307,16 @@
     examType = (EXAM_TYPE)btn.tag;
     switch (examType) {
         case MOCK_EXAM:{
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            NSString *userID = [userDefaults objectForKey:@"userID"];
+            if (!userID) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您还没有设置个人信息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"前去设置", nil];
+                [alert show];
+                [alert release];
+                //[self loadRegister];
+                return;
+            }
             transition = [[DMScaleTransition alloc]init];
             viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Exam"];
         }
@@ -339,32 +359,6 @@
     
 }
 
--(void)showRegisterAlert{
-//    UITextField *tfID=[[UITextField alloc]initWithFrame:CGRectZero];
-//    [tfID becomeFirstResponder];
-//    tfID.borderStyle = UITextBorderStyleRoundedRect;
-//    tfID.autocapitalizationType = UITextAutocapitalizationTypeNone;
-//    self.nameTextField = tfID;
-//    [tfID release];
-//    
-//    UITextField *tfPwd=[[UITextField alloc]initWithFrame:CGRectZero];
-//    tfPwd.borderStyle = UITextBorderStyleRoundedRect;
-//    tfPwd.autocapitalizationType = UITextAutocapitalizationTypeNone;
-//    self.companytextField = tfPwd;
-//    [tfPwd release];
-//    
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置用户信息" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//    alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
-//    self.nameTextField = [alert textFieldAtIndex:0];
-//    nameTextField.placeholder = @"用户昵称";
-//    self.companytextField = [alert textFieldAtIndex:1];
-//    companytextField.placeholder = @"所在单位";
-//    alert.tag=100;
-//    [alert show];
-//    [alert release];
-    UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"modal"];
-
-}
 -(void)addMainView{
     if (!mainView) {
         mainView  = [[MainView alloc]initWithFrame:MAIN_RECT];
@@ -375,26 +369,32 @@
     }
 }
 
-#pragma mark
-#pragma mark UIAlertViewDelegate
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag==100) {
-        switch (buttonIndex) {
-            case 1:
-            {
-                [self saveUserInfo];
-                
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
+
+-(IBAction)openJizheHome:(id)sender{
+     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.jizhehome.com/"]];
 }
 
+-(IBAction)setUserInfo:(id)sender{
+    [self loadRegister];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"buttonIndex is:%d",buttonIndex);
+    if (buttonIndex == 1) {
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(enterExamViewController) name:@"EnterExam" object:nil];
+        [self loadRegister];
+    }
+}
+
+-(void)enterExamViewController{
+    NSLog(@"enterExamViewController");
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"EnterExam" object:nil];
+    ExamViewController  *viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Exam"];
+    [self presentViewController:viewController animated:YES completion:^{
+        
+    }];
+
+}
 
 //- (IBAction)goAction:(id)sender
 //{

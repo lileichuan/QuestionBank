@@ -10,6 +10,8 @@
 #import "InterfaceService.h"
 #import "UserInfo.h"
 #import "UserInfoDao.h"
+#import "ViewController.h"
+#import "Catalog.h"
 @interface UserCenterViewController ()
 
 @end
@@ -60,11 +62,22 @@
         [userDefaults setObject:userID forKey:@"userID"];
         [userDefaults synchronize];
         
+        
+        NSData *imageData = UIImagePNGRepresentation(photImageView.image);
+        if(imageData != nil)
+        {
+            imageData = UIImageJPEGRepresentation(photImageView.image, 1.0);
+        }
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userID]];
+        [imageData writeToFile:photoPath atomically:YES];
+        
+        
         UserInfo *userInfo = [[UserInfo alloc]init];
         userInfo.userID = userID;
         userInfo.name = nameTextField.text;
         userInfo.company = companyLabel.text;
         UserInfoDao *dao  =[[UserInfoDao alloc]init];
+        
         [dao insertUser:userInfo];
         InterfaceService *service = [[InterfaceService alloc]init];
         BOOL success =  [service uploadUserInfo:userInfo];
@@ -77,9 +90,10 @@
 //        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 //
 //        });
+     
         [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"EnterExam" object:nil];
+                          }];
     }
 
 }
@@ -108,6 +122,66 @@
 -(BOOL)textFieldShouldReturn:(id)sender{
     [self saveUserSetting:nil];
     return YES;
+}
+
+
+#pragma mark
+#pragma mark 切换头像
+
+- (IBAction)handleTableviewCellLongPressed:(UITapGestureRecognizer *)gestureRecognizer {
+    UIActionSheet* actionsheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"取消"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"相机",@"相册",nil];
+    
+    actionsheet.delegate = self;
+    [actionsheet showInView:self.view];
+    [actionsheet release];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"buttonIndex is:%d",buttonIndex);
+    if (buttonIndex == 2) {
+        return;
+    }
+    UIImagePickerControllerSourceType sourceType;
+    //判断是否有摄像头
+    if (buttonIndex == 0) {
+        sourceType = UIImagePickerControllerSourceTypeCamera;
+        if(![UIImagePickerController isSourceTypeAvailable:sourceType])
+        {
+            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+    }
+    else if(buttonIndex == 1){
+        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.delegate = self;   // 设置委托
+    imagePickerController.sourceType = sourceType;
+    imagePickerController.allowsEditing = NO;
+    [self presentViewController:imagePickerController animated:YES completion:nil];  //需要以模态的形式展示
+    [imagePickerController release];
+}
+#pragma mark -
+#pragma mark UIImagePickerController Method
+//完成拍照
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    if (image == nil)
+        image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    else{
+            photImageView.image = image;
+    }
+    
+}
+//用户取消拍照
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 

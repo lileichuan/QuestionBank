@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserCenterViewController : UIViewController<UITextFieldDelegate>{
+@interface UserCenterViewController : UIViewController<UITextFieldDelegate,UIActionSheetDelegate>{
     IBOutlet UITextField  *nameTextField;
     IBOutlet UILabel      *companyLabel;
     IBOutlet UIImageView  *photImageView;
@@ -22,4 +22,5 @@
 
 -(IBAction)saveUserSetting:(id)sender;
 
+- (IBAction)handleTableviewCellLongPressed:(UITapGestureRecognizer *)gestureRecognizer;
 @end

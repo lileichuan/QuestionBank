@@ -13,6 +13,7 @@
 #import "UserInfo.h"
 #import "UserInfoDao.h"
 #import "InterfaceService.h"
+#import "REFrostedViewController.h"
 @interface CompanyViewController (){
     NSArray  *companyArr;
     UITextField *companyTextField;
@@ -83,8 +84,10 @@
 
 }
 -(IBAction)closeSetting:(id)sender{
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    //[self dismissViewControllerAnimated:YES completion:^{}];
+    [self.frostedViewController hideMenuViewController];
 }
+
 -(void)initData{
     InterfaceService *service = [[InterfaceService alloc]init];
    NSArray *arr =  [service getCompanylist];

@@ -22,20 +22,31 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
 
-        
+//        [enterExamBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1]] forState:UIControlStateNormal];
+//        enterExamBtn.layer.masksToBounds  = YES;
+//        
+//        
+//        [photoImageView.layer setMasksToBounds:YES];
+//        [photoImageView.layer setCornerRadius:photoImageView.frame.size.height/2];
+//        [photoImageView.layer setMasksToBounds:YES];
+//        [photoImageView setContentMode:UIViewContentModeScaleAspectFill];
+//        [photoImageView setClipsToBounds:YES];
+//        photoImageView.layer.shadowColor = [UIColor blackColor].CGColor;
+//        photoImageView.layer.shadowOffset = CGSizeMake(4, 4);
+//        photoImageView.layer.shadowOpacity = 0.5;
+//        photoImageView.layer.shadowRadius = 2.0;
+//        photoImageView.layer.borderColor = [[UIColor blackColor] CGColor];
+//        photoImageView.layer.borderWidth = 2.0f;
+//        photoImageView.userInteractionEnabled = YES;
       
     }
     return self;
 }
 
 -(void)awakeFromNib{
-    enterExamBtn.layer.masksToBounds  = YES;
-    enterExamBtn.layer.cornerRadius  = 3.0;
-    
-    [photoImageView.layer setMasksToBounds:YES];
-    [photoImageView.layer setCornerRadius:CGRectGetHeight(photoImageView.frame)/2];
-    photoImageView.layer.borderWidth = 2.0;
-    photoImageView.layer.borderColor =  [UIColor grayColor].CGColor;
+//    enterExamBtn.layer.masksToBounds  = YES;
+//    enterExamBtn.layer.cornerRadius  = 3.0;
+
 }
 /*
 // Only override drawRect: if you perform custom drawing.

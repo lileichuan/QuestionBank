@@ -15,13 +15,16 @@
 @interface RankingViewController (){
     IBOutlet TopView *topView;
     IBOutlet RankingView *rankingView;
+    IBOutlet UISegmentedControl *segmentControl;
     NSArray    *rankArr;
 }
+@property(nonatomic, retain)UISegmentedControl *segmentControl;
+
 
 @end
 
 @implementation RankingViewController
-
+@synthesize userInfo,segmentControl;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -35,6 +38,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.userInfo = [UserInfo sharedUserInfo];
     [self initData];
     [self addTopBarView];
     [self addRankingView];
@@ -50,6 +54,10 @@
 }
 
 -(void)dealloc{
+//    if (userInfo) {
+//        [userInfo release];
+//        userInfo =  nil;
+//    }
     [super dealloc];
 }
 -(void)close{
@@ -59,14 +67,6 @@
 }
 
 -(void)addTopBarView{
-//    if (!topView) {
-//        CGRect topRect =   CGRectMake(0,20,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
-//        topView = [[TopView alloc]initWithFrame:topRect];
-//        [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-//        topView.title.text = @"排行榜";
-//        [self.view addSubview:topView];
-//        [topView  release];
-//    }
     [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
     topView.title.text = @"排行榜";
     
@@ -75,17 +75,26 @@
 -(void)addRankingView{
     CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame));
     rankingView.frame = contentRect;
-    //[rankingView reloadData];
 }
 
 -(void)initData{
-//    NSDictionary *dic = @{@"user_id":@"123",@"name":@"李雷川",@"score":[NSNumber numberWithFloat:20],@"duration":[NSNumber numberWithInt:20]};
-//    rankArr = @[dic,dic];
     InterfaceService *service = [[InterfaceService alloc]init];
-    rankArr = [service loadAnswerRaking];
+    if (segmentControl.selectedSegmentIndex == 0) {
+         rankArr = [service loadRakingWithCompany:userInfo.company];
+    }
+    else if(segmentControl.selectedSegmentIndex == 1){
+         rankArr = [service loadAnswerRaking];
+    }
+   
     [rankArr retain];
     [service release];
     service = nil;
+}
+
+-(IBAction)switchRankIndex:(id)sender{
+    [self initData];
+    [rankingView reloadData];
+    
 }
 
 #pragma mark

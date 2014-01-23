@@ -19,6 +19,7 @@
 #import "InterfaceService.h"
 #import "Catalog.h"
 #import "RankingViewController.h"
+#import "ImageExt.h"
 
 @interface ExamViewController ()<QuestionBrowserDelegate,QuestionProtocol,UIGridViewDelegate,UIGestureRecognizerDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationBarDelegate>{
     UIView *guideView;
@@ -32,7 +33,7 @@
     UserInfo   *userInfo;
 }
 @property(nonatomic, retain)  NSArray          *questionArr;
-@property(nonatomic, retain)  UserInfo   *userInfo;
+@property(nonatomic, retain)  UserInfo         *userInfo;
 @property(nonatomic, assign)  NSInteger       viewTag;
 
 @end
@@ -58,21 +59,14 @@
 	// Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
     [self addTopBarView];
-     self.viewTag = 0;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [userDefaults objectForKey:@"userID"];
-    UserInfoDao *dao = [[UserInfoDao alloc]init];
-    self.userInfo = [dao getUserWithID:userID];
-    [dao release];
-    dao = nil;
+    self.viewTag = 0;
+    self.userInfo = [UserInfo sharedUserInfo];
     if (infoView) {
         [infoView configureUserInfo:userInfo];
     }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-
-
 
 }
 
@@ -84,10 +78,10 @@
 }
 
 -(void)dealloc{
-    if (userInfo) {
-        [userInfo release];
-        userInfo = nil;
-    }
+//    if (userInfo) {
+//        [userInfo release];
+//        userInfo = nil;
+//    }
     if (questionArr) {
         [questionArr release];
         questionArr = nil;
@@ -111,12 +105,15 @@
         };
         [alert release];
     }
+    else if (viewTag == 3){
+        [self removeAnswerListView];
+        viewTag = 2;
+    }
     else{
         [self dismissViewControllerAnimated:YES completion:^{
             
         }];
     }
-    
 }
 
 -(void)setViewTag:(NSInteger)_viewTag{
@@ -136,7 +133,7 @@
             break;
         case 3:
             title = @"查看答案";
-            [topView setReturnTitle:@"主菜单"];
+            [topView setReturnTitle:@"返回"];
             break;
         case 4:
             title = @"回顾答题";
@@ -275,7 +272,7 @@
         [self.view addSubview:answerList];
         [answerList release];
     }
-    [self removeQuestionResultView];
+    //[self removeQuestionResultView];
     self.viewTag = 3;
 }
 
@@ -441,7 +438,7 @@
                                                              delegate:nil
                                                     cancelButtonTitle:@"取消"
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"相机",@"相册",nil];
+                                                    otherButtonTitles:@"拍照",@"从相册中选取",nil];
     
     actionsheet.delegate = self;
     [actionsheet showInView:self.view];
@@ -478,9 +475,7 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [picker dismissViewControllerAnimated:YES completion:^{}];
-    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-    if (image == nil)
-        image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     [self performSelector:@selector(saveImage:) withObject:image];
 }
 //用户取消拍照
@@ -495,29 +490,29 @@
 //将照片保存到disk上
 -(void)saveImage:(UIImage *)image
 {
-    NSData *imageData = UIImagePNGRepresentation(image);
-    if(imageData != nil)
-    {
-        imageData = UIImageJPEGRepresentation(image, 1.0);
-    }
-    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
-    [imageData writeToFile:photoPath atomically:YES];
-    [self updatePhotoWithPath:photoPath];
-    
-    InterfaceService *service = [[InterfaceService alloc]init];
-    [service uploadUserInfo:userInfo];
-    [service release];
-
-    
-}
-
--(void)updatePhotoWithPath:(NSString *)photoPath{
-    UIImage *image = [UIImage imageWithContentsOfFile:photoPath];
-    for (UIImageView *subView in guideView.subviews) {
-        if ([subView isKindOfClass:[UIImageView class]]) {
-            subView.image = image;
+    if (image){
+       image =[image scaleToSize:image size:CGSizeMake(64, 64)];
+        
+        NSData *imageData = UIImagePNGRepresentation(image);
+        if(imageData != nil)
+        {
+            imageData = UIImageJPEGRepresentation(image, 1.0);
         }
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
+        [imageData writeToFile:photoPath atomically:YES];
+        if (infoView) {
+            [infoView configureUserInfo:userInfo];
+        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            InterfaceService *service = [[InterfaceService alloc]init];
+            [service uploadUserInfo:userInfo];
+            [service release];
+        });
+        
     }
+    
+
 }
+
 
 @end

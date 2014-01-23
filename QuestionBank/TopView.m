@@ -73,9 +73,9 @@
     return self;
 }
 
--(void)layoutSubviews{
-
-}
+//-(void)layoutSubviews{
+//
+//}
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents{
     [back addTarget:target action:action forControlEvents:controlEvents];
 }

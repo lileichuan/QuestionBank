@@ -12,6 +12,7 @@
 #import "UserInfoDao.h"
 #import "ViewController.h"
 #import "Catalog.h"
+#import "ProgressHUD.h"
 @interface UserCenterViewController ()
 
 @end
@@ -30,11 +31,31 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [photoImageView.layer setMasksToBounds:YES];
+    [photoImageView.layer setCornerRadius:photoImageView.frame.size.height/2];
+    [photoImageView.layer setMasksToBounds:YES];
+    [photoImageView setContentMode:UIViewContentModeScaleAspectFill];
+    [photoImageView setClipsToBounds:YES];
+    photoImageView.layer.shadowColor = [UIColor blackColor].CGColor;
+    photoImageView.layer.shadowOffset = CGSizeMake(4, 4);
+    photoImageView.layer.shadowOpacity = 0.5;
+    photoImageView.layer.shadowRadius = 2.0;
+    photoImageView.layer.borderColor = [[UIColor blackColor] CGColor];
+    photoImageView.layer.borderWidth = 2.0f;
+    photoImageView.userInteractionEnabled = YES;
+
+    
 	// Do any additional setup after loading the view.
     NSString *company = [userInfoDic objectForKey:@"company"];
     companyLabel.text = company;
     nameTextField.delegate = self;
     [nameTextField becomeFirstResponder];
+    UserInfo *curUserInfo = [UserInfo sharedUserInfo];
+    if (curUserInfo) {
+        nameTextField.text = curUserInfo.name;
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",curUserInfo.userID]];
+        photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -55,42 +76,50 @@
     }
     else{
         [nameTextField resignFirstResponder];
-        CFUUIDRef uuidObj = CFUUIDCreate(nil);   //create a new UUID
-        NSString *userID = (NSString *)CFUUIDCreateString(nil, uuidObj);
-        CFRelease(uuidObj);
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:userID forKey:@"userID"];
-        [userDefaults synchronize];
-        
-        
-        NSData *imageData = UIImagePNGRepresentation(photImageView.image);
+        UserInfo *curUserInfo = [UserInfo sharedUserInfo];
+        BOOL isNewUser = NO;
+        if (!curUserInfo) {
+            CFUUIDRef uuidObj = CFUUIDCreate(nil);   //create a new UUID
+            NSString *userID = (NSString *)CFUUIDCreateString(nil, uuidObj);
+            CFRelease(uuidObj);
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject:userID forKey:@"userID"];
+            [userDefaults synchronize];
+            curUserInfo = [[[UserInfo alloc]init]autorelease];
+            curUserInfo.userID =userID;
+            isNewUser = YES;
+        }
+
+        NSData *imageData = UIImagePNGRepresentation(photoImageView.image);
         if(imageData != nil)
         {
-            imageData = UIImageJPEGRepresentation(photImageView.image, 1.0);
+            imageData = UIImageJPEGRepresentation(photoImageView.image, 1.0);
         }
-        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userID]];
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",curUserInfo.userID]];
         [imageData writeToFile:photoPath atomically:YES];
         
-        
-        UserInfo *userInfo = [[UserInfo alloc]init];
-        userInfo.userID = userID;
-        userInfo.name = nameTextField.text;
-        userInfo.company = companyLabel.text;
+        curUserInfo.name = nameTextField.text;
+        curUserInfo.company = companyLabel.text;
         UserInfoDao *dao  =[[UserInfoDao alloc]init];
-        
-        [dao insertUser:userInfo];
-        InterfaceService *service = [[InterfaceService alloc]init];
-        BOOL success =  [service uploadUserInfo:userInfo];
-        if (success) {
-            [userDefaults setBool:YES forKey:@"IsUploadUser"];
+        if (isNewUser) {
+             [dao insertUser:curUserInfo];
         }
-        [service release];
-        [userInfo release];
+        else{
+            [dao updateUserInfo:curUserInfo];
+        }
         [dao release];
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//
-//        });
-     
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            InterfaceService *service = [[InterfaceService alloc]init];
+            BOOL success =  [service uploadUserInfo:curUserInfo];
+            if (success) {
+                [ProgressHUD showSuccess:@"添加成功"];
+            }
+            else{
+                [ProgressHUD showSuccess:@"添加失败"];
+            }
+            [service release];
+
+        });
         [self dismissViewControllerAnimated:YES completion:^{
             [[NSNotificationCenter defaultCenter]postNotificationName:@"EnterExam" object:nil];
                           }];
@@ -169,13 +198,13 @@
 //完成拍照
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [picker dismissViewControllerAnimated:YES completion:^{}];
-    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-    if (image == nil)
-        image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    else{
-            photImageView.image = image;
+    
+     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    if (image){
+        UIImage *photoImage =[image imageByScalingAndCroppingForSize:CGSizeMake(64, 64)];
+         photoImageView.image = photoImage;
     }
+    [picker dismissViewControllerAnimated:YES completion:nil];
     
 }
 //用户取消拍照

@@ -30,6 +30,7 @@
 #import "DMAlphaTransition.h"
 #import "DMScaleTransition.h"
 #import "DMSlideTransition.h"
+#import "REFrostedViewController.h"
 
 
 #define MAIN_RECT CGRectMake(0,20,CGRectGetWidth(self.view.bounds),CGRectGetHeight(self.view.bounds) -20)
@@ -39,21 +40,16 @@
     
     EXAM_TYPE  examType;
     
-    UITextField *nameTextField;
-    UITextField *companytextField;
     
 }
-@property(nonatomic, retain)UITextField *nameTextField;
-@property(nonatomic, retain) UITextField *companytextField;
 
 @end
 
 @implementation ViewController
-@synthesize nameTextField,companytextField;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];//    float startX = 20;
+    //self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];//    float startX = 20;
     //[self addMainView];
 //    for (NSInteger i = 1; i < 7; i++) {
 //        [self setDataWithChapterNum:i];
@@ -291,15 +287,6 @@
     [pool release];
 }
 
--(void)loadRegister{
-    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Company"];
-    [self presentViewController:viewController animated:YES completion:^{
-        
-    }];
-}
-
-
-
 -(IBAction)loadFunctionView:(id)sender{
     UIButton *btn = sender;
     id transition = nil;
@@ -317,41 +304,38 @@
                 //[self loadRegister];
                 return;
             }
-            transition = [[DMScaleTransition alloc]init];
+           
             viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Exam"];
         }
         break;
         case HOT_SPORT:{
-            transition = [[DMScaleTransition alloc]init];
              viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Hotspot"];
         }
             break;
         case FREEDOM_EXAM:
         case ERROR_BOOK:
         case START_BOOK:{
-            transition = [[DMScaleTransition alloc]init];
+    
             viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Chapter"];
             [viewController initChapterWithType:examType];
         }
             break;
         case ANSWER_RECORD:
         {
-            transition = [[DMSlideTransition alloc]init];
            viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"AnswerRecord"];
             
         }
             break;
         case RANGKING:{
-            transition = [[DMSlideTransition alloc]init];
              viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Ranking"];
         }
             break;
-
         default:
             break;
     }
-    [viewController setTransitioningDelegate:transition];
-    [transition autorelease];
+//     transition = [[DMScaleTransition alloc]init];
+//    [viewController setTransitioningDelegate:transition];
+//    [transition autorelease];
     [self presentViewController:viewController animated:YES completion:^{
         
     }];
@@ -369,31 +353,28 @@
     }
 }
 
-
 -(IBAction)openJizheHome:(id)sender{
      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.jizhehome.com/"]];
 }
 
--(IBAction)setUserInfo:(id)sender{
-    [self loadRegister];
+-(IBAction)loadUserCenter:(id)sender;{
+     [self.frostedViewController presentMenuViewController];
 }
 
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"buttonIndex is:%d",buttonIndex);
     if (buttonIndex == 1) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(enterExamViewController) name:@"EnterExam" object:nil];
-        [self loadRegister];
+        [self.frostedViewController presentMenuViewController];
     }
 }
 
 -(void)enterExamViewController{
-    NSLog(@"enterExamViewController");
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"EnterExam" object:nil];
     ExamViewController  *viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Exam"];
     [self presentViewController:viewController animated:YES completion:^{
         
     }];
-
 }
 
 //- (IBAction)goAction:(id)sender

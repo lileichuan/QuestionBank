@@ -469,6 +469,12 @@
     TestPaper *testPaper =   [[QuestionInterface sharedQuestionInterface]getCurTestPaper];
     if (isCorrect && score ==  1.0) {
          testPaper.correctNum += 1;
+        if (question.optionType == MUTABLE_CHOOSE) {
+            score = score * 1.5;
+        }
+        else if(question.optionType == TRUE_FALSE){
+             score = score * 0.5;
+        }
          testPaper.score += score;
     }
     else{

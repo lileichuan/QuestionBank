@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserInfo.h"
+#import "UserInfoDao.h"
+@interface RankingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>{
 
-@interface RankingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
-
+    
+    UserInfo *userInfo;
+}
+@property(nonatomic, retain)  UserInfo *userInfo;
+-(IBAction)switchRankIndex:(id)sender;
 @end

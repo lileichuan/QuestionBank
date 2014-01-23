@@ -24,4 +24,18 @@
 
 -(NSArray *)getCompanylist;
 
+-(NSArray *)loadRakingWithCompany:(NSString *)company;
+
+-(NSDictionary *)checkClientUpadte;
+
+-(BOOL)feedbackWithContent:(NSDictionary *)info;
+
+-(BOOL)uploadNewsWithInfo:(NSDictionary *)newsInfo;
+
+//参数：user_id、content、type（1新闻 2通知 3报道）
+-(NSArray *)loadNewWithType:(NSInteger)type withCompany:(NSString *)company;
+
+//-(BOOL)uploadMemberWithInfo:(NSDictionary *)newsInfo;
+
+-(NSArray *)loadFriendswithCompany:(NSString *)company;
 @end

@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ImageExt.h"
 
-@interface UserCenterViewController : UIViewController<UITextFieldDelegate,UIActionSheetDelegate>{
+@interface UserCenterViewController : UIViewController<UITextFieldDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate>{
     IBOutlet UITextField  *nameTextField;
     IBOutlet UILabel      *companyLabel;
-    IBOutlet UIImageView  *photImageView;
+    IBOutlet UIImageView  *photoImageView;
     
     NSDictionary   *userInfoDic;
 }

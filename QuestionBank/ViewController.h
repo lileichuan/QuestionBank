@@ -18,7 +18,6 @@
 
 -(IBAction)openJizheHome:(id)sender;
 
--(IBAction)setUserInfo:(id)sender;
+-(IBAction)loadUserCenter:(id)sender;
 
--(void)enterExamViewController;
 @end

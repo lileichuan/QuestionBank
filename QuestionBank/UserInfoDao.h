@@ -12,5 +12,6 @@
 @interface UserInfoDao : BaseDao
 -(BOOL)insertUser:(UserInfo *)_userInfo;
 -(UserInfo *)getUserWithID:(NSString *)userID;
+-(BOOL)updateUserInfo:(UserInfo *)_userInfo;
 
 @end

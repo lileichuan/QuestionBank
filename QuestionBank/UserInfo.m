@@ -7,10 +7,29 @@
 //
 
 #import "UserInfo.h"
+#import "UserInfoDao.h"
 
 @implementation UserInfo
+UserInfo *userInfo;
 @synthesize userID,name,company;
-
++(UserInfo *)sharedUserInfo{
+    if (!userInfo) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *userID = [userDefaults objectForKey:@"userID"];
+        if (userID) {
+            UserInfoDao *dao = [[UserInfoDao alloc]init];
+            userInfo = [dao getUserWithID:userID];
+            [userInfo retain];
+            [dao release];
+            dao = nil;
+        }
+        else{
+            userInfo = nil;
+        }
+        
+	}
+	return userInfo;
+}
 -(void)dealloc{
     if (userID) {
         [userID release];

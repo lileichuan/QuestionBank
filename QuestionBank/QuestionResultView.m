@@ -55,7 +55,7 @@
     [resultImageView release];
     
     UIImage *resultImage = nil;
-    NSInteger score = testPaper.score;
+    float score = testPaper.score;
     NSInteger duration =testPaper.duration;
   
     if (score < 60) {
@@ -85,7 +85,7 @@
     scoreLabel.backgroundColor = [UIColor clearColor];
     scoreLabel.textColor = [UIColor redColor];
     [self addSubview:scoreLabel];
-    scoreLabel.text = [NSString stringWithFormat:@"%d",score];
+    scoreLabel.text = [NSString stringWithFormat:@"%1f",score];
     [scoreLabel release];
     
     CGRect durationRect = CGRectMake(165,228,90,20);

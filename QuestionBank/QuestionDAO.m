@@ -147,14 +147,22 @@
 
 -(NSArray *)generateMockExamWithMode:(NSInteger)mode{
     NSMutableArray *questionArr = nil;
- 	FMResultSet *rs =[db executeQuery:[self SQL:@"SELECT * FROM %@ order by RANDOM()  limit 100 " inTable:TABLE_NAME]];
-	while ([rs next]) {
-        if (!questionArr) {
-            questionArr = [[[NSMutableArray alloc]initWithCapacity:10]autorelease];
+// 	FMResultSet *rs =[db executeQuery:[self SQL:@"SELECT * FROM %@ order by RANDOM()  limit 100 " inTable:TABLE_NAME]];
+    for (NSInteger i = 0; i < 3; i++) {
+        NSInteger amount = 30;
+        if (i == 0) {
+            amount = 40;
         }
-        Question *question = [self analysisQuesionWithRS:rs needHistoryRecord:NO];
-        [questionArr addObject:question];
+        FMResultSet *rs =[db executeQuery:[self SQL:@"SELECT * FROM %@ where option_type = ? order  by RANDOM()  limit ? " inTable:TABLE_NAME],[NSNumber numberWithInteger:i],[NSNumber numberWithInteger:amount]];
+        while ([rs next]) {
+            if (!questionArr) {
+                questionArr = [[[NSMutableArray alloc]initWithCapacity:10]autorelease];
+            }
+            Question *question = [self analysisQuesionWithRS:rs needHistoryRecord:NO];
+            [questionArr addObject:question];
+        }
     }
+
     if ([db hadError]) {
 		NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
 	}

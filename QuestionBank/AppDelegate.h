@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #define UMENG_APPKEY @"52d242e756240bdbaf1ca46c"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

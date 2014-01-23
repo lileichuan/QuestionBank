@@ -12,6 +12,9 @@
 #import "UserInfo.h"
 #import "MobClick.h"
 
+
+
+#define APP_URL @"itms-services://?action=download-manifest&url=http://jizhehome.duapp.com/jizhi.plist"
 #define DB_NAME @"question.db"
 
 @implementation AppDelegate
@@ -44,11 +47,27 @@
     NSLog(@"online config has fininshed and note = %@", note.userInfo);
 }
 
-
+//检测客户端是否有更新
+-(void)checkClientVersion{
+   InterfaceService  *interface = [[InterfaceService alloc]init];
+    NSDictionary *versionDic = [interface checkClientUpadte];
+    if ([[versionDic objectForKey:@"result"] isEqualToString:@"success"]) {
+        NSString *changelog = [versionDic objectForKey:@"data"];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"有新版本更新" message:changelog delegate:self cancelButtonTitle:@"暂不更新" otherButtonTitles:@"立即更新", nil];
+        alert.tag = 130;
+        [alert show];
+        [alert release];
+    }
+    [interface release];
+    interface = nil;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-//    InterfaceService *service = [[InterfaceService alloc]init];
+    InterfaceService *service = [[InterfaceService alloc]init];
+    
+    NSDictionary *infoDic = @{@"user_id":@"1111",@"mobile":@"1111",@"email":@"123@qq.com",@"content":@"123"};
+    [service feedbackWithContent:infoDic];
    
 //    UserInfo *userInfo = [[UserInfo alloc]init];
 //    userInfo.userID = @"1234567";
@@ -64,11 +83,12 @@
     //打开数据库
     [[SqliteInterface sharedSqliteInterface] setupDB:DB_NAME];
     [[SqliteInterface sharedSqliteInterface] connectDB];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:[NSBundle mainBundle]];
-    UIViewController *vc = [storyboard instantiateInitialViewController];
-    self.window.rootViewController = vc;
-    self.window.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
-    [self.window makeKeyAndVisible];
+//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:[NSBundle mainBundle]];
+//    UIViewController *vc = [storyboard instantiateInitialViewController];
+//    self.window.rootViewController = vc;
+//    self.window.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
+    //[self.window makeKeyAndVisible];
+    [self checkClientVersion];
     return YES;
 }
 
@@ -98,6 +118,16 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:APP_URL]];
+
+    }
+    
 }
 
 @end

@@ -41,4 +41,16 @@
     userInfo.company = [rs stringForColumn:@"company"];
     return userInfo;
 }
+-(BOOL)updateUserInfo:(UserInfo *)_userInfo{
+    BOOL success = YES;
+    [db executeUpdate:[self SQL:@"UPDATE %@ SET name =? and company = ? WHERE id = ?" inTable:TABLE_NAME],
+   _userInfo.name,
+   _userInfo.company,
+     _userInfo.userID];
+    if ([db hadError]) {
+		NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		success = NO;
+    }
+	return success;
+}
 @end

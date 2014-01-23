@@ -17,4 +17,5 @@
 @property(nonatomic, retain)NSString   *name;
 @property(nonatomic, retain)NSString   *company;
 
++(UserInfo *)sharedUserInfo;
 @end

@@ -23,7 +23,7 @@
 
 @interface ExamViewController ()<QuestionBrowserDelegate,QuestionProtocol,UIGridViewDelegate,UIGestureRecognizerDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationBarDelegate>{
     UIView *guideView;
-    TopView *topView;
+    IBOutlet TopView *topView;
     QuestionBrowser     *questionBrowser;
     QuestionResultView *questionResultView;
     
@@ -35,11 +35,11 @@
 @property(nonatomic, retain)  NSArray          *questionArr;
 @property(nonatomic, retain)  UserInfo         *userInfo;
 @property(nonatomic, assign)  NSInteger       viewTag;
-
+@property(nonatomic, retain)  IBOutlet TopView *topView;
 @end
 
 @implementation ExamViewController
-@synthesize questionArr,viewTag,userInfo;
+@synthesize questionArr,viewTag,userInfo,topView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,11 +58,27 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor colorWithRed:156/255.0 green:28/255.5 blue:27/255.0 alpha:1.0];
+    
+
+    photoImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    photoImageView.layer.masksToBounds = YES;
+    photoImageView.layer.cornerRadius = photoImageView.frame.size.width/2;
+    photoImageView.layer.borderColor = [UIColor grayColor].CGColor;
+    photoImageView.layer.borderWidth = 3.0f;
+    photoImageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    photoImageView.layer.shouldRasterize = YES;
+    photoImageView.clipsToBounds = YES;
+    
+    
     [self addTopBarView];
     self.viewTag = 0;
     self.userInfo = [UserInfo sharedUserInfo];
-    if (infoView) {
-        [infoView configureUserInfo:userInfo];
+    
+    nameLabel.text = userInfo.name;
+    companyLabel.text = userInfo.company;
+    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
+    if ([[NSFileManager defaultManager]fileExistsAtPath:photoPath]) {
+        photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
     }
 }
 
@@ -107,7 +123,7 @@
     }
     else if (viewTag == 3){
         [self removeAnswerListView];
-        viewTag = 2;
+        self.viewTag = 2;
     }
     else{
         [self dismissViewControllerAnimated:YES completion:^{
@@ -122,9 +138,11 @@
     switch (viewTag) {
         case 0:
             title = @"考试简介";
+              [topView setReturnTitle:@"主菜单"];
             break;
         case 1:
             title = @"模拟考试";
+            [topView setReturnTitle:@"主菜单"];
             break;
         case 2:{
             title = @"答题结果";
@@ -159,11 +177,11 @@
     if (!topView) {
         CGRect topRect =   CGRectMake(0,20,CGRectGetWidth(self.view.bounds), TOP_BAR_HEIGHT);
         topView = [[TopView alloc]initWithFrame:topRect];
-        [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-        
         [self.view addSubview:topView];
         [topView  release];
     }
+    [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+   
 }
 
 -(void)removeTopBarView{
@@ -173,13 +191,6 @@
     }
 }
 
--(void)addRegisterView{
-    
-}
-
--(void)removeRegisterView{
-    
-}
 
 -(void)removeGuidView{
     if (guideView) {
@@ -188,7 +199,7 @@
     }
 }
 
--(IBAction)addQuestionBrowserView:(id)sender{
+-(IBAction)enterExamView:(id)sender{
     [self initQuestionData];
     CGRect startRect =   CGRectMake(CGRectGetWidth(self.view.bounds), CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
     CGRect contentRect =   CGRectMake(0,CGRectGetMaxY(topView.frame),CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(topView.frame) );
@@ -220,12 +231,10 @@
 -(void)restartQuestionBroswerView{
     [self initQuestionData];
     if (questionBrowser) {
-        [questionBrowser reloadData];
-        [questionBrowser jumpToQuestionIndex:0];
+        [questionBrowser restartExam];
     }
     [self removeQuestionResultView];
-    viewTag = 4;
-    
+    self.viewTag = 1;
 }
 
 -(void)addQuestionResultView{
@@ -433,7 +442,7 @@
 #pragma mark
 #pragma mark 切换头像
 
-- (IBAction)handleTableviewCellLongPressed:(UITapGestureRecognizer *)gestureRecognizer {
+- (IBAction)showPhotoLibary:(id)sender{
     UIActionSheet* actionsheet = [[UIActionSheet alloc] initWithTitle:nil
                                                              delegate:nil
                                                     cancelButtonTitle:@"取消"
@@ -484,15 +493,19 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)updateUaerInfo:(UserInfo *)_userInfo{
-    
+-(void)updateUserInfo{
+    nameLabel.text = userInfo.name;
+    companyLabel.text = userInfo.company;
+    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
+    if ([[NSFileManager defaultManager]fileExistsAtPath:photoPath]) {
+        photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
+    }
 }
 //将照片保存到disk上
 -(void)saveImage:(UIImage *)image
 {
     if (image){
-       image =[image scaleToSize:image size:CGSizeMake(64, 64)];
-        
+       image =[image scaleToSize:image size:CGSizeMake(image.size.width / 5, image.size.height / 5)];
         NSData *imageData = UIImagePNGRepresentation(image);
         if(imageData != nil)
         {
@@ -500,9 +513,7 @@
         }
         NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
         [imageData writeToFile:photoPath atomically:YES];
-        if (infoView) {
-            [infoView configureUserInfo:userInfo];
-        }
+        [self updateUserInfo];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             InterfaceService *service = [[InterfaceService alloc]init];
             [service uploadUserInfo:userInfo];
@@ -510,8 +521,6 @@
         });
         
     }
-    
-
 }
 
 

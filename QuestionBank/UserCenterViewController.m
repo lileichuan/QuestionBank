@@ -27,7 +27,9 @@
     }
     return self;
 }
-
+-(void)dealloc{
+    [super dealloc];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -85,7 +87,7 @@
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setObject:userID forKey:@"userID"];
             [userDefaults synchronize];
-            curUserInfo = [[[UserInfo alloc]init]autorelease];
+            curUserInfo = [[UserInfo alloc]init];
             curUserInfo.userID =userID;
             isNewUser = YES;
         }
@@ -120,8 +122,9 @@
             [service release];
 
         });
+        [[UserInfo sharedUserInfo]closeUserInfo];
         [self dismissViewControllerAnimated:YES completion:^{
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"EnterExam" object:nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"FinishRegist" object:nil];
                           }];
     }
 
@@ -201,8 +204,8 @@
     
      UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     if (image){
-        UIImage *photoImage =[image imageByScalingAndCroppingForSize:CGSizeMake(64, 64)];
-         photoImageView.image = photoImage;
+        UIImage *photoImage =[image scaleToSize:image size:CGSizeMake(image.size.width / 5, image.size.height / 5)];
+        photoImageView.image = photoImage;
     }
     [picker dismissViewControllerAnimated:YES completion:nil];
     

@@ -7,7 +7,7 @@
 //
 
 #import "CompanyDao.h"
-#define TABLE_NAME @"Company"
+#define TABLE_NAME @"company"
 @implementation Company
 @synthesize name;
 -(void)dealloc{
@@ -34,6 +34,17 @@
 	return success;
 }
 
+-(BOOL)clearCompany{
+    BOOL success = YES;
+    [db executeUpdate:[self SQL:@"DELETE FROM %@ " inTable:TABLE_NAME]];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+		success = NO;
+        
+    }
+    return success;
+}
+
 -(NSArray *)getCompanys{
     NSMutableArray *arr = nil;
     FMResultSet *rs =[db executeQuery:[self SQL:@"SELECT * FROM %@ " inTable:TABLE_NAME]];
@@ -50,7 +61,7 @@
     return arr;
 }
 
--(NSArray *)searchCompanysWithName:(NSString *)name{
+-(NSArray *)searchCompanysWithName:(NSString *)searchKey{
     NSMutableArray *arr = nil;
     NSString *pro = [NSString stringWithFormat:@"select * from %@ where name like \'",TABLE_NAME];
 	
@@ -59,10 +70,10 @@
     NSString *likeBef = @"\%";
     NSString *likeAft = @"\%";
     
-	
-	NSString *sql = [pro stringByAppendingString:likeBef];
-	sql = [sql stringByAppendingString:name];
-	sql = [sql stringByAppendingString:likeAft];
+	NSString *sql = [NSString stringWithFormat:@"%@%@%@%@'",pro,likeBef,searchKey,likeAft];
+//	NSString *sql = [pro stringByAppendingString:likeBef];
+//	sql = [sql stringByAppendingString:searchKey];
+//	sql = [sql stringByAppendingString:likeAft];
 	NSLog(@"searchBar sql:\n%@", sql);
     FMResultSet *rs =[db executeQuery:sql];
 	while ([rs next]){

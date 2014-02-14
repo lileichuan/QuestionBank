@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CompanyViewController : UITableViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
+@interface CompanyViewController : UITableViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UISearchBarDelegate>{
+}
+
 
 -(IBAction)addCompany:(id)sender;
 

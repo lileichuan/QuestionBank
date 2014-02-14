@@ -25,7 +25,7 @@
 - (void)awakeFromNib
 {
     self.contentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"mainController"];
-    self.menuViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"userCenterController"];
+    //self.menuViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"userCenterController"];
 }
 
 - (void)viewDidLoad

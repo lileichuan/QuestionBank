@@ -18,4 +18,6 @@
 @property(nonatomic, retain)NSString   *company;
 
 +(UserInfo *)sharedUserInfo;
+
+-(void)closeUserInfo;
 @end

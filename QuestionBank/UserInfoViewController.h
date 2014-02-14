@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserInfoViewController : UITableViewController{
+@interface UserInfoViewController : UITableViewController<UITabBarControllerDelegate>{
     IBOutlet UIImageView *photoImageView;
     IBOutlet UITableView *infoTableView;
 }

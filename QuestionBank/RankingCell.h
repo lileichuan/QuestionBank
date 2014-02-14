@@ -13,8 +13,9 @@
     IBOutlet UIImageView *photoImageView;
     IBOutlet UILabel *nameLabel;
     IBOutlet UILabel *scoreLabel;
-    IBOutlet UILabel *timeLabel;
+    IBOutlet UILabel *timeLabel; //答题时长
     IBOutlet UILabel *compayLabel;
+    IBOutlet UILabel *answerTimeLabel; //答题时间
 }
 
 -(void)configureCellInfo:(NSDictionary *)info withRank:(NSInteger)rank;

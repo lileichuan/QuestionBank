@@ -35,7 +35,11 @@
 
 - (void)jumpToQuestionIndex:(NSInteger)index;
 
+-(void)restartExam;
+
 - (void)reloadData;
 
 -(void)swithcExamType:(EXAM_TYPE)type;
+
+
 @end

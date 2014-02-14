@@ -124,6 +124,7 @@
     if (cell == nil) {
         cell = [[RankingCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellWithIdentifier];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [self makeCellAnswerWithCell:cell cellforRowIndexPath:indexPath];
     return cell;
 }

@@ -14,16 +14,22 @@
 #import "UserInfoDao.h"
 #import "InterfaceService.h"
 #import "REFrostedViewController.h"
+#import "CompanyDao.h"
 @interface CompanyViewController (){
     NSArray  *companyArr;
     UITextField *companyTextField;
+    CompanyDao *companyDao;
+    UISearchBar *searchBar;
 }
-@property(nonatomic, retain)NSArray  *companyArr;
+@property(nonatomic, retain) NSArray  *companyArr;
 @property(nonatomic, retain) UITextField *companyTextField;
+@property(nonatomic, retain) CompanyDao *companyDao;
+@property(nonatomic, retain) UISearchBar *searchBar;
+
 @end
 
 @implementation CompanyViewController
-@synthesize companyArr,companyTextField;
+@synthesize companyArr,companyTextField,companyDao,searchBar;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -32,6 +38,26 @@
         
     }
     return self;
+}
+
+-(void)dealloc{
+//    if (companyTextField) {
+//        [companyTextField release];
+//        companyTextField = nil;
+//    }
+//    if (companyArr) {
+//        [companyArr release];
+//        companyArr = nil;
+//    }
+//    if (companyDao) {
+//        [companyDao release];
+//        companyDao = nil;
+//    }
+//    if (searchBar) {
+//        [searchBar release];
+//        searchBar = nil;
+//    }
+    [super dealloc];
 }
 
 - (void)viewDidLoad
@@ -43,8 +69,61 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    [self initData];
+    
+    UISearchBar * theSearchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width-50, 40)] autorelease];
+    
+    theSearchBar.placeholder = @"请输入单位名";
+    
+    theSearchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+    
+    theSearchBar.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
+    
+    theSearchBar.delegate = self;
+    
+    //theSearchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"All",@"A",@"B",@"C",@"D" ,nil];
+    
+    theSearchBar.showsScopeBar = YES;
+    
+    theSearchBar.keyboardType = UIKeyboardTypeNamePhonePad;
+    self.searchBar = theSearchBar;
+    
+    //theSearchBar.showsBookmarkButton = YES;
+    
+    self.tableView.tableHeaderView = searchBar;
+    [theSearchBar release];
+    companyDao = [[CompanyDao alloc]init];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        InterfaceService *service = [[InterfaceService alloc]init];
+        NSArray *arr =  [service getCompanylist];
+        [service release];
+        if (arr) {
+            [companyDao clearCompany];
+            for (NSDictionary *companyInfo in arr) {
+                Company *company = [[Company alloc]init];
+                company.name =[companyInfo objectForKey:@"name"];
+                [companyDao insertCompany:company];
+                [company release];
+            }
+            self.companyArr = [companyDao getCompanys];
+        }
+//        else{
+//            NSString *filePath = [Catalog getCompanyFilePath];
+//            if ([[NSFileManager defaultManager]fileExistsAtPath:filePath]) {
+//                self.companyArr = [NSArray arrayWithContentsOfFile:filePath];
+//            }
+//            else{
+//                self.companyArr =@[@"人民日报社",@"新华通讯社",@"解放军报社",@"光明日报社",@"经济日报社",@"中央人民广播电台",@"中国国际广播电台",@"中央电视台",@"中国日报社",@"科技日报社",@"中国纪检监察报社",@"工人日报社",@"中国青年报社",@"中国妇女报社",@"农民日报社",@"法制日报社",@"中国新闻社",@"《求是》杂志社",@"中国石化报"];
+//                [companyArr writeToFile:filePath atomically:YES];
+//            }
+//        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+        });
+    });
 }
+               
 
 - (void)didReceiveMemoryWarning
 {
@@ -52,15 +131,6 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)dealloc{
-    if (companyTextField) {
-        [companyTextField release];
-    }
-    if (companyArr) {
-        [companyArr release];
-    }
-    [super dealloc];
-}
 
 -(IBAction)addCompany:(id)sender{
     UITextField *tfID=[[UITextField alloc]initWithFrame:CGRectZero];
@@ -71,10 +141,10 @@
     [tfID release];
     
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"设置用户信息" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"添加单位" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     self.companyTextField = [alert textFieldAtIndex:0];
-    companyTextField.placeholder = @"所在单位";
+    companyTextField.placeholder = @"单位名称";
     alert.tag=100;
     [alert show];
     [alert release];
@@ -84,32 +154,10 @@
 
 }
 -(IBAction)closeSetting:(id)sender{
-    //[self dismissViewControllerAnimated:YES completion:^{}];
-    [self.frostedViewController hideMenuViewController];
+    [self dismissViewControllerAnimated:YES completion:^{}];
+    //[self.frostedViewController hideMenuViewController];
 }
 
--(void)initData{
-    InterfaceService *service = [[InterfaceService alloc]init];
-   NSArray *arr =  [service getCompanylist];
-    [service release];
-    if (arr) {
-        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:10];
-        for (NSDictionary *companyInfo in arr) {
-            [tempArr addObject:[companyInfo objectForKey:@"name"]];
-        }
-        self.companyArr = tempArr;
-    }
-    else{
-        NSString *filePath = [Catalog getCompanyFilePath];
-        if ([[NSFileManager defaultManager]fileExistsAtPath:filePath]) {
-            self.companyArr = [NSArray arrayWithContentsOfFile:filePath];
-        }
-        else{
-            self.companyArr =@[@"人民日报社",@"新华通讯社",@"解放军报社",@"光明日报社",@"经济日报社",@"中央人民广播电台",@"中国国际广播电台",@"中央电视台",@"中国日报社",@"科技日报社",@"中国纪检监察报社",@"工人日报社",@"中国青年报社",@"中国妇女报社",@"农民日报社",@"法制日报社",@"中国新闻社",@"《求是》杂志社",@"中国石化报"];
-            [companyArr writeToFile:filePath atomically:YES];
-        }
-    }
-}
 
 #pragma mark - Table view data source
 
@@ -134,8 +182,8 @@
     if (cell == nil) {
         cell = [[CompanyCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellWithIdentifier];
     }
-    NSString *company = [companyArr objectAtIndex:indexPath.row];
-    cell.companyLabel.text = company;
+    Company *company = [companyArr objectAtIndex:indexPath.row];
+    cell.companyLabel.text = company.name;
     return cell;
 }
 
@@ -178,7 +226,48 @@
 }
 */
 
+-(void)updateSearchResult{
+    [searchBar resignFirstResponder];
+    NSString *str = searchBar.text;
+    if (companyArr) {
+        [companyArr release];
+        companyArr = nil;
+    }
+    if (str.length > 0) {
+        self.companyArr = [companyDao searchCompanysWithName:str];
+    }
+    else{
+        self.companyArr = [companyDao getCompanys];
+    }
+   
+    [self.tableView reloadData];
+    
+}
 
+
+#pragma mark -
+#pragma mark Search Bar Delegate Methods
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)_searchBar
+{
+    [self updateSearchResult];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+   [self updateSearchResult];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)_searchBar
+{
+    [self.searchBar setText:@""];
+    [self updateSearchResult];
+  
+}
 #pragma mark - Navigation
 
 // In a story board-based application, you will often want to do a little preparation before navigation
@@ -189,7 +278,8 @@
     if ([segue.identifier isEqualToString:@"UserCenter"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         UserCenterViewController *destViewController = segue.destinationViewController;
-        NSDictionary *dic = @{@"company":[companyArr objectAtIndex:indexPath.row]};
+        Company *company = [companyArr objectAtIndex:indexPath.row];
+        NSDictionary *dic = @{@"company":company.name};
         [destViewController configureUserInfo:dic];
     }
     else if([segue.identifier isEqualToString:@"AddCompany"]){
@@ -220,16 +310,11 @@
 }
 
 -(void)enterUserCenterViewController{
-//    NSMutableArray *arr = [NSMutableArray arrayWithArray:self.companyArr];
-//    [arr addObject:companyTextField.text];
-//    NSString *filePath = [Catalog getCompanyFilePath];
-//    [arr writeToFile:filePath atomically:YES];
 
     UserCenterViewController *destViewController= [self.storyboard instantiateViewControllerWithIdentifier:@"UserCenter"];
     NSDictionary *dic = @{@"company":companyTextField.text};
     [destViewController configureUserInfo:dic];
     [self.navigationController pushViewController:destViewController animated:YES];
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         InterfaceService *service = [[InterfaceService alloc]init];
         BOOL success =  [service uploadCompany:companyTextField.text];
@@ -238,7 +323,6 @@
             NSLog(@"上传单位失败");
         }
         else {
-            [self initData];
             [self.tableView reloadData];
         }
         

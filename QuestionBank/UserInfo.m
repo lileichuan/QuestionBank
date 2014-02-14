@@ -30,6 +30,14 @@ UserInfo *userInfo;
 	}
 	return userInfo;
 }
+
+-(void)closeUserInfo{
+    if (userInfo) {
+        [userInfo release];
+        userInfo = nil;
+    }
+}
+
 -(void)dealloc{
     if (userID) {
         [userID release];

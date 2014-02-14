@@ -26,10 +26,7 @@
 #import "InterfaceService.h"
 #import "UserInfo.h"
 #import "UserInfoDao.h"
-
-#import "DMAlphaTransition.h"
-#import "DMScaleTransition.h"
-#import "DMSlideTransition.h"
+#import "CompanyViewController.h"
 #import "REFrostedViewController.h"
 
 
@@ -364,13 +361,14 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(enterExamViewController) name:@"EnterExam" object:nil];
-        [self.frostedViewController presentMenuViewController];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(enterExamViewController) name:@"FinishRegist" object:nil];
+        CompanyViewController *companyViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"register"];
+        [self presentViewController:companyViewController animated:YES completion:NULL];
     }
 }
 
 -(void)enterExamViewController{
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"EnterExam" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"FinishRegist" object:nil];
     ExamViewController  *viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"Exam"];
     [self presentViewController:viewController animated:YES completion:^{
         

@@ -20,8 +20,10 @@
 
 -(BOOL)insertCompany:(Company *)_company;
 
+-(BOOL)clearCompany;
+
 -(NSArray *)getCompanys;
 
--(NSArray *)searchCompanysWithName:(NSString *)name;
+-(NSArray *)searchCompanysWithName:(NSString *)searchKey;
 
 @end

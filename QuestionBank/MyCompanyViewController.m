@@ -40,32 +40,6 @@
     self.tableView.dataSource = self;
     self.tableView.opaque = NO;
     
-//    self.tableView.backgroundColor = [UIColor clearColor];
-//    self.tableView.tableHeaderView = ({
-//        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 184.0f)];
-//        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 40, 100, 100)];
-//        imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-//        imageView.image = [UIImage imageNamed:@"avatar.jpg"];
-//        imageView.layer.masksToBounds = YES;
-//        imageView.layer.cornerRadius = 50.0;
-//        imageView.layer.borderColor = [UIColor whiteColor].CGColor;
-//        imageView.layer.borderWidth = 3.0f;
-//        imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-//        imageView.layer.shouldRasterize = YES;
-//        imageView.clipsToBounds = YES;
-//        
-//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 150, 0, 24)];
-//        label.text = @"Roman Efimov";
-//        label.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
-//        label.backgroundColor = [UIColor clearColor];
-//        label.textColor = [UIColor colorWithRed:62/255.0f green:68/255.0f blue:75/255.0f alpha:1.0f];
-//        [label sizeToFit];
-//        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-//        
-//        [view addSubview:imageView];
-//        [view addSubview:label];
-//        view;
-//    });
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [userDefaults objectForKey:@"userID"];
     if (!userID) {
@@ -173,6 +147,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (!curUserInfo) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您还没有设置个人信息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"前去设置", nil];
+        [alert show];
+        [alert release];
+    }
     id viewController = nil;
     switch (indexPath.row) {
         case 0:
@@ -243,11 +222,23 @@
 }
 
  */
+-(void)loadRegisterView{
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateUserInfo) name:@"FinishRegist" object:nil];
+    CompanyViewController *companyViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"register"];
+    [self presentViewController:companyViewController animated:YES completion:NULL];
+}
 
+-(void)updateUserInfo{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"FinishRegist" object:nil];
+    self.curUserInfo = [UserInfo sharedUserInfo];
+    self.title = curUserInfo.company;
+}
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {
-     CompanyViewController *viewcontroller  = [self.storyboard instantiateViewControllerWithIdentifier:@"userCenterController"];
-        [self presentViewController:viewcontroller animated:YES completion:nil];
+        [self loadRegisterView];
+    }
+    else{
+        [self.tabBarController setSelectedIndex:0];
     }
 }
 

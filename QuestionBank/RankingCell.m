@@ -13,11 +13,22 @@
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if ([super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.selectedBackgroundView.backgroundColor = [UIColor clearColor];
+        //self.selectedBackgroundView.backgroundColor = [UIColor clearColor];
        // [self addSubViews];
         
     }
     return self;
+}
+
+-(void)awakeFromNib{
+    photoImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    photoImageView.layer.masksToBounds = YES;
+    photoImageView.layer.cornerRadius = photoImageView.frame.size.width/2;
+    photoImageView.layer.borderColor = [UIColor grayColor].CGColor;
+    photoImageView.layer.borderWidth = 1.0f;
+    photoImageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    photoImageView.layer.shouldRasterize = YES;
+    photoImageView.clipsToBounds = YES;
 }
 
 -(void)dealloc{
@@ -73,6 +84,7 @@
     NSString *time = [NSString stringWithFormat:@"%ld分%ld秒",duration/60,duration%60];
     NSString *rankInfo = [NSString stringWithFormat:@"第%ld名",rank];
     NSString *company = [userInfo objectForKey:@"company"];
+     NSString *answerTime = [info objectForKey:@"time"];
     NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userID]];
     if([[NSFileManager defaultManager]fileExistsAtPath:photoPath]){
          photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
@@ -82,6 +94,7 @@
     timeLabel.text = time;
     scoreLabel.text = score;
     compayLabel.text = company;
+    answerTimeLabel.text = answerTime;
 }
 
 /*

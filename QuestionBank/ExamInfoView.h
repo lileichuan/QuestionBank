@@ -14,7 +14,7 @@
     IBOutlet UIImageView *photoImageView;
     IBOutlet UIButton *enterExamBtn;
 }
-
+@property(nonatomic, retain) IBOutlet UIImageView *photoImageView;
 -(void)configureUserInfo:(UserInfo *)userInfo;
 
 @end

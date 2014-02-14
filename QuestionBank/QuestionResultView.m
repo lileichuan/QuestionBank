@@ -85,10 +85,10 @@
     scoreLabel.backgroundColor = [UIColor clearColor];
     scoreLabel.textColor = [UIColor redColor];
     [self addSubview:scoreLabel];
-    scoreLabel.text = [NSString stringWithFormat:@"%1f",score];
+    scoreLabel.text = [NSString stringWithFormat:@"%.1f分",score];
     [scoreLabel release];
     
-    CGRect durationRect = CGRectMake(165,228,90,20);
+    CGRect durationRect = CGRectMake(165,226,90,20);
     UILabel *durationLabel = [[UILabel alloc]initWithFrame:durationRect];
     durationLabel.font =[UIFont systemFontOfSize:18];
     durationLabel.textAlignment = NSTextAlignmentCenter;

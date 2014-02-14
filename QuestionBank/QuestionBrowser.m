@@ -333,7 +333,7 @@
 
 -(void)updateExamTime{
     second ++;
-    NSInteger leftTime = 4500 - second;
+    NSInteger leftTime = 5400 - second;
     NSString *time = [NSString stringWithFormat:@"%d:%d",leftTime/60,leftTime%60];
     [questionBottomView updateExamTime:time];
     
@@ -501,6 +501,16 @@
         [self finishExam];
     }
 
+}
+-(void)restartExam{
+    [self reloadData];
+    [self jumpToQuestionIndex:0];
+    
+    if (answerType == MOCK_EXAM) {
+        second = 0;
+        examTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateExamTime) userInfo:nil repeats:YES];
+        [examTimer retain];
+    }
 }
 
 -(void)starQuestion{

@@ -49,25 +49,34 @@
 
 //检测客户端是否有更新
 -(void)checkClientVersion{
-   InterfaceService  *interface = [[InterfaceService alloc]init];
-    NSDictionary *versionDic = [interface checkClientUpadte];
-    if ([[versionDic objectForKey:@"result"] isEqualToString:@"success"]) {
-        NSString *changelog = [versionDic objectForKey:@"data"];
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"有新版本更新" message:changelog delegate:self cancelButtonTitle:@"暂不更新" otherButtonTitles:@"立即更新", nil];
-        alert.tag = 130;
-        [alert show];
-        [alert release];
-    }
-    [interface release];
-    interface = nil;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        InterfaceService  *interface = [[InterfaceService alloc]init];
+        NSDictionary *versionDic = [interface checkClientUpadte];
+        [interface release];
+        interface = nil;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([[versionDic objectForKey:@"result"] isEqualToString:@"success"]) {
+                NSString *changelog = [versionDic objectForKey:@"data"];
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"有新版本更新" message:changelog delegate:self cancelButtonTitle:@"暂不更新" otherButtonTitles:@"立即更新", nil];
+                alert.tag = 130;
+                [alert show];
+                [alert release];
+            }
+        });
+        
+    });
+    
+
+
+
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    InterfaceService *service = [[InterfaceService alloc]init];
-    
-    NSDictionary *infoDic = @{@"user_id":@"1111",@"mobile":@"1111",@"email":@"123@qq.com",@"content":@"123"};
-    [service feedbackWithContent:infoDic];
+//    InterfaceService *service = [[InterfaceService alloc]init];
+//    
+//    NSDictionary *infoDic = @{@"user_id":@"1111",@"mobile":@"1111",@"email":@"123@qq.com",@"content":@"123"};
+//    [service feedbackWithContent:infoDic];
    
 //    UserInfo *userInfo = [[UserInfo alloc]init];
 //    userInfo.userID = @"1234567";

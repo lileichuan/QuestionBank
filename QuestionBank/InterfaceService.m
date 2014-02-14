@@ -36,13 +36,15 @@
     //[request setPostValue:[compoments lastObject] forKey:@"img_file"];
     if ([[NSFileManager defaultManager]fileExistsAtPath:photoPath]) {
         photo = photoPath;
+        NSArray *compoments = [photo componentsSeparatedByString:@"/"];
+        [request setFile:photo withFileName:[compoments lastObject] andContentType:nil forKey:@"img_file"];
     }
-    else{
-       photo = [[NSBundle mainBundle]pathForResource:@"Photo_Default" ofType:@"png"];
-    }
-      NSArray *compoments = [photo componentsSeparatedByString:@"/"];
+//    else{
+//       photo = [[NSBundle mainBundle]pathForResource:@"Photo_Default" ofType:@"png"];
+//    }
+
     //[request setFile:photo forKey:@"png" ];
-    [request setFile:photo withFileName:[compoments lastObject] andContentType:nil forKey:@"img_file"];
+//   [request setFile:photo withFileName:[compoments lastObject] andContentType:nil forKey:@"img_file"];
 //    [ request setDelegate : self ];
 //    [ request setDidFinishSelector : @selector ( responseComplete:)];
 //    [ request setDidFailSelector : @selector (responseFailed:)];
@@ -66,7 +68,7 @@
     NSString *serveraddress = [NSString stringWithFormat:@"%@/app/version.c?version=%@",BASE_URL,clientVersion];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setTimeOutSeconds:15.0];
+    [request setTimeOutSeconds:3.0];
     [request startSynchronous];
     NSError *error = [request error];
     if (!error) {

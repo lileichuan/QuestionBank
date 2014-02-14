@@ -9,43 +9,51 @@
 #import "ExamInfoView.h"
 #import "Catalog.h"
 @implementation ExamInfoView
-
+@synthesize photoImageView;
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(40, 40, 84, 84)];
+        photoImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        
+        photoImageView.layer.masksToBounds = YES;
+        photoImageView.layer.cornerRadius = 50.0;
+        photoImageView.layer.borderColor = [UIColor grayColor].CGColor;
+        photoImageView.layer.borderWidth = 3.0f;
+        photoImageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+        photoImageView.layer.shouldRasterize = YES;
+        photoImageView.clipsToBounds = YES;
     }
     return self;
 }
 -(id)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
     if (self) {
-
-//        [enterExamBtn setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRed:227.0/255.0 green:100.0/255.0 blue:83.0/255.0 alpha:1]] forState:UIControlStateNormal];
-//        enterExamBtn.layer.masksToBounds  = YES;
-//        
-//        
-//        [photoImageView.layer setMasksToBounds:YES];
-//        [photoImageView.layer setCornerRadius:photoImageView.frame.size.height/2];
-//        [photoImageView.layer setMasksToBounds:YES];
-//        [photoImageView setContentMode:UIViewContentModeScaleAspectFill];
-//        [photoImageView setClipsToBounds:YES];
-//        photoImageView.layer.shadowColor = [UIColor blackColor].CGColor;
-//        photoImageView.layer.shadowOffset = CGSizeMake(4, 4);
-//        photoImageView.layer.shadowOpacity = 0.5;
-//        photoImageView.layer.shadowRadius = 2.0;
-//        photoImageView.layer.borderColor = [[UIColor blackColor] CGColor];
-//        photoImageView.layer.borderWidth = 2.0f;
-//        photoImageView.userInteractionEnabled = YES;
-      
+    NSLog(@"photoImageView 0000000000000 is%f,%f,%f,%f",photoImageView.frame.origin.x,photoImageView.frame.origin.y,photoImageView.frame.size.width,photoImageView.frame.size.height);
     }
     return self;
 }
 
+-(void)dealloc{
+    if (photoImageView) {
+        [photoImageView release];
+    }
+    [super dealloc];
+}
 -(void)awakeFromNib{
 //    enterExamBtn.layer.masksToBounds  = YES;
 //    enterExamBtn.layer.cornerRadius  = 3.0;
+    NSLog(@"photoImageView frame111111111 is%f,%f,%f,%f",photoImageView.frame.origin.x,photoImageView.frame.origin.y,photoImageView.frame.size.width,photoImageView.frame.size.height);
+    self.photoImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+     self.photoImageView.layer.masksToBounds = YES;
+     self.photoImageView.layer.cornerRadius = 50.0;
+     self.photoImageView.layer.borderColor = [UIColor grayColor].CGColor;
+     self.photoImageView.layer.borderWidth = 3.0f;
+     self.photoImageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+     self.photoImageView.layer.shouldRasterize = YES;
+     self.photoImageView.clipsToBounds = YES;
 
 }
 /*

@@ -27,7 +27,7 @@
         {
             [showAnswerBtn setBtnImage:[UIImage imageNamed:@"finish_exam.png"]];
             [showAnswerBtn setBtnTitle:@"交卷"];
-            numLabel.text = @"60:00";
+            numLabel.text = @"90:00";
             showAnswerBtn.tag = 5;
         }
             break;

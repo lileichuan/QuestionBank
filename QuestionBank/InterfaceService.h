@@ -18,13 +18,19 @@
 
 -(BOOL)uploadAnswerRecord:(NSDictionary *)recordDic;
 
--(NSArray *)loadAnswerRaking;
+
 
 -(BOOL)uploadCompany:(NSString *)company;
 
 -(NSArray *)getCompanylist;
 
+-(NSArray *)loadAllRaking;
+
 -(NSArray *)loadRakingWithCompany:(NSString *)company;
+
+-(NSArray *)loadRakingWithCompany:(NSString *)company withPageNum:(NSInteger)pageNum;
+
+-(NSArray *)loadRakingWithPageNum:(NSInteger)pageNum;
 
 -(NSDictionary *)checkClientUpadte;
 

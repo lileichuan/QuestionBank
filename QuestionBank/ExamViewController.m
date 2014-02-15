@@ -474,7 +474,7 @@
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.delegate = self;   // 设置委托
     imagePickerController.sourceType = sourceType;
-    imagePickerController.allowsEditing = NO;
+    imagePickerController.allowsEditing = YES;
     [self presentViewController:imagePickerController animated:YES completion:nil];  //需要以模态的形式展示
     [imagePickerController release];
 }
@@ -483,9 +483,21 @@
 //完成拍照
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    NSLog(@"完成拍照");
     [picker dismissViewControllerAnimated:YES completion:^{}];
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    //UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    //UIImage* edit = [info objectForKey:UIImagePickerControllerEditedImage];
+    //获取图片裁剪后，剩下的图
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    if (image == nil)
+        image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    //获取图片的url
     [self performSelector:@selector(saveImage:) withObject:image];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo {
+    NSLog(@"完成编辑拍照");
 }
 //用户取消拍照
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

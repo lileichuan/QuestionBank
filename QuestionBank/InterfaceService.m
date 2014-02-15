@@ -87,7 +87,7 @@
     NSString *serveraddress = [NSString stringWithFormat:@"%@/app/feedback_add.c?user_id=%@&mobile=%@&email=%@&content=%@",BASE_URL,[info objectForKey:@"user_id"],[info objectForKey:@"mobile"],[info objectForKey:@"email"],[info objectForKey:@"content"]];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setTimeOutSeconds:15.0];
+    [request setTimeOutSeconds:5.0];
     [request startSynchronous];
     error = [request error];
     if (!error) {
@@ -123,7 +123,7 @@
     return success;
 }
 
--(NSArray *)loadAnswerRaking{
+-(NSArray *)loadAllRaking{
     NSString *serveraddress = [NSString stringWithFormat:@"%@/app/sort.c",BASE_URL];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
@@ -151,7 +151,7 @@
     NSString *serveraddress = [NSString stringWithFormat:@"%@/app/sort.c?company=%@",BASE_URL,company];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setTimeOutSeconds:15.0];
+    [request setTimeOutSeconds:5.0];
     [request startSynchronous];
     NSError *error = [request error];
     if (!error) {
@@ -170,6 +170,55 @@
     }
     return nil;
 }
+
+-(NSArray *)loadRakingWithCompany:(NSString *)company withPageNum:(NSInteger)pageNum{
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/sort.c?company=%@&pageNo=%ld",BASE_URL,company,pageNum];
+    NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setTimeOutSeconds:5.0];
+    [request startSynchronous];
+    NSError *error = [request error];
+    if (!error) {
+        // NSString *jsonString = [request responseString];
+        //NSDictionary *dic = [jsonString JSONValue];
+        NSData *data = [request responseData];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        if ([[dic objectForKey:@"result"] isEqualToString:@"success"]) {
+            NSArray *rankArr = [dic objectForKey:@"data"];
+            //              NSArray *rankArr = [NSJSONSerialization JSONObjectWithData:[data dataUsingEncoding: NSUTF8StringEncoding]options:kNilOptions error:&error];
+            for (id rankInfo in rankArr) {
+                [self analysisRankInfo:rankInfo];
+            }
+            return rankArr;
+        }
+    }
+    return nil;
+}
+
+-(NSArray *)loadRakingWithPageNum:(NSInteger)pageNum{
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/sort.c?pageNo=%ld",BASE_URL,pageNum];
+    NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setTimeOutSeconds:5.0];
+    [request startSynchronous];
+    NSError *error = [request error];
+    if (!error) {
+        // NSString *jsonString = [request responseString];
+        //NSDictionary *dic = [jsonString JSONValue];
+        NSData *data = [request responseData];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        if ([[dic objectForKey:@"result"] isEqualToString:@"success"]) {
+            NSArray *rankArr = [dic objectForKey:@"data"];
+            //              NSArray *rankArr = [NSJSONSerialization JSONObjectWithData:[data dataUsingEncoding: NSUTF8StringEncoding]options:kNilOptions error:&error];
+            for (id rankInfo in rankArr) {
+                [self analysisRankInfo:rankInfo];
+            }
+            return rankArr;
+        }
+    }
+    return nil;
+}
+
 -(void)analysisRankInfo:(NSDictionary *)rankInfo{
     NSLog(@"rankInfo is:%@",rankInfo);
    NSDictionary  *userInfo = [rankInfo objectForKey:@"user"];
@@ -205,7 +254,7 @@
     NSString *serveraddress = [NSString stringWithFormat:@"%@/app/company_add.c?company=%@",BASE_URL,company];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setTimeOutSeconds:15.0];
+    [request setTimeOutSeconds:5.0];
     [request startSynchronous];
     error = [request error];
     if (!error) {
@@ -223,7 +272,7 @@
     NSString *serveraddress = [NSString stringWithFormat:@"%@/app/company.c",BASE_URL];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setTimeOutSeconds:15.0];
+    [request setTimeOutSeconds:5.0];
     [request startSynchronous];
     NSError *error = [request error];
     if (!error) {
@@ -293,7 +342,7 @@
     NSString *serveraddress = [NSString stringWithFormat:@"%@/app/news.c?company=%@&type=%d",BASE_URL,company,type];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setTimeOutSeconds:15.0];
+    [request setTimeOutSeconds:5.0];
     [request startSynchronous];
     NSError *error = [request error];
     if (!error) {
@@ -313,7 +362,7 @@
     NSString *serveraddress = [NSString stringWithFormat:@"%@/app/company_person.c?company=%@",BASE_URL,company];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setTimeOutSeconds:15.0];
+    [request setTimeOutSeconds:5.0];
     [request startSynchronous];
     NSError *error = [request error];
     if (!error) {

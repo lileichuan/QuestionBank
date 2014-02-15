@@ -10,10 +10,10 @@
 #import "UserInfo.h"
 #import "UserInfoDao.h"
 @interface RankingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>{
-
-    
     UserInfo *userInfo;
+    UIActivityIndicatorView* indicator;
 }
-@property(nonatomic, retain)  UserInfo *userInfo;
+@property(nonatomic, retain) UserInfo *userInfo;
+@property(nonatomic, retain) UIActivityIndicatorView* indicator;
 -(IBAction)switchRankIndex:(id)sender;
 @end

@@ -84,7 +84,7 @@
 //    userInfo.company = @"北大方正";
 //    [service uploadUserInfo:userInfo];
     
-    //[service loadAnswerRaking];
+    //[service loadAllRaking];
     
     // Override point for customization after application launch.
     //  友盟的方法本身是异步执行，所以不需要再异步调用

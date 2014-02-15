@@ -16,7 +16,16 @@
     IBOutlet UILabel *timeLabel; //答题时长
     IBOutlet UILabel *compayLabel;
     IBOutlet UILabel *answerTimeLabel; //答题时间
+    IBOutlet UIImageView *rankImageView;
 }
+@property(nonatomic, retain) IBOutlet UILabel  *rankLabel;
+@property(nonatomic, retain) IBOutlet UIImageView *photoImageView;
+@property(nonatomic, retain) IBOutlet UILabel *nameLabel;
+@property(nonatomic, retain) IBOutlet UILabel *scoreLabel;
+@property(nonatomic, retain) IBOutlet UILabel *timeLabel; //答题时长
+@property(nonatomic, retain) IBOutlet UILabel *compayLabel;
+@property(nonatomic, retain) IBOutlet UILabel *answerTimeLabel; //答题时间
+@property(nonatomic, retain) IBOutlet UIImageView *rankImageView;
 
 -(void)configureCellInfo:(NSDictionary *)info withRank:(NSInteger)rank;
 @end

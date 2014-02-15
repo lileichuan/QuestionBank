@@ -165,7 +165,7 @@
                                                              delegate:nil
                                                     cancelButtonTitle:@"取消"
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:@"相机",@"相册",nil];
+                                                    otherButtonTitles:@"拍照",@"从相册中选取",nil];
     
     actionsheet.delegate = self;
     [actionsheet showInView:self.view];
@@ -192,7 +192,7 @@
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.delegate = self;   // 设置委托
     imagePickerController.sourceType = sourceType;
-    imagePickerController.allowsEditing = NO;
+    imagePickerController.allowsEditing = YES;
     [self presentViewController:imagePickerController animated:YES completion:nil];  //需要以模态的形式展示
     [imagePickerController release];
 }
@@ -201,14 +201,13 @@
 //完成拍照
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    
-     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    if (image){
-        UIImage *photoImage =[image scaleToSize:image size:CGSizeMake(image.size.width / 5, image.size.height / 5)];
-        photoImageView.image = photoImage;
-    }
-    [picker dismissViewControllerAnimated:YES completion:nil];
-    
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    if (image == nil)
+        image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    //获取图片的url
+    UIImage *photoImage =[image scaleToSize:image size:CGSizeMake(image.size.width / 5, image.size.height / 5)];
+    photoImageView.image = photoImage;
 }
 //用户取消拍照
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

@@ -11,8 +11,10 @@
 #import "Catalog.h"
 #import "CompanyViewController.h"
 #import "FeedbackViewController.h"
+#import "ImageExt.h"
+#import "InterfaceService.h"
 
-@interface UserInfoViewController (){
+@interface UserInfoViewController ()<UIImagePickerControllerDelegate,UIActionSheetDelegate>{
     UserInfo *curUserInfo;
 }
 @property(nonatomic, retain) UserInfo *curUserInfo;
@@ -62,6 +64,7 @@
         photoImageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         photoImageView.layer.shouldRasterize = YES;
         photoImageView.clipsToBounds = YES;
+        photoImageView.userInteractionEnabled = YES;
         
 //        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 150, 0, 24)];
 //        label.text = @"Roman Efimov";
@@ -73,6 +76,11 @@
 //        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         
         [view addSubview:photoImageView];
+        UITapGestureRecognizer* singleRecognizer;
+        singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPhotoLibary)];
+        singleRecognizer.numberOfTapsRequired = 1; // 单击
+        [photoImageView addGestureRecognizer:singleRecognizer];
+        [singleRecognizer release];
        // [view addSubview:label];
         
         if (curUserInfo) {
@@ -95,6 +103,22 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+-(void)dealloc{
+    if (curUserInfo) {
+        [curUserInfo release];
+        curUserInfo = nil;
+    }
+    if (infoTableView) {
+        [infoTableView release];
+        infoTableView = nil;
+    }
+    if (photoImageView) {
+        [photoImageView release];
+        photoImageView = nil;
+    }
+    [super dealloc];
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -262,5 +286,94 @@
 
 -(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
     NSLog(@"didSelectViewController");
+}
+
+#pragma mark
+#pragma mark 切换头像
+
+- (void)showPhotoLibary{
+    UIActionSheet* actionsheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"取消"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"拍照",@"从相册中选取",nil];
+    
+    actionsheet.delegate = self;
+    [actionsheet showInView:self.view];
+    [actionsheet release];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"buttonIndex is:%d",buttonIndex);
+    if (buttonIndex == 2) {
+        return;
+    }
+    UIImagePickerControllerSourceType sourceType;
+    //判断是否有摄像头
+    if (buttonIndex == 0) {
+        sourceType = UIImagePickerControllerSourceTypeCamera;
+        if(![UIImagePickerController isSourceTypeAvailable:sourceType])
+        {
+            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        }
+    }
+    else if(buttonIndex == 1){
+        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.delegate = self;   // 设置委托
+    imagePickerController.sourceType = sourceType;
+    imagePickerController.allowsEditing = YES;
+    [self presentViewController:imagePickerController animated:YES completion:nil];  //需要以模态的形式展示
+    [imagePickerController release];
+}
+
+
+#pragma mark UIImagePickerController Method
+//完成拍照
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSLog(@"完成拍照");
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    //UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    //UIImage* edit = [info objectForKey:UIImagePickerControllerEditedImage];
+    //获取图片裁剪后，剩下的图
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    if (image == nil)
+        image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    //获取图片的url
+    [self performSelector:@selector(saveImage:) withObject:image];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo {
+    NSLog(@"完成编辑拍照");
+}
+//用户取消拍照
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+//将照片保存到disk上
+-(void)saveImage:(UIImage *)image
+{
+    if (image){
+        image =[image scaleToSize:image size:CGSizeMake(image.size.width / 5, image.size.height / 5)];
+        photoImageView.image = image;
+        NSData *imageData = UIImagePNGRepresentation(image);
+        if(imageData != nil)
+        {
+            imageData = UIImageJPEGRepresentation(image, 1.0);
+        }
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",curUserInfo.userID]];
+        [imageData writeToFile:photoPath atomically:YES];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            InterfaceService *service = [[InterfaceService alloc]init];
+            [service uploadUserInfo:curUserInfo];
+            [service release];
+        });
+        
+    }
 }
 @end

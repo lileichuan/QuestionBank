@@ -8,7 +8,9 @@
 
 #import "RankingCell.h"
 #import "Catalog.h"
+#import "DateMethod.h"
 @implementation RankingCell
+@synthesize rankLabel,photoImageView,nameLabel,scoreLabel,timeLabel,compayLabel,answerTimeLabel,rankImageView;
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if ([super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
@@ -82,20 +84,50 @@
     NSString *score = [NSString stringWithFormat:@"%.1f分",[[info objectForKey:@"score"]floatValue]];
     NSInteger duration = [[info objectForKey:@"duration"]integerValue];
     NSString *time = [NSString stringWithFormat:@"%ld分%ld秒",duration/60,duration%60];
-    NSString *rankInfo = [NSString stringWithFormat:@"第%ld名",rank];
     NSString *company = [userInfo objectForKey:@"company"];
-     NSString *answerTime = [info objectForKey:@"time"];
+    NSString *answerTime = [DateMethod timestampFromString:[info objectForKey:@"time"]];
     NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userID]];
     if([[NSFileManager defaultManager]fileExistsAtPath:photoPath]){
          photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
     }
+    switch (rank) {
+        case 1:{
+            rankImageView.hidden = NO;
+            rankLabel.hidden = YES;
+            rankImageView.image = [UIImage imageNamed:@"gold.png"];
+        }
+            
+            break;
+        case 2:{
+            rankImageView.hidden = NO;
+            rankLabel.hidden = YES;
+            rankImageView.image = [UIImage imageNamed:@"silver.png"];
+        }
+            
+            break;
+        case 3:{
+            rankImageView.hidden = NO;
+            rankLabel.hidden = YES;
+            rankImageView.image = [UIImage imageNamed:@"bronze.png"];
+        }
+            break;
+        default:{
+            NSString *rankInfo = [NSString stringWithFormat:@"第%ld名",rank];
+            rankLabel.text = rankInfo;
+            rankImageView.hidden = YES;
+            rankLabel.hidden = NO;
+        }
+            break;
+    }
+   
     nameLabel.text = name;
-    rankLabel.text = rankInfo;
+   
     timeLabel.text = time;
     scoreLabel.text = score;
     compayLabel.text = company;
     answerTimeLabel.text = answerTime;
 }
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

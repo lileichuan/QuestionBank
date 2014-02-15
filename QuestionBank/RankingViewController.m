@@ -11,20 +11,28 @@
 #import "TopView.h"
 #import "RankingCell.h"
 #import "InterfaceService.h"
+#import "MJRefresh.h"
 
 @interface RankingViewController (){
     IBOutlet TopView *topView;
     IBOutlet RankingView *rankingView;
     IBOutlet UISegmentedControl *segmentControl;
-    NSArray    *rankArr;
+    NSMutableArray    *companyRankingArr;
+    NSMutableArray    *rankingArr;
+    NSArray          *curRaingkingArr;
+    
+    MJRefreshFooterView *_footer;
 }
-@property(nonatomic, retain)UISegmentedControl *segmentControl;
+@property(nonatomic, retain) UISegmentedControl *segmentControl;
+@property(nonatomic, retain) NSMutableArray    *companyRankingArr;
+@property(nonatomic, retain) NSMutableArray    *rankingArr;
+@property(nonatomic, retain) NSArray          *curRaingkingArr;
 
 
 @end
 
 @implementation RankingViewController
-@synthesize userInfo,segmentControl;
+@synthesize userInfo,segmentControl,companyRankingArr,rankingArr,curRaingkingArr,indicator;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -39,10 +47,33 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.userInfo = [UserInfo sharedUserInfo];
-    [self initData];
+    //[self initData];
     [self addTopBarView];
     [self addRankingView];
+    //初始化:
+    indicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    //设置显示样式,见UIActivityIndicatorViewStyle的定义
+    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+    //设置显示位置
+     [indicator setCenter:CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2 - 60)];
+   //[indicator setCenter:self.view.center];
+    //设置背景色
+    //indicator.backgroundColor = [UIColor grayColor];
+    //将初始化好的indicator add到view中
+    [self.view addSubview:indicator];
+    [self addFooter];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self initData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [rankingView reloadData];
+            if (indicator) {
+                [indicator removeFromSuperview];
+                [indicator release];
+                indicator = nil;
+            }
+        });
 
+    });
 }
 - (BOOL)shouldAutorotate{
     return NO;
@@ -54,10 +85,29 @@
 }
 
 -(void)dealloc{
-//    if (userInfo) {
-//        [userInfo release];
-//        userInfo =  nil;
-//    }
+    if (userInfo) {
+        [userInfo release];
+        userInfo =  nil;
+    }
+    if (curRaingkingArr) {
+        [curRaingkingArr release];
+        curRaingkingArr = nil;
+    }
+    if (companyRankingArr) {
+        [companyRankingArr removeLastObject];
+        [companyRankingArr release];
+        companyRankingArr = nil;
+    }
+    if (rankingArr) {
+        [rankingArr removeAllObjects];
+        [rankingArr release];
+        rankingArr = nil;
+    }
+    if (indicator) {
+        [indicator removeFromSuperview];
+        [indicator release];
+        indicator = nil;
+    }
     [super dealloc];
 }
 -(void)close{
@@ -65,6 +115,31 @@
         
     }];
 }
+
+- (void)addFooter
+{
+    __unsafe_unretained RankingViewController *vc = self;
+    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+    footer.scrollView = rankingView;
+    footer.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
+        BOOL success = [self initData];
+        if (success) {
+        }
+        [vc performSelector:@selector(doneWithView:) withObject:refreshView afterDelay:0.5];
+        
+        NSLog(@"%@----开始进入刷新状态", refreshView.class);
+    };
+    _footer = footer;
+}
+
+
+- (void)doneWithView:(MJRefreshBaseView *)refreshView
+{
+    // 刷新表格
+    [rankingView reloadData];
+    [refreshView endRefreshing];
+}
+
 
 -(void)addTopBarView{
     [topView addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
@@ -77,23 +152,46 @@
     rankingView.frame = contentRect;
 }
 
--(void)initData{
+-(BOOL)initData{
+    BOOL success = NO;
+    if (!companyRankingArr) {
+        companyRankingArr = [[NSMutableArray alloc]initWithCapacity:0];
+    }
+    if(!rankingArr){
+        rankingArr = [[NSMutableArray alloc]initWithCapacity:0];
+    }
     InterfaceService *service = [[InterfaceService alloc]init];
     if (segmentControl.selectedSegmentIndex == 0) {
-         rankArr = [service loadRakingWithCompany:userInfo.company];
+       
+        NSInteger pageNum = companyRankingArr.count / 10;
+        NSArray *tempArr = [service loadRakingWithCompany:userInfo.company withPageNum:pageNum+1];
+        if (tempArr && tempArr.count > 0) {
+            [companyRankingArr addObjectsFromArray:tempArr];
+            success = YES;
+        }
+        curRaingkingArr = companyRankingArr;
     }
     else if(segmentControl.selectedSegmentIndex == 1){
-         rankArr = [service loadAnswerRaking];
+        NSInteger pageNum = rankingArr.count / 10;
+        NSArray *tempArr = [service loadRakingWithPageNum:pageNum + 1];
+        if (tempArr && tempArr.count > 0) {
+            [rankingArr addObjectsFromArray:tempArr];
+            success = YES;
+        }
+        curRaingkingArr = rankingArr;
+
     }
-   
-    [rankArr retain];
     [service release];
     service = nil;
-}
+    return success;
+  }
+
+
 
 -(IBAction)switchRankIndex:(id)sender{
     [self initData];
     [rankingView reloadData];
+    [rankingView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     
 }
 
@@ -106,15 +204,21 @@
 
 - (NSInteger)tableView:(RankingView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return rankArr.count;
+    return curRaingkingArr.count;
 }
 
 #pragma mark
 #pragma mark UITableViewDataSource
 
 -(void)makeCellAnswerWithCell:(RankingCell *)cell cellforRowIndexPath:(NSIndexPath *)indexPath{
-    NSDictionary *cellInfo = [rankArr objectAtIndex:indexPath.row];
+    NSDictionary *cellInfo = [curRaingkingArr objectAtIndex:indexPath.row];
     [cell configureCellInfo:cellInfo withRank:indexPath.row + 1];
+    if ([userInfo.name isEqualToString:[cellInfo objectForKey:@"name"]]) {
+        cell.contentView.backgroundColor = [UIColor grayColor];
+    }
+    else{
+         cell.contentView.backgroundColor = [UIColor whiteColor];
+    }
 }
 
 - (UITableViewCell *)tableView:(RankingView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

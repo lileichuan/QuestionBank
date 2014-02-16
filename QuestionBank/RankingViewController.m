@@ -123,9 +123,10 @@
     footer.scrollView = rankingView;
     footer.beginRefreshingBlock = ^(MJRefreshBaseView *refreshView) {
         BOOL success = [self initData];
-        if (success) {
+        [vc performSelector:@selector(doneWithView:) withObject:refreshView afterDelay:1.0];
+        if (!success) {
+            //[rankingView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:curRaingkingArr.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
-        [vc performSelector:@selector(doneWithView:) withObject:refreshView afterDelay:0.5];
         
         NSLog(@"%@----开始进入刷新状态", refreshView.class);
     };
@@ -162,21 +163,24 @@
     }
     InterfaceService *service = [[InterfaceService alloc]init];
     if (segmentControl.selectedSegmentIndex == 0) {
-       
-        NSInteger pageNum = companyRankingArr.count / 10;
-        NSArray *tempArr = [service loadRakingWithCompany:userInfo.company withPageNum:pageNum+1];
-        if (tempArr && tempArr.count > 0) {
-            [companyRankingArr addObjectsFromArray:tempArr];
-            success = YES;
+        if (companyRankingArr.count %10 == 0) {
+            NSInteger pageNum = companyRankingArr.count / 10;
+            NSArray *tempArr = [service loadRakingWithCompany:userInfo.company withPageNum:pageNum+1];
+            if (tempArr && tempArr.count > 0) {
+                [companyRankingArr addObjectsFromArray:tempArr];
+                success = YES;
+            }
         }
         curRaingkingArr = companyRankingArr;
     }
     else if(segmentControl.selectedSegmentIndex == 1){
-        NSInteger pageNum = rankingArr.count / 10;
-        NSArray *tempArr = [service loadRakingWithPageNum:pageNum + 1];
-        if (tempArr && tempArr.count > 0) {
-            [rankingArr addObjectsFromArray:tempArr];
-            success = YES;
+        if (rankingArr.count %10 == 0) {
+            NSInteger pageNum = rankingArr.count / 10;
+            NSArray *tempArr = [service loadRakingWithPageNum:pageNum + 1];
+            if (tempArr && tempArr.count > 0) {
+                [rankingArr addObjectsFromArray:tempArr];
+                success = YES;
+            }
         }
         curRaingkingArr = rankingArr;
 
@@ -213,7 +217,8 @@
 -(void)makeCellAnswerWithCell:(RankingCell *)cell cellforRowIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *cellInfo = [curRaingkingArr objectAtIndex:indexPath.row];
     [cell configureCellInfo:cellInfo withRank:indexPath.row + 1];
-    if ([userInfo.name isEqualToString:[cellInfo objectForKey:@"name"]]) {
+    NSDictionary *userDic = [cellInfo objectForKey:@"user"];
+    if ([userInfo.name isEqualToString:[userDic objectForKey:@"name"]]) {
         cell.contentView.backgroundColor = [UIColor grayColor];
     }
     else{

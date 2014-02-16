@@ -102,11 +102,83 @@
 }
 
 
+//获取短信验证码
+//参数：mobile
+-(void)getCaptchaWithPhoneNum:(NSInteger)phoneNum{
+  
+   NSString *serveraddress = [NSString stringWithFormat:@"%@/app/get_captcha.c?mobile=%ld",BASE_URL,phoneNum];
+    NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setTimeOutSeconds:3.0];
+    [request startSynchronous];
+    NSError *error = [request error];
+    if (!error) {
+        // NSString *jsonString = [request responseString];
+        //NSDictionary *dic = [jsonString JSONValue];
+        NSData *data = [request responseData];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        NSLog(@"getCaptchaWithPhoneNum is:%@",dic);
+        
+    }
+}
+
+//检查验证码是否正确
+//参数：mobile code
+-(BOOL)checkCaptchaWithPhoneNum:(NSInteger)phoneNum  withCaptcha:(NSInteger)code{
+   BOOL success = NO;
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/check_captcha.c?mobile=%ld&code=%ld",BASE_URL,phoneNum,code];
+    NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setTimeOutSeconds:3.0];
+    [request startSynchronous];
+    NSError *error = [request error];
+    if (!error) {
+        // NSString *jsonString = [request responseString];
+        //NSDictionary *dic = [jsonString JSONValue];
+        NSData *data = [request responseData];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        NSLog(@"checkCaptchaWithPhoneNum is:%@",dic);
+        if ([[dic objectForKey:@"result"] isEqualToString:@"success"]) {
+            success =  YES;
+        }
+        
+    }
+    return success;
+}
+
+//用户注册
+-(BOOL)userRegister:(NSDictionary *)userInfo{
+    BOOL success = NO;
+    NSInteger phoneNum =[[userInfo objectForKey:@"phoneNum"]integerValue];
+    NSString *password =[userInfo objectForKey:@"password"];
+    NSString *conpmay =[userInfo objectForKey:@"company"];
+    NSString *name = [userInfo objectForKey:@"name"];
+    NSInteger sex = [[userInfo objectForKey:@"sex"]integerValue];
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/register_detail.c?mobile=%ld&password=%@&company=%@&name=%@&sex=%ld",BASE_URL,phoneNum,password,conpmay,name,sex
+                               ];
+    NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    [request setTimeOutSeconds:3.0];
+    [request startSynchronous];
+    NSError *error = [request error];
+    if (!error) {
+        // NSString *jsonString = [request responseString];
+        //NSDictionary *dic = [jsonString JSONValue];
+        NSData *data = [request responseData];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        NSLog(@"userRegister is:%@",dic);
+        if ([[dic objectForKey:@"result"] isEqualToString:@"success"]) {
+            success =  YES;
+        }
+        
+    }
+    return success;
+}
 
 -(BOOL)uploadAnswerRecord:(NSDictionary *)recordDic{
     BOOL success = NO;
     NSError *error;
-    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/record.c?user_id=%@&score=%@&duration=%d",BASE_URL,[recordDic objectForKey:@"user_id"],[recordDic objectForKey:@"score"],[[recordDic objectForKey:@"duration"]integerValue]];
+    NSString *serveraddress = [NSString stringWithFormat:@"%@/app/record.c?user_id=%@&score=%@&duration=%ld",BASE_URL,[recordDic objectForKey:@"user_id"],[recordDic objectForKey:@"score"],[[recordDic objectForKey:@"duration"]integerValue]];
     NSURL *url = [NSURL URLWithString:[serveraddress stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
     [request setTimeOutSeconds:5.0];

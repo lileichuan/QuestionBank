@@ -12,10 +12,14 @@
     NSString   *userID;
     NSString   *name;
     NSString   *company;
+    NSString   *loginName; //用户登录名
+    NSString   *password;  //用户密码
 }
 @property(nonatomic, retain)NSString   *userID;
 @property(nonatomic, retain)NSString   *name;
 @property(nonatomic, retain)NSString   *company;
+@property(nonatomic, retain)NSString   *loginName; //用户登录名
+@property(nonatomic, retain)NSString   *password;  //用户密码
 
 +(UserInfo *)sharedUserInfo;
 

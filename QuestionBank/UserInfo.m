@@ -11,7 +11,7 @@
 
 @implementation UserInfo
 UserInfo *userInfo;
-@synthesize userID,name,company;
+@synthesize userID,name,company,loginName,password;
 +(UserInfo *)sharedUserInfo{
     if (!userInfo) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -50,6 +50,14 @@ UserInfo *userInfo;
     if (company) {
         [company release];
         company = nil;
+    }
+    if (loginName) {
+        [loginName release];
+        loginName = nil;
+    }
+    if (password) {
+        [password release];
+        password = nil;
     }
     [super dealloc];
 }

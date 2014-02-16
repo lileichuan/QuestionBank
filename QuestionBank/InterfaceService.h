@@ -38,6 +38,17 @@
 
 -(BOOL)uploadNewsWithInfo:(NSDictionary *)newsInfo;
 
+//获取短信验证码
+//参数：mobile
+-(void)getCaptchaWithPhoneNum:(NSInteger)phoneNum;
+
+//检查验证码是否正确
+//参数：mobile code
+-(BOOL)checkCaptchaWithPhoneNum:(NSInteger)phoneNum  withCaptcha:(NSInteger)code;
+
+//用户注册
+-(BOOL)userRegister:(NSDictionary *)userInfo;
+
 //参数：user_id、content、type（1新闻 2通知 3报道）
 -(NSArray *)loadNewWithType:(NSInteger)type withCompany:(NSString *)company;
 

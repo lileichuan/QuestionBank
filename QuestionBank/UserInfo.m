@@ -12,23 +12,34 @@
 @implementation UserInfo
 UserInfo *userInfo;
 @synthesize userID,name,company,loginName,password;
+@synthesize telephone,sex,photoName;
 +(UserInfo *)sharedUserInfo{
-    if (!userInfo) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *userID = [userDefaults objectForKey:@"userID"];
-        if (userID) {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [userDefaults objectForKey:@"user_ID"];
+    if (userID) {
+        if (userInfo) {
+            if ([userInfo.userID isEqualToString:userID] == NO) {
+                [userInfo release];
+                UserInfoDao *dao = [[UserInfoDao alloc]init];
+                userInfo = [dao getUserWithID:userID];
+                [userInfo retain];
+                [dao release];
+                dao = nil;
+            }
+        }
+        else {
             UserInfoDao *dao = [[UserInfoDao alloc]init];
             userInfo = [dao getUserWithID:userID];
             [userInfo retain];
             [dao release];
             dao = nil;
         }
-        else{
-            userInfo = nil;
-        }
         
-	}
-	return userInfo;
+    }
+    else{
+        return nil;
+    }
+   return userInfo;
 }
 
 -(void)closeUserInfo{
@@ -58,6 +69,14 @@ UserInfo *userInfo;
     if (password) {
         [password release];
         password = nil;
+    }
+    if (telephone) {
+        [telephone release];
+        telephone = nil;
+    }
+    if (photoName) {
+        [photoName release];
+        photoName = nil;
     }
     [super dealloc];
 }

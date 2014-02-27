@@ -55,7 +55,7 @@
     UserInfo *curUserInfo = [UserInfo sharedUserInfo];
     if (curUserInfo) {
         nameTextField.text = curUserInfo.name;
-        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",curUserInfo.userID]];
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:curUserInfo.photoName];
         photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
     }
 }
@@ -85,7 +85,7 @@
             NSString *userID = (NSString *)CFUUIDCreateString(nil, uuidObj);
             CFRelease(uuidObj);
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:userID forKey:@"userID"];
+            [userDefaults setObject:userID forKey:@"user_ID"];
             [userDefaults synchronize];
             curUserInfo = [[UserInfo alloc]init];
             curUserInfo.userID =userID;
@@ -97,7 +97,7 @@
         {
             imageData = UIImageJPEGRepresentation(photoImageView.image, 1.0);
         }
-        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",curUserInfo.userID]];
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:curUserInfo.photoName];
         [imageData writeToFile:photoPath atomically:YES];
         
         curUserInfo.name = nameTextField.text;
@@ -112,15 +112,15 @@
         [dao release];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             InterfaceService *service = [[InterfaceService alloc]init];
-            BOOL success =  [service uploadUserInfo:curUserInfo];
+            NSDictionary *info = @{@"userID":curUserInfo.userID,@"photoPath":photoPath};
+            BOOL success =  [service uploadPhoto:info];
+            [service release];
             if (success) {
                 [ProgressHUD showSuccess:@"添加成功"];
             }
             else{
                 [ProgressHUD showSuccess:@"添加失败"];
             }
-            [service release];
-
         });
         [[UserInfo sharedUserInfo]closeUserInfo];
         [self dismissViewControllerAnimated:YES completion:^{

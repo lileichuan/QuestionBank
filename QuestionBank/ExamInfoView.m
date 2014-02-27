@@ -67,7 +67,7 @@
 -(void)configureUserInfo:(UserInfo *)userInfo{
     nameLabel.text = userInfo.name;
     companyLabel.text = userInfo.company;
-    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
+    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:userInfo.photoName];
     if ([[NSFileManager defaultManager]fileExistsAtPath:photoPath]) {
           photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
     }

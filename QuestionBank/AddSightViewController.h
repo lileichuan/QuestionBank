@@ -12,6 +12,7 @@
     IBOutlet UITextView *contentView;
     IBOutlet UIScrollView *picScrollerView;
 }
+@property(nonatomic,copy)dispatch_block_t updateDataBlock;
 
 -(IBAction)cancel:(id)sender;
 

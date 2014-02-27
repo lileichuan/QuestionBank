@@ -7,6 +7,7 @@
 //
 
 #import "RootViewController.h"
+#import "LoginViewController.h"
 
 @interface RootViewController ()
 
@@ -32,6 +33,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    //[self loadLoginViewController];
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,4 +42,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)loadLoginViewController{
+    [[UserInfo sharedUserInfo]closeUserInfo];
+    LoginViewController  *viewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    [self presentViewController:viewController animated:YES completion:^{
+        
+    }];
+}
 @end

@@ -11,8 +11,13 @@
 @interface PhoneVerifyViewController : UIViewController<UITextFieldDelegate>{
     IBOutlet UITextField *phoneNumField;
     IBOutlet UIButton    *nextStepBtn;
+    NSString *identifierCode;
+    
+    BOOL     isRestPassword;
 }
 @property(nonatomic, retain) IBOutlet UITextField *phoneNumField;
 @property(nonatomic, retain) IBOutlet UIButton    *nextStepBtn;
+@property(nonatomic, retain) NSString *identifierCode;
+@property(nonatomic, assign) BOOL     isRestPassword;
 -(IBAction)nextStep:(id)sender;
 @end

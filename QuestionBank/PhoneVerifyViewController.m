@@ -10,12 +10,15 @@
 #import "ProgressHUD.h"
 #import "VerificationCodeViewController.h"
 #import "InterfaceService.h"
+#import "LoginNavigationController.h"
+#import "UserInfo.h"
 @interface PhoneVerifyViewController ()
 
 @end
 
 @implementation PhoneVerifyViewController
-@synthesize phoneNumField,nextStepBtn;
+@synthesize phoneNumField,nextStepBtn,identifierCode;
+@synthesize isRestPassword;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -35,6 +38,14 @@
     self.navigationItem.leftBarButtonItem = backItem;
     [backItem release];
     [phoneNumField becomeFirstResponder];
+    LoginNavigationController *navigationController = (LoginNavigationController *)self.navigationController;
+    BOOL isResetPassword = navigationController.isResetPassword;
+    if (isResetPassword) {
+        UserInfo *curUserInfo = [UserInfo sharedUserInfo];
+        if (curUserInfo) {
+            phoneNumField.text = curUserInfo.loginName;
+        }
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -49,6 +60,10 @@
     if (nextStepBtn) {
         [nextStepBtn release];
         nextStepBtn = nil;
+    }
+    if (identifierCode) {
+        [identifierCode release];
+        identifierCode = nil;
     }
     [super dealloc];
 }
@@ -79,6 +94,7 @@
 }
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     NSLog(@"shouldPerformSegueWithIdentifier");
+    BOOL success =  NO;
     if (phoneNumField.text.length == 0) {
         [ProgressHUD showError:@"手机号为空"];
         return NO;
@@ -89,18 +105,21 @@
     }
     else{
         InterfaceService *service = [[InterfaceService alloc]init];
-        [service getCaptchaWithPhoneNum:[phoneNumField.text integerValue]];
+        self.identifierCode =  [service getCaptchaWithPhoneNum:phoneNumField.text];
+        if (identifierCode) {
+            success = YES;
+        }
         [service release];
         
     }
-    return YES;
+    return success;
 }
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     NSLog(@"prepareForSegue");
     if ([segue.identifier isEqualToString:@"VerifyCode"]) {
         VerificationCodeViewController *destViewController = segue.destinationViewController;
-        destViewController.phoneNum = [phoneNumField.text integerValue
-        ];
+        destViewController.phoneNum = phoneNumField.text;
+        destViewController.identifierCode = self.identifierCode;
     }
 }
 
@@ -124,10 +143,10 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (phoneNumField.text.length == 11) {
-        [nextStepBtn setBackgroundImage:[UIImage imageNamed:@"nextStep_red"] forState:UIControlStateNormal];
+        [nextStepBtn setImage:[UIImage imageNamed:@"nextStep_red"] forState:UIControlStateNormal];
     }
     else{
-         [nextStepBtn setBackgroundImage:[UIImage imageNamed:@"nextStep_white"] forState:UIControlStateNormal];
+         [nextStepBtn setImage:[UIImage imageNamed:@"nextStep_white"] forState:UIControlStateNormal];
     }
     if (textField.text.length > 11) {
         return NO;

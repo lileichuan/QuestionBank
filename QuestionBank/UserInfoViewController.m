@@ -43,7 +43,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     //self.tableView.backgroundColor = [UIColor clearColor];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [userDefaults objectForKey:@"userID"];
+    NSString *userID = [userDefaults objectForKey:@"user_ID"];
     if (!userID) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您还没有设置个人信息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"前去设置", nil];
         [alert show];
@@ -84,7 +84,7 @@
        // [view addSubview:label];
         
         if (curUserInfo) {
-            NSString *fullPhotoPath = [[Catalog getPhotoForlder] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",curUserInfo.userID]];
+            NSString *fullPhotoPath = [[Catalog getPhotoForlder] stringByAppendingPathComponent:curUserInfo.photoName];
             if ([[NSFileManager defaultManager]fileExistsAtPath:fullPhotoPath]) {
                 photoImageView.image = [UIImage imageWithContentsOfFile:fullPhotoPath];
             }
@@ -97,6 +97,9 @@
     });
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -124,13 +127,19 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 4;
+    if (section == 0) {
+        return 4;
+    }
+    else if(section == 1){
+        return 1;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -142,49 +151,60 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    switch (indexPath.row) {
-        case 0:
-        {
-            if (!curUserInfo) {
-                cell.textLabel.text = cell.textLabel.text = @"未设置用户";;
+    if (indexPath.section == 0) {
+        switch (indexPath.row) {
+            case 0:
+            {
+                if (!curUserInfo) {
+                    cell.textLabel.text = cell.textLabel.text = @"未设置用户";;
+                }
+                else{
+                    cell.textLabel.text = [NSString stringWithFormat:@"姓名:%@",curUserInfo.name];
+                }
             }
-            else{
-                cell.textLabel.text = [NSString stringWithFormat:@"昵称:%@",curUserInfo.name];
+                
+                break;
+                //        case 1:
+                //            cell.textLabel.text = [NSString stringWithFormat:@"女士:%@",curUserInfo.name];
+                break;
+                //        case 2:
+                //            cell.textLabel.text = [NSString stringWithFormat:@"城市:%@",curUserInfo.name];
+                //            break;
+                //        case 3:
+                //            cell.textLabel.text = [NSString stringWithFormat:@"单位:%@",curUserInfo.name];
+                //            break;
+                //        case 4:
+                //            cell.textLabel.text = [NSString stringWithFormat:@"职位:%@",curUserInfo.name];
+                break;
+            case 1:{
+                if (!curUserInfo) {
+                    cell.textLabel.text = @"未设置单位";
+                }
+                else{
+                    cell.textLabel.text = [NSString stringWithFormat:@"单位:%@",curUserInfo.company];
+                }
+                
             }
+                break;
+            case 2:
+                cell.textLabel.text = @"联系我们";
+                break;
+            case 3:
+                cell.textLabel.text = @"问题反馈";
+                break;
+            default:
+                break;
         }
-           
-            break;
-//        case 1:
-//            cell.textLabel.text = [NSString stringWithFormat:@"女士:%@",curUserInfo.name];
-            break;
-//        case 2:
-//            cell.textLabel.text = [NSString stringWithFormat:@"城市:%@",curUserInfo.name];
-//            break;
-//        case 3:
-//            cell.textLabel.text = [NSString stringWithFormat:@"单位:%@",curUserInfo.name];
-//            break;
-//        case 4:
-//            cell.textLabel.text = [NSString stringWithFormat:@"职位:%@",curUserInfo.name];
-            break;
-        case 1:{
-            if (!curUserInfo) {
-                cell.textLabel.text = @"未设置单位";
-            }
-            else{
-                 cell.textLabel.text = [NSString stringWithFormat:@"单位:%@",curUserInfo.company];
-            }
-           
-        }
-            break;
-        case 2:
-            cell.textLabel.text = @"联系我们";
-            break;
-        case 3:
-            cell.textLabel.text = @"问题反馈";
-            break;
-        default:
-            break;
     }
+    else if (indexPath.section == 1){
+        UIButton *logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        logoutBtn.frame = cell.contentView.bounds;
+        [logoutBtn addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
+        [logoutBtn setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
+        [logoutBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+        [cell.contentView addSubview:logoutBtn];
+    }
+
 //    NSArray *titles = @[@"单位",@"社内通知",@"报道安排",@"电话表",@"同事圈"];
 //    NSArray *imageNames = @[@"company_news.png",@"company_infomation.png",@"schedule.png",@"telephone.png",@"works.png"];
 //    cell.textLabel.text = titles[indexPath.row];
@@ -192,6 +212,8 @@
 //    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
+
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -263,6 +285,10 @@
 }
 
 
+-(void)logout:(id)sender{
+    [[NSNotificationCenter defaultCenter]postNotificationName:LOGOUT object:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 -(void)loadRegisterView{
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateUserInfo) name:@"FinishRegist" object:nil];
     CompanyViewController *companyViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"register"];
@@ -366,11 +392,12 @@
         {
             imageData = UIImageJPEGRepresentation(image, 1.0);
         }
-        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",curUserInfo.userID]];
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:curUserInfo.photoName];
         [imageData writeToFile:photoPath atomically:YES];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             InterfaceService *service = [[InterfaceService alloc]init];
-            [service uploadUserInfo:curUserInfo];
+            NSDictionary *info = @{@"userID":curUserInfo.userID,@"photoPath":photoPath};
+            [service uploadPhoto:info];
             [service release];
         });
         

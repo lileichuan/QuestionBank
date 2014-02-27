@@ -34,11 +34,11 @@ SqliteInterface *sharedSqliteInterface;
 		NSLog(@"Could not open database.");
 	}else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        BOOL isHasDatabase = [defaults boolForKey:@"isCreateDatabase"];
-        if (!isHasDatabase) {
-           BOOL success = [self createDatabase];
+        NSInteger dbVersion = [defaults integerForKey:@"DBVerion"];
+        if (dbVersion != DBVersion) {
+            BOOL success = [self createDatabase];
             if (success) {
-                [defaults setBool:YES forKey:@"isCreateDatabase"];
+                [defaults setInteger:DBVersion  forKey:@"DBVerion"];
             }
         }
         [defaults synchronize];
@@ -75,11 +75,16 @@ SqliteInterface *sharedSqliteInterface;
     dbRealPath = [libraryPath stringByAppendingString:[NSString stringWithFormat:@"/%@",dbFileName]];
 	if (![fileManager fileExistsAtPath:dbRealPath]) {
 		NSString *dbSrcPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:dbFileName];
-		BOOL copySuccess = [fileManager copyItemAtPath:dbSrcPath toPath:dbRealPath error:&err];
+		NSString *oldDBPath = [libraryPath stringByAppendingString:[NSString stringWithFormat:@"/question.db"]];
+        if ([[NSFileManager defaultManager]fileExistsAtPath:oldDBPath isDirectory:nil]) {
+            [[NSFileManager defaultManager]removeItemAtPath:oldDBPath error:nil];
+        }
+        BOOL copySuccess = [fileManager copyItemAtPath:dbSrcPath toPath:dbRealPath error:&err];
 		if (copySuccess) {
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            NSNumber *datebaseVersion =[self getDatebaseVersionCode];
-            [defaults setValue:datebaseVersion forKey:@"DatebaseVersion"];
+            [defaults setInteger:DBVersion  forKey:@"DBVerion"];
+//            NSNumber *datebaseVersion =[self getDatebaseVersionCode];
+//            [defaults setValue:datebaseVersion forKey:@"DatebaseVersion"];
             [defaults synchronize];
 		}
         else{
@@ -114,10 +119,13 @@ SqliteInterface *sharedSqliteInterface;
     
     BOOL result5 =[db executeUpdate:@"Create table if not exists chapter (id integer PRIMARY KEY,name text)"];
     
-    BOOL result6 =[db executeUpdate:@"Create table if not exists userInfo (id text PRIMARY KEY,name text,company text)"];
+    BOOL result6 =[db executeUpdate:@"Create table if not exists userInfo (id text PRIMARY KEY,name text,company text,login_name text,telephone text,password text,sex integer)"];
     
-     BOOL result7 =[db executeUpdate:@"Create table if not exists company (name text)"];
-      success = result1&& result2 && result3 && result4 && result5 && result6 && result7;
+    //BOOL result6 =[db executeUpdate:@"alter table userInfo add photo text"]; //default 1.png“
+                   
+    BOOL result7 =[db executeUpdate:@"Create table if not exists company (name text)"];
+    
+    success = result1&& result2 && result3 && result4 && result5 && result6 && result7;
     return success;
 }
 

@@ -11,6 +11,7 @@
 @interface CompanyViewController : UITableViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UISearchBarDelegate>{
 }
 
+@property (nonatomic, copy)void (^chooseCompany)(NSString *companyName);
 
 -(IBAction)addCompany:(id)sender;
 

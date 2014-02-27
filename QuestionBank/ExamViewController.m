@@ -76,7 +76,7 @@
     
     nameLabel.text = userInfo.name;
     companyLabel.text = userInfo.company;
-    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
+    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:userInfo.photoName];
     if ([[NSFileManager defaultManager]fileExistsAtPath:photoPath]) {
         photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
     }
@@ -508,7 +508,7 @@
 -(void)updateUserInfo{
     nameLabel.text = userInfo.name;
     companyLabel.text = userInfo.company;
-    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
+    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:userInfo.photoName];
     if ([[NSFileManager defaultManager]fileExistsAtPath:photoPath]) {
         photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
     }
@@ -523,12 +523,13 @@
         {
             imageData = UIImageJPEGRepresentation(image, 1.0);
         }
-        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userInfo.userID]];
+        NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:userInfo.photoName];
         [imageData writeToFile:photoPath atomically:YES];
         [self updateUserInfo];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             InterfaceService *service = [[InterfaceService alloc]init];
-            [service uploadUserInfo:userInfo];
+            NSDictionary *info = @{@"userID":userInfo.userID,@"photoPath":photoPath};
+            [service uploadPhoto:info];
             [service release];
         });
         

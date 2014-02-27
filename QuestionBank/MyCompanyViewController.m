@@ -41,7 +41,7 @@
     self.tableView.opaque = NO;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [userDefaults objectForKey:@"userID"];
+    NSString *userID = [userDefaults objectForKey:@"user_ID"];
     if (!userID) {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您还没有设置个人信息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"前去设置", nil];
         [alert show];

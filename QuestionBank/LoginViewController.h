@@ -12,15 +12,12 @@
     UIButton *dropButton;
     UIView *moveDownGroup;
     UIView *account_box;
-    
     UITextField *userNumber;
-    UILabel *numberLabel;
     UITextField *userPassword;
-    UILabel *passwordLabel;
-    
     UIImageView *userLargeHead;
     
     UIButton  *loginBtn;
+    
 
 }
 @property (retain, nonatomic) IBOutlet UIButton *dropButton;

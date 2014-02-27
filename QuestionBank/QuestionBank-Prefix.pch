@@ -15,4 +15,13 @@
     #import <Foundation/Foundation.h>
     #import <QuartzCore/QuartzCore.h>
     #import "QuestionDefine.h"
+#ifdef __IPHONE_7_0
+    #import <SpriteKit/SpriteKit.h>
+#endif
+    #import "UIColor+FlatUI.h"
+    #import "UIView+utilities.h"
+
+    #import "Constants.h"
+    #import "Math.h"
+
 #endif

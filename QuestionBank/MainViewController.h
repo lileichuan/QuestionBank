@@ -1,13 +1,13 @@
 //
-//  SightCell.h
+//  MainViewController.h
 //  QuestionBank
 //
-//  Created by 李 雷川 on 14-1-25.
+//  Created by hanbo on 14-2-19.
 //  Copyright (c) 2014年 李 雷川. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface SightCell : UITableViewCell
+@interface MainViewController : UIViewController
 
 @end

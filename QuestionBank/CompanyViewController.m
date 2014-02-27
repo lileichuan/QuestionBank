@@ -153,6 +153,7 @@
 
 
 }
+
 -(IBAction)closeSetting:(id)sender{
     [self dismissViewControllerAnimated:YES completion:^{}];
     //[self.frostedViewController hideMenuViewController];
@@ -187,14 +188,20 @@
     return cell;
 }
 
-/*
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    Company *company = [companyArr objectAtIndex:indexPath.row];
+    if (self.chooseCompany) {
+        self.chooseCompany(company.name);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
-*/
+
 
 /*
 // Override to support editing the table view.

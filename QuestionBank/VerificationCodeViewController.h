@@ -9,20 +9,34 @@
 #import <UIKit/UIKit.h>
 
 @interface VerificationCodeViewController : UIViewController<UITextFieldDelegate>{
-    NSInteger phoneNum;
+    NSString *phoneNum;
+    NSString *identifierCode;
     IBOutlet UILabel *infoLabel;
     IBOutlet UITextField *codeField;
     IBOutlet UIButton *resendBtn;
     IBOutlet UIButton *nextStep;
+    IBOutlet UILabel  *countdownLabel;
+    NSTimer  *timer;
+    NSInteger leftTime;
+    
+    BOOL    isResetPassword;
+    
+   IBOutlet UIButton *gotoRestPasswordBtn;
     
 }
-@property(nonatomic, assign)NSInteger phoneNum;
+@property(nonatomic, retain)NSString  *phoneNum;
 @property(nonatomic, retain)IBOutlet UILabel *infoLabel;
 @property(nonatomic, retain)IBOutlet UITextField *codeField;
 @property(nonatomic, retain)IBOutlet UIButton *resendBtn;
 @property(nonatomic, retain)IBOutlet UIButton *nextStep;
+@property(nonatomic, retain)IBOutlet UILabel  *countdownLabel;
+@property(nonatomic, retain)NSString *identifierCode;
+@property(nonatomic, retain)NSTimer  *timer;
+@property(nonatomic, assign)BOOL    isResetPassword;
+@property(nonatomic, retain)IBOutlet UIButton *gotoRestPasswordBtn;
 
 -(IBAction)nextStep:(id)sender;
 
 -(IBAction)resendCode:(id)sender;
+
 @end

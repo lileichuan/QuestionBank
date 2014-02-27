@@ -86,7 +86,8 @@
     NSString *time = [NSString stringWithFormat:@"%ld分%ld秒",duration/60,duration%60];
     NSString *company = [userInfo objectForKey:@"company"];
     NSString *answerTime = [DateMethod timestampFromString:[info objectForKey:@"time"]];
-    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:[NSString stringWithFormat:@"%@.png",userID]];
+    NSString *headName = [[userInfo objectForKey:@"head_url"] lastPathComponent];
+    NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:headName];
     if([[NSFileManager defaultManager]fileExistsAtPath:photoPath]){
          photoImageView.image = [UIImage imageWithContentsOfFile:photoPath];
     }

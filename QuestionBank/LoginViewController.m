@@ -9,6 +9,10 @@
 #import "LoginViewController.h"
 #import "ProgressHUD.h"
 #import "InterfaceService.h"
+#import "PhoneVerifyViewController.h"
+#import "LoginNavigationController.h"
+#import "Catalog.h"
+#import "UserInfoDao.h"
 
 @interface LoginViewController ()
 
@@ -30,6 +34,18 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [userDefaults objectForKey:@"user_ID"];
+    if (userID) {
+        UserInfoDao *dao = [[UserInfoDao alloc]init];
+        UserInfo    *curUserInfo = [dao getUserWithID:userID];
+        if (curUserInfo) {
+            userNumber.text = curUserInfo.loginName;
+            userPassword.text = curUserInfo.password;
+            NSString *photoPath = [[Catalog getPhotoForlder]stringByAppendingString:curUserInfo.photoName];
+            userLargeHead.image = [UIImage imageWithContentsOfFile:photoPath];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -71,7 +87,17 @@
 - (IBAction)login:(id)sender{
     BOOL isValid = [self isContentValid];
     if (isValid) {
-        
+        [userNumber resignFirstResponder];
+        [userPassword resignFirstResponder];
+        InterfaceService *service = [[InterfaceService alloc]init];
+        NSDictionary *userInfo = @{@"name":userNumber.text,@"password":userPassword.text};
+        BOOL success = [service userLogin:userInfo];
+        [service release];
+        if (success) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:FINISHLOGIN object:nil];
+            [self dismissViewControllerAnimated:NO completion:nil];
+        }
+
     }
 }
 - (IBAction)forgetPassword:(id)sender{
@@ -83,7 +109,7 @@
     return YES;
 }
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    NSLog(@"prepareForSegue");
+
 }
 
 -(BOOL)isContentValid{
@@ -94,7 +120,7 @@
     else if (userNumber.text.length == 0) {
         [ProgressHUD showError:@"用户名为空"];
     }
-    else if(passwordLabel.text.length == 0){
+    else if(userPassword.text.length == 0){
         [ProgressHUD showError:@"密码为空"];
     }
     else{
@@ -117,9 +143,9 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (userPassword.text.length > 0 && userPassword.text.length > 0) {
-    [loginBtn setBackgroundImage:[UIImage imageNamed:@"login_btn_red.png"] forState:UIControlStateNormal];
-    }
+//    if (userPassword.text.length > 0 && userPassword.text.length > 0) {
+//    [loginBtn setImage:[UIImage imageNamed:@"login_btn_red.png"] forState:UIControlStateNormal];
+//    }
     return YES;
 }
 

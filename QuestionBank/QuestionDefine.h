@@ -11,6 +11,12 @@
 #import <Foundation/Foundation.h>
 #define TOP_BAR_HEIGHT 50
 #define BOTTOM_BAR_HEIGHT 48
+#define FINISHLOGIN @"finishlogin"
+#define LOGOUT @"logout"
+#define DBVersion 1.0
+
+#define APP_URL @"itms-services://?action=download-manifest&url=http://jizhehome.duapp.com/jizhi.plist"
+#define DB_NAME @"jizhe.db"
 
 typedef enum{
     MOCK_EXAM = 0,  //模拟

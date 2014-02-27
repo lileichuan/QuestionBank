@@ -13,5 +13,5 @@
 -(BOOL)insertUser:(UserInfo *)_userInfo;
 -(UserInfo *)getUserWithID:(NSString *)userID;
 -(BOOL)updateUserInfo:(UserInfo *)_userInfo;
-
+-(BOOL)isHasUserWithID:(NSString *)userID;
 @end
